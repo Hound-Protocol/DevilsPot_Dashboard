@@ -111,7 +111,7 @@ a{color:var(--org)}
 
 <script>
 /* =====================================================
-   OBSAH DASHBOARDU – upravuje Claude podle domluvy v chatu
+   OBSAH DASHBOARDU – aktualizuje se podle domluvy týmu
    ===================================================== */
 const UPDATED="2. 11. 2026";
 const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["pravo","Právo a daně"],["road","Roadmapa"],["otazky","Otevřené otázky"]];
@@ -120,7 +120,7 @@ const KPI=[["Tým","3 zakladatelé"],["Formát","Sety + à la carte"],["Kapitál
 
 const OVERVIEW=[
  ["Zadání",null,["Hotpot restaurace DevilsPot ve Zlíně.","Zakladatelé: Erik, Filip a třetí společník. Všichni jsou zatím zaměstnaní.","Bez vlastního kapitálu, financování z půjčky.","Formát: sety pro skupiny a à la carte suroviny.","Žádný časový tlak, důraz na kvalitní přípravu."]],
- ["Příležitost","fact",["Ve vyhledávání jsem ve Zlíně nenašel žádný hotpot podnik (jen česká, čínská, nepálská a sushi kuchyně). Je potřeba si to ověřit v terénu.","Zlín: asi 73 tis. obyvatel, okres asi 187 tis., Univerzita Tomáše Bati = hodně potenciálních zákazníků mezi studenty.","Hotpot je skupinový zážitek, sedí na večery a víkendy."]],
+ ["Příležitost","fact",["Podle dostupných údajů ve Zlíně není žádný hotpot podnik (jen česká, čínská, nepálská a sushi kuchyně). Je potřeba to ověřit v terénu.","Zlín: asi 73 tis. obyvatel, okres asi 187 tis., Univerzita Tomáše Bati = hodně potenciálních zákazníků mezi studenty.","Hotpot je skupinový zážitek, sedí na večery a víkendy."]],
  ["Rizika","fact",["Zlínský kraj ztrácí obyvatele (1. pololetí 2026: −1 395).","Méně lidí obědvá v restauracích (z 33 % v 2024 na 26 % v 2025).","Půjčka bez vlastního vkladu znamená osobní ručení všech tří."]],
  ["Doporučený postup",null,["1. Ověřit poptávku levným zkušebním provozem (pop-up večery).","2. Spočítat reálné náklady z nabídek dodavatelů a nájmů.","3. Teprve potom jednat s bankou o úvěru a záruce.","4. Držet investici nízko: hotový gastro prostor, leasing vybavení."]]
 ];
@@ -180,8 +180,8 @@ const ROAD=[
  ["Fáze 5: Otevření (měsíc 10–14)",[["Objednat vybavení","todo"],["Najmout a zaškolit personál, školení hygieny (HACCP)","todo"],["Kasa, rezervace, dodavatelé","todo"],["Zkušební otevření pro pozvané a recenze","todo"],["Velké otevření","todo"]]]
 ];
 const ASK=[
- ["Co potřebuju od vás",[ "Jak si rozdělíte role (kdo vede, kdo kuchyň, kdo marketing)?","Kolik každý z vás může a chce ručit za úvěr?","Jaký prostor a čtvrť ve Zlíně preferujete (centrum, u UTB, Zlín-Malenovice)?","Chcete provoz hlavně večer a o víkendu, nebo i přes den?","Máte zkušenost s gastrem, nebo budete najímat kuchaře?"]],
- ["Co zjistím / připravím já",["Seznam konkrétních hotpot podniků v Brně a Praze s cenami","Návrh menu s kalkulací ceny surovin","Dotazník pro studenty","Seznam prostor ve Zlíně k pronájmu","Podklady pro schůzku s bankou"]]
+ ["Co je potřeba doplnit od týmu",[ "Jak si rozdělíte role (kdo vede, kdo kuchyň, kdo marketing)?","Kolik každý z vás může a chce ručit za úvěr?","Jaký prostor a čtvrť ve Zlíně preferujete (centrum, u UTB, Zlín-Malenovice)?","Chcete provoz hlavně večer a o víkendu, nebo i přes den?","Máte zkušenost s gastrem, nebo budete najímat kuchaře?"]],
+ ["Co je potřeba zjistit a připravit",["Seznam konkrétních hotpot podniků v Brně a Praze s cenami","Návrh menu s kalkulací ceny surovin","Dotazník pro studenty","Seznam prostor ve Zlíně k pronájmu","Podklady pro schůzku s bankou"]]
 ];
 
 /* =====================================================
@@ -202,9 +202,9 @@ const be=(fixT+pay)/(M.price*(1-M.food));
 const V={};
 V.prehled=`<h2>Přehled</h2><div class="kpi">${KPI.map(([l,v])=>`<div><small>${l}</small><b>${v}</b></div>`).join("")}<div><small>Roadmapa</small><b id="rp"></b></div></div>
 <div class="note"><b>Hlavní zjištění:</b> bez vlastního kapitálu je největší riziko ručení za půjčku. Nejdřív ověřte poptávku levným zkušebním provozem (pop-up večery), teprve potom berte velký úvěr.</div>${cards(OVERVIEW)}`;
-V.plan=`<h2>Podnikový plán</h2><p class="small">První návrh. Doplňuje a upravuje Claude podle toho, co zjistíme.</p><div class="grid">${PLAN.map(([t,x])=>`<div class="card"><h3>${t}</h3><p>${x}</p></div>`).join("")}</div>`;
+V.plan=`<h2>Podnikový plán</h2><p class="small">První návrh. Bude se doplňovat podle nových zjištění.</p><div class="grid">${PLAN.map(([t,x])=>`<div class="card"><h3>${t}</h3><p>${x}</p></div>`).join("")}</div>`;
 V.fin=`<h2>Financování bez vlastního kapitálu</h2>${cards(FIN)}<div class="note"><b>Doporučení:</b> nejdřív zkušební provoz a hotová čísla, pak banka. Banka chce plán, rozpočet, předpověď příjmů a výdajů (cash flow) a ideálně doložit poptávku.</div><div class="card"><h3>Co banka obvykle chce <span class="tag est">odhad</span></h3><ul>${BANK.map(x=>`<li>${x}</li>`).join("")}</ul></div>`;
-V.calc=`<h2>Finance (modelový scénář)</h2><div class="note">Všechna čísla jsou <b>moje odhady</b>, ne zjištěná fakta. Přepočítám je, jakmile budeme mít nabídky dodavatelů a nájmů.</div>
+V.calc=`<h2>Finance (modelový scénář)</h2><div class="note">Všechna čísla jsou <b>odhady</b>, ne zjištěná fakta. Přepočítají se, jakmile budou nabídky dodavatelů a nájmů.</div>
 <div class="grid"><div class="card"><h3>Startovní investice</h3><table>${INV.map(([l,v])=>`<tr><td>${l}</td><td style="text-align:right">${fmt(v)}</td></tr>`).join("")}</table><p class="res">Celkem: ${fmt(invT)}</p></div>
 <div class="card"><h3>Stálé měsíční náklady</h3><table>${FIXED.map(([l,v])=>`<tr><td>${l}</td><td style="text-align:right">${fmt(v)}</td></tr>`).join("")}</table><p class="res">Celkem: ${fmt(fixT)}</p></div>
 <div class="card"><h3>Předpoklady a úvěr</h3><table><tr><td>Míst k sezení</td><td style="text-align:right">${M.seats}</td></tr><tr><td>Kolikrát se stůl za den vystřídá</td><td style="text-align:right">${M.turns}</td></tr><tr><td>Provozních dní / měsíc</td><td style="text-align:right">${M.days}</td></tr><tr><td>Průměrná útrata na hosta</td><td style="text-align:right">${fmt(M.price)}</td></tr><tr><td>Suroviny z tržeb</td><td style="text-align:right">${M.food*100} %</td></tr><tr><td>Úvěr (100 % investice)</td><td style="text-align:right">${fmt(P)}</td></tr><tr><td>Sazba / splatnost</td><td style="text-align:right">${M.rate*100} % / ${M.years} let</td></tr></table><p class="res">Splátka: ${fmt(pay)} / měs</p></div></div>
@@ -216,10 +216,10 @@ V.calc=`<h2>Finance (modelový scénář)</h2><div class="note">Všechna čísla
 <p class="small">Hostů k vyrovnání nákladů a splátky: asi ${num(be)} za měsíc. V pesimistickém scénáři provoz splátku nepokryje.</p></div>`;
 V.mkt=`<h2>Marketingový plán</h2>${cards(MKT)}`;
 V.prov=`<h2>Provoz a menu</h2>${cards(PROV)}`;
-V.pravo=`<h2>Právo, daně, povolení</h2><div class="note">Nejsem právník ani účetní. Vše si před rozhodnutím ověřte s účetní, daňovým poradcem a na úřadech.</div>${cards(LAW)}`;
+V.pravo=`<h2>Právo, daně, povolení</h2><div class="note">Informace nejsou právní ani účetní poradenství. Před rozhodnutím je nutné vše ověřit s účetní, daňovým poradcem a na úřadech.</div>${cards(LAW)}`;
 const tot=ROAD.reduce((a,p)=>a+p[1].length,0), dn=ROAD.reduce((a,p)=>a+p[1].filter(x=>x[1]==="done").length,0), pct=Math.round(100*dn/tot);
 const ST={done:"✅",doing:"🔥",todo:"⬜"};
-V.road=`<h2>Roadmapa</h2><div class="bar"><i style="--w:${pct}%"></i></div><p class="small">Splněno ${dn} z ${tot} (${pct} %). Stav aktualizuje Claude.</p>${ROAD.map(([t,it])=>`<div class="card" style="margin-bottom:14px"><h3>${t}</h3>${it.map(([x,s])=>`<label class="chk ${s==="done"?"done":""}"><span style="width:22px">${ST[s]}</span><span>${x}</span></label>`).join("")}</div>`).join("")}`;
+V.road=`<h2>Roadmapa</h2><div class="bar"><i style="--w:${pct}%"></i></div><p class="small">Splněno ${dn} z ${tot} (${pct} %).</p>${ROAD.map(([t,it])=>`<div class="card" style="margin-bottom:14px"><h3>${t}</h3>${it.map(([x,s])=>`<label class="chk ${s==="done"?"done":""}"><span style="width:22px">${ST[s]}</span><span>${x}</span></label>`).join("")}</div>`).join("")}`;
 V.otazky=`<h2>Otevřené otázky</h2><div class="grid">${ASK.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`;
 
 // nav + tabs
