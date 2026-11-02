@@ -136,7 +136,7 @@ a{color:var(--org)}a:hover{color:var(--gold)}
    OBSAH DASHBOARDU – upravuje Claude podle domluvy v chatu
    ===================================================== */
 const UPDATED="2. 11. 2026";
-const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["pravo","Právo a daně"],["road","Roadmapa"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
+const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["pravo","Právo a daně"],["road","Harmonogram"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
 
 /* Finanční model – všechna čísla jsou ODHADY, ne zjištěná fakta */
 const INV=[["Rekonstrukce a úpravy prostoru",500000],["Kuchyň: chlazení, odtah, technika",300000],["Stoly s indukcí, nádobí, nádoby",200000],["Interiér a nábytek",200000],["Kauce, první nájmy, povolení",150000],["Rezerva na první měsíce",250000]];
@@ -175,7 +175,7 @@ const PLAN=[
  ["9. Finance","Modelová investice "+fmtS(invT)+" financovaná úvěrem, splátka asi "+fmtS(pay)+" měsíčně. Při ceně 500 Kč na hosta a obsazenosti 45 % je model mírně ve ztrátě, k vyrovnání je potřeba asi "+Math.round(beOcc*100)+" % obsazenosti (zakladatelé bez mzdy). Při ceně 700 Kč stačí asi "+Math.round(beGuests(700)/capMonth*100)+" %."],
  ["10. Rizika","Nízká obsazenost, růst cen surovin a energií, ručení za úvěr, závislost na pár lidech, sezónnost (hotpot je silnější v chladných měsících), nižší kupní síla ve Zlínském kraji."],
  ["11. Právní forma","Pro dva společníky se doporučuje zvážit s.r.o. a smlouvu společníků (podíly, role, odchod, rozhodování). Ověřit s účetní."],
- ["12. Harmonogram","Pět fází od ověření přes zkušební provoz, financování a povolení po otevření. Viz Roadmapa."]
+ ["12. Harmonogram","Pět fází od ověření přes zkušební provoz, financování a povolení po otevření. Viz záložka Harmonogram."]
 ];
 function fmtS(n){return Math.round(n).toLocaleString("cs-CZ")+" Kč"}
 
@@ -250,7 +250,7 @@ const cards=a=>`<div class="grid">${a.map(([t,g,l])=>`<div class="card"><h3>${t}
 const cl=v=>v>=0?"pos":"neg";
 
 const V={};
-V.prehled=`<h2>Přehled</h2><div class="kpi">${KPI.map(([l,v])=>`<div><small>${l}</small><b>${v}</b></div>`).join("")}<div><small>Roadmapa</small><b id="rp"></b></div></div>
+V.prehled=`<h2>Přehled</h2><div class="kpi">${KPI.map(([l,v])=>`<div><small>${l}</small><b>${v}</b></div>`).join("")}<div><small>Harmonogram</small><b id="rp"></b></div></div>
 <div class="note"><b>Hlavní zjištění:</b> hotpot ve Zlíně nebyl nalezen, což je příležitost. Při ceně 500 Kč na hosta ale model vychází ztrátově. Cenu je potřeba zvednout na 600 Kč a víc, nebo snížit náklady a investici. Dřív než cokoliv jiného je třeba vyřešit odbornou způsobilost pro hostinskou činnost.</div>${cards(OVERVIEW)}`;
 V.plan=`<h2>Podnikový plán</h2><p class="small">První návrh. Bude se doplňovat podle nových zjištění.</p><div class="grid">${PLAN.map(([t,x])=>`<div class="card"><h3>${t}</h3><p>${x}</p></div>`).join("")}</div>`;
 V.trh=`<h2>Trh a konkurence</h2>
@@ -276,7 +276,7 @@ V.prov=`<h2>Provoz a menu</h2>${cards(PROV)}`;
 V.pravo=`<h2>Právo, daně, povolení</h2><div class="note">Informace nejsou právní ani účetní poradenství. Před rozhodnutím je nutné vše ověřit s účetní, daňovým poradcem a na úřadech.</div>${cards(LAW)}`;
 const tot=ROAD.reduce((a,p)=>a+p[1].length,0), dn=ROAD.reduce((a,p)=>a+p[1].filter(x=>x[1]==="done").length,0), pct=Math.round(100*dn/tot);
 const ST={done:"✅",doing:"🔥",todo:"⬜"};
-V.road=`<h2>Roadmapa</h2><div class="bar"><i style="--w:${pct}%"></i></div><p class="small">Splněno ${dn} z ${tot} (${pct} %).</p>${ROAD.map(([t,it])=>`<div class="card" style="margin-bottom:14px"><h3>${t}</h3>${it.map(([x,s])=>`<label class="chk ${s==="done"?"done":""}"><span style="width:22px">${ST[s]}</span><span>${x}</span></label>`).join("")}</div>`).join("")}`;
+V.road=`<h2>Harmonogram</h2><div class="bar"><i style="--w:${pct}%"></i></div><p class="small">Splněno ${dn} z ${tot} (${pct} %).</p>${ROAD.map(([t,it])=>`<div class="card" style="margin-bottom:14px"><h3>${t}</h3>${it.map(([x,s])=>`<label class="chk ${s==="done"?"done":""}"><span style="width:22px">${ST[s]}</span><span>${x}</span></label>`).join("")}</div>`).join("")}`;
 V.zdroje=`<h2>Zdroje</h2><p class="small">Údaje v dashboardu vycházejí z těchto veřejných zdrojů (stav k ${UPDATED}).</p><div class="grid">${SRC.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(([a,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${a}</a></li>`).join("")}</ul></div>`).join("")}</div>`;
 V.otazky=`<h2>Otevřené otázky</h2><div class="grid">${ASK.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`;
 
@@ -310,8 +310,8 @@ document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.c
  f()})();
 
 // oznámení o nové verzi
-const VERSION="2026-11-02-b";
-const WHATS_NEW=["Nový průzkum trhu a konkurence (hotpot v ČR, ceny, Zlín)","Přepočítaný finanční model, citlivost na cenu","Role: Erik (byznys a marketing), Filip (gastro)","Nové záložky Trh a konkurence a Zdroje"];
+const VERSION="2026-11-02-c";
+const WHATS_NEW=["Roadmapa se jmenuje Harmonogram (česky a přesněji)","Průzkum trhu, ceny a konkurence z minulé verze zůstávají","Finanční model s citlivostí na cenu"];
 (function(){let seen=null;try{seen=localStorage.getItem("dp_ver")}catch(e){}
  if(seen===VERSION)return;
  const ov=document.createElement("div");ov.className="ov";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");
