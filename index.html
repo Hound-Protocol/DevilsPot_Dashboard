@@ -116,6 +116,19 @@ a{color:var(--org)}a:hover{color:var(--gold)}
 .mb button:active{transform:scale(.96)}
 @keyframes btnp{50%{box-shadow:0 0 46px rgba(255,110,20,1),inset 0 1px 0 rgba(255,255,255,.45)}}
 .mv{position:relative;margin-top:14px;font-size:11px;color:var(--mut);letter-spacing:.1em}
+
+/* ---------- plán, dotazník, dokumenty ---------- */
+.chap{margin-bottom:14px;animation:none}
+.chap p{margin:6px 0}.chap h5{margin:16px 0 6px;font:600 14px Oswald,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.chap ul,.chap ol{margin:6px 0 10px;padding-left:20px}.chap li{margin:3px 0}
+.q{padding:8px 0;border-bottom:1px solid rgba(255,110,60,.12)}.q:last-child{border-bottom:0}.q ul{margin:4px 0 0}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 16px}
+.toc button{background:rgba(255,100,40,.1);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font:500 12px Inter,sans-serif;cursor:pointer;transition:.2s}
+.toc button:hover{background:rgba(255,100,40,.25);border-color:var(--org)}
+.dlbar{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:10px 0}
+.dlbtn{border:0;cursor:pointer;color:#fff;font:700 15px Oswald,Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:12px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 70%,#ffd166);box-shadow:0 0 26px rgba(255,80,20,.6),inset 0 1px 0 rgba(255,255,255,.4);transition:.2s;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.dlbtn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(255,110,20,.9),inset 0 1px 0 rgba(255,255,255,.5)}
+.dlbtn:disabled{opacity:.7;cursor:wait}
 </style>
 </head>
 <body>
@@ -132,11 +145,9 @@ a{color:var(--org)}a:hover{color:var(--gold)}
 <main id="main"></main>
 
 <script>
-/* =====================================================
-   OBSAH DASHBOARDU – upravuje Claude podle domluvy v chatu
-   ===================================================== */
+/* DATA DASHBOARDU DevilsPot: veškerý obsah. Aktualizuje Claude podle domluvy; viz CLAUDE.md */
 const UPDATED="2. 11. 2026";
-const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["pravo","Právo a daně"],["road","Harmonogram"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
+const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dotazník"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["brig","Nábor brigádníků"],["pravo","Právo a daně"],["road","Harmonogram"],["rozh","Rozhodnutí"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
 
 /* Finanční model – všechna čísla jsou ODHADY, ne zjištěná fakta */
 const INV=[["Rekonstrukce a úpravy prostoru",500000],["Kuchyň: chlazení, odtah, technika",300000],["Stoly s indukcí, nádobí, nádoby",200000],["Interiér a nábytek",200000],["Kauce, první nájmy, povolení",150000],["Rezerva na první měsíce",250000]];
@@ -155,28 +166,16 @@ const beOcc=beGuests(M.price)/capMonth;
 
 const KPI=[["Tým","2 zakladatelé"],["Formát","Sety + à la carte"],["Kapitál","0 Kč (úvěr)"],["Hotpot ve Zlíně","nenalezen"],["Break-even (model)",Math.round(beOcc*100)+" % obsazenosti"]];
 
+const ZAS_MOTTO_SHORT="Jasné, legálně podložené, vstřícné, klidné a férové podmínky pro všechny. Každý má šanci růst a pracovat v bezpečném, čistém a profesionálním prostředí.";
 const OVERVIEW=[
  ["Zadání",null,["Hotpot restaurace DevilsPot ve Zlíně.","Zakladatelé: Erik a Filip. Oba jsou zatím zaměstnaní.","Bez vlastního kapitálu, financování z půjčky.","Formát: sety pro skupiny a à la carte suroviny.","Žádný časový tlak, důraz na kvalitní přípravu."]],
  ["Tým a role",null,["Filip: celé gastro (kuchyň, menu, dodavatelé, hygiena, provoz). Má vyučení, praxi a vášeň pro obor.","Erik: byznys a marketing (plán, finance, značka, sociální sítě), v procesu učení.","Claude: asistent pro data, průzkum, propočty a návrhy."]],
  ["Příležitost","fact",["Hotpot podnik ve Zlíně nebyl ve vyhledávání nalezen (jen česká, čínská, nepálská a sushi kuchyně).","V ČR se hotpot koncentruje v Praze, vstupní cena all-you-can-eat je kolem 700–800 Kč na osobu.","Zlín: kraj má 576 tis. obyvatel, UTB asi 9 tis. studentů, v kraji žije 27 tis. cizinců."]],
  ["Rizika","fact",["Při ceně 500 Kč na hosta a obsazenosti 45 % je model mírně ztrátový, k vyrovnání nákladů je potřeba asi "+Math.round(beOcc*100)+" % obsazenosti. Zakladatelé jsou v modelu bez mzdy, po ověření je potřeba počítat i s jejich odměnou.","Mzdy ve Zlínském kraji jsou o 12 % pod průměrem ČR, lidé tu mají méně na útratu.","Méně lidí obědvá v restauracích (z 33 % na 26 %), hotpot proto na obědy nestavět.","Půjčka bez vlastního vkladu znamená osobní ručení obou zakladatelů."]],
+ ["Zásady zaměstnávání",null,[ZAS_MOTTO_SHORT]],
  ["Co je potřeba vyřešit dřív než cokoliv jiného","est",["Hostinská činnost je řemeslná živnost a vyžaduje odbornou způsobilost. Filip má vyučení a praxi, což by podmínku mělo splnit. Doklady je třeba potvrdit na živnostenském úřadě.","Zvednout průměrnou útratu (600+ Kč), nebo snížit náklady a investici, aby model vycházel i s odměnou zakladatelů.","Ověřit poptávku zkušebním provozem, než se vezme velký úvěr."]]
 ];
 
-const PLAN=[
- ["1. Shrnutí","Koncept: hotpot restaurace ve Zlíně, kde si hosté vaří u stolu v indukčním hrnci. Cílová skupina jsou party přátel, páry, studenti a firemní oslavy. Prodej přes sety pro 2 / 4 / 6 osob a doobjednání surovin. Start financovaný úvěrem, otevření po ověření poptávky."],
- ["2. Produkt","3–4 vývary (jemný, pálivý Sichuan, houbový, bezmasý), sety a à la carte suroviny (hovězí, kuřecí, vepřové, mořské plody, tofu, houby, zelenina, knedlíčky, nudle), bar s omáčkami, dezerty a nápoje. Zážitek spočívá ve společném vaření."],
- ["3. Trh Zlín","Kraj má 576 120 obyvatel (30. 6. 2026) a ubývá. Okres Zlín má asi 187 tis. obyvatel. Průměrná mzda v kraji je 45 615 Kč (ČR 51 966 Kč). UTB má asi 9 tis. studentů. Hotpot podnik ve Zlíně nenalezen (k ověření v terénu). Nejbližší známé hotpot podniky jsou v Praze."],
- ["4. Zákazníci","Studenti UTB (večerní skupiny), mladí dospělí a páry, firemní akce a oslavy, rodiny o víkendech, část z 27 tis. cizinců v kraji. Obědy nejsou hlavní cíl."],
- ["5. Konkurenční výhoda","První hotpot ve městě (pokud se potvrdí), silná značka DevilsPot s ohnivým konceptem a úrovněmi ostrosti, zážitkový formát vhodný pro sdílení na sociálních sítích."],
- ["6. Marketing","Instagram a TikTok, Google Maps, spolupráce s UTB a studentskými spolky, zkušební večery před otevřením, akce ve Zlíně (food truck festival, svatomartinské hody, vánoční trhy), věrnostní „Devil level“."],
- ["7. Provoz","Menší restaurace (cca 30–50 míst) v pronajatém gastro prostoru. Indukce ve stolech, chlazení, odtah. Večerní a víkendový provoz s brigádníky."],
- ["8. Tým","Filip vede celé gastro (vyučení, praxe, vášeň pro obor). Erik vede byznys a marketing. Pomocná kuchyně, obsluha a brigádníci se doplní podle rozpočtu. Asistenční roli (data, průzkum, propočty, návrhy) zajišťuje Claude."],
- ["9. Finance","Modelová investice "+fmtS(invT)+" financovaná úvěrem, splátka asi "+fmtS(pay)+" měsíčně. Při ceně 500 Kč na hosta a obsazenosti 45 % je model mírně ve ztrátě, k vyrovnání je potřeba asi "+Math.round(beOcc*100)+" % obsazenosti (zakladatelé bez mzdy). Při ceně 700 Kč stačí asi "+Math.round(beGuests(700)/capMonth*100)+" %."],
- ["10. Rizika","Nízká obsazenost, růst cen surovin a energií, ručení za úvěr, závislost na pár lidech, sezónnost (hotpot je silnější v chladných měsících), nižší kupní síla ve Zlínském kraji."],
- ["11. Právní forma","Pro dva společníky se doporučuje zvážit s.r.o. a smlouvu společníků (podíly, role, odchod, rozhodování). Ověřit s účetní."],
- ["12. Harmonogram","Pět fází od ověření přes zkušební provoz, financování a povolení po otevření. Viz záložka Harmonogram."]
-];
 function fmtS(n){return Math.round(n).toLocaleString("cs-CZ")+" Kč"}
 
 const COMP=[
@@ -221,11 +220,11 @@ const FIN=[
 const BANK=["Podnikatelský plán a prognóza na 3 roky","Rozpočet investice s nabídkami dodavatelů","Návrh nebo předsmlouva nájmu prostoru","Doklad o poptávce (předprodeje, zkušební večery, seznam zájemců)","Příjmy a závazky ručitelů","Doklad o odborné způsobilosti pro hostinskou činnost (výuční list a praxe Filipa)","Pojištění a zajištění úvěru"];
 
 const ROAD=[
- ["Fáze 1: Ověření (měsíc 1–3)",[["Vytvořit dashboard a první návrh plánu","done"],["První kolo průzkumu trhu, cen, práva a financování","done"],["Filip: ověřit na živnostenském úřadě, že vyučení a praxe stačí pro hostinskou činnost","todo"],["Dohodnout podíly a role mezi Erikem a Filipem","todo"],["Ověřit ve Zlíně terénně, že hotpot opravdu chybí","todo"],["Navštívit hotpot restaurace jinde (Praha, Brno), nafotit, změřit ceny","todo"],["Navrhnout menu a spočítat cenu surovin na porci","todo"],["Dotazník mezi studenty UTB a známými","todo"],["Založit sociální sítě a seznam zájemců","todo"]]],
+ ["Fáze 1: Ověření (měsíc 1–3)",[["Vytvořit dashboard a první návrh plánu","done"],["První kolo průzkumu trhu, cen, práva a financování","done"],["Filip: ověřit na živnostenském úřadě, že vyučení a praxe stačí pro hostinskou činnost","todo"],["Dohodnout podíly a role mezi Erikem a Filipem","todo"],["Ověřit ve Zlíně terénně, že hotpot opravdu chybí","todo"],["Navštívit hotpot restaurace jinde (Praha, Brno), nafotit, změřit ceny","todo"],["Navrhnout menu a spočítat cenu surovin na porci","todo"],["Sepsat zásady zaměstnávání, zaměstnanecký řád a vzory dohod","todo"],["Dotazník mezi studenty UTB a známými (hotový, k rozeslání)","todo"],["Nábor studentů UTB na brigády: kontakt na Job centrum UTB a Studentskou unii","todo"],["Založit sociální sítě a seznam zájemců","todo"]]],
  ["Fáze 2: Zkušební provoz (měsíc 3–6)",[["Najít kuchyň nebo prostor na jednorázové večery","todo"],["Uspořádat 2–4 hotpot večery","todo"],["Vyhodnotit tržby, náklady a spokojenost","todo"],["Rozhodnout: pokračovat / upravit / skončit","todo"]]],
  ["Fáze 3: Plán a financování (měsíc 5–9)",[["Dokončit podnikatelský plán a finance","todo"],["Konzultace s účetní: forma, DPH","todo"],["Bezplatná konzultace v CzechInvest Zlín","todo"],["Schůzky s 2–3 bankami (Garant InvestEU)","todo"],["Nabídky leasingu vybavení","todo"],["Podepsat smlouvu společníků","todo"]]],
  ["Fáze 4: Prostor a povolení (měsíc 8–12)",[["Vybrat lokalitu (frekvence, studenti, parkování, elektřina)","todo"],["Dohodnout nájem s volnými měsíci na rekonstrukci","todo"],["Změna užívání, hygiena, požární ochrana","todo"],["Živnostenské oprávnění / registrace firmy","todo"]]],
- ["Fáze 5: Otevření (měsíc 10–14)",[["Objednat vybavení","todo"],["Najmout a zaškolit personál, školení hygieny (HACCP)","todo"],["Kasa (s ohledem na EET 2.0), rezervace, dodavatelé","todo"],["Zkušební otevření a recenze","todo"],["Velké otevření","todo"]]]
+ ["Fáze 5: Otevření (měsíc 10–14)",[["Objednat vybavení","todo"],["Najmout brigádníky (DPP/DPČ), přihlásit je u ČSSZ, zaškolit a vyřídit zdravotní průkazy a HACCP","todo"],["Kasa (s ohledem na EET 2.0), rezervace, dodavatelé","todo"],["Zkušební otevření a recenze","todo"],["Velké otevření","todo"]]]
 ];
 const ASK=[
  ["Co je potřeba doplnit od týmu",["Kolik každý z vás může a chce ručit za úvěr?","Kdy a za jakých podmínek může Filip opustit zaměstnání a vést kuchyň?","Jaký prostor a čtvrť ve Zlíně preferujete (centrum, u UTB, Zlín-Malenovice)?","Chcete provoz hlavně večer a o víkendu, nebo i přes den?","Z čeho budou žít zakladatelé v prvním roce provozu?"]],
@@ -236,12 +235,360 @@ const SRC=[
  ["Konkurence a ceny",[["Slevomat: Malatang, hot pot all-you-can-eat","https://www.slevomat.cz/akce/2417720-hot-pot-all-you-can-eat-ve-vodickove-pro-1-az-2-osoby"],["Slevomat: NALI, hotpot","https://www.slevomat.cz/podnik/187390-nali"],["Czech Crunch: InTown Hot Pot","https://cc.cz/cinska-ctvrt-v-kapesnim-vydani-ve-florentinu-najdete-podnik-ktery-vas-prenese-na-druhy-konec-sveta/"],["Hungary Unlocked: HiBeef Hot Pot Budapest","https://hungaryunlocked.com/cs/hibeef-hot-pot-budapest/"],["Wolt: restaurace ve Zlíně","https://wolt.com/cs/cze/zlin/restaurants"]]],
  ["Náklady",[["Companyspace: komerční prostory ve Zlíně","https://companyspace.com/czech/available/restaurants/zlin"],["MPSV: minimální mzda","https://mpsv.gov.cz/minimalni-mzda"],["Pracomat: nabídka práce číšník ve Zlíně","https://www.pracomat.cz/prace/33024040717-cisnici-a-servirky"],["Ušetřeno: cena elektřiny 2026","https://www.usetreno.cz/energie-elektrina/cena-za-1-kwh/"],["Zboží.cz: indukční vařič Hendi","https://www.zbozi.cz/vyrobek/hendi-239421-kitchen-line/"]]],
  ["Právo a daně",[["BusinessInfo: hostinská činnost","https://www.businessinfo.cz/cs/clanky/hostinska-cinnost-1516.html"],["Praha 1: hostinská činnost jako řemeslná živnost","https://www.praha1.cz/faq/ubytovaci-sluzby-a-hostinska-cinnost/"],["BusinessInfo: změny v DPH 2026","https://www.businessinfo.cz/clanky/pozor-na-zmeny-v-dph-nektere-plati-od-1-ledna-2026-co-museji-podnikatele-udelat/"],["DAUC: DPH u stravovacích služeb od 2027","https://www.dauc.cz/clanky/17467/dph-u-stravovacich-a-ubytovacich-sluzeb-a-zmeny-pro-rok-2027"],["BusinessInfo: EET 2.0 schválena Sněmovnou","https://www.businessinfo.cz/clanky/snemovna-schvalila-eet-2-0-moderni-evidence-trzeb-miri-do-senatu/"],["BusinessInfo: založení s.r.o.","https://www.businessinfo.cz/navody/spravny-vyber-obchodni-spolecnosti-pro-vas-obchodni-plan-ppbi/2/"],["Fakturoid: jak založit s.r.o.","https://fakturoid.cz/almanach/zacatky-podnikani/zalozeni-sro"]]],
- ["Financování a podpora",[["E15: Garant InvestEU nahradí Národní záruku","https://www.e15.cz/finexpert/banky-a-ucty/konec-obihani-uradu-statni-zaruku-za-uver-ted-vyridite-primo-ve-sve-bance-1434528"],["BusinessInfo: spouští se Garant InvestEU","https://www.businessinfo.cz/clanky/mensim-podnikum-pomuze-novy-financni-nastroj-spousti-se-garant-investeu/"],["BusinessInfo: konzultační den CzechInvest Zlín","https://www.businessinfo.cz/akce/konzultacni-den-pro-zlinsky-kraj-3/"],["BusinessInfo: akcelerátor Můj první milion","https://www.businessinfo.cz/clanky/nastartujte-sve-podnikani-v-18-rocniku-zlinskeho-akceleratoru-muj-prvni-milion/"]]]
+ ["Financování a podpora",[["E15: Garant InvestEU nahradí Národní záruku","https://www.e15.cz/finexpert/banky-a-ucty/konec-obihani-uradu-statni-zaruku-za-uver-ted-vyridite-primo-ve-sve-bance-1434528"],["BusinessInfo: spouští se Garant InvestEU","https://www.businessinfo.cz/clanky/mensim-podnikum-pomuze-novy-financni-nastroj-spousti-se-garant-investeu/"],["BusinessInfo: konzultační den CzechInvest Zlín","https://www.businessinfo.cz/akce/konzultacni-den-pro-zlinsky-kraj-3/"],["BusinessInfo: akcelerátor Můj první milion","https://www.businessinfo.cz/clanky/nastartujte-sve-podnikani-v-18-rocniku-zlinskeho-akceleratoru-muj-prvni-milion/"]]],
+ ["Nábor brigádníků",[["ARROWS: DPP v roce 2026, limity a povinnosti","https://arws.cz/novinky-v-arrows/dohody-o-provedeni-prace-v-roce-2026-nove-limity-odvody-a-povinnosti-zamestnavatelu"],["Finance.cz: dohoda o provedení práce","https://www.finance.cz/wiki/dane-a-mzdy/dpp/"],["E15: kalkulačka DPP 2026","https://www.e15.cz/kalkulacka-dpp"],["BusinessInfo: sezóna brigád, daně a pojištění","https://www.businessinfo.cz/clanky/zacina-sezona-brigad-jake-dane-a-pojisteni-nejen-studenti-plati-a-co-se-zmenilo/"],["VZP: brigáda u studenta","https://www.vzp.cz/o-nas/tiskove-centrum/otazky-tydne/brigada-u-studenta-ss-pokracujiciho-na-vs"],["ČSSZ: evidence zaměstnanců","https://www.cssz.gov.cz/evidence-zamestnancu-prihlaseni-zmena-odhlaseni-"],["Banky.cz: dohody 2027","https://www.banky.cz/clanky/dohody-2027-odvody-az-od-12-500-kc-u-dpp-a-5-000-kc-u-dpc/"],["BusinessInfo: portál Zlin.Jobs","https://www.businessinfo.cz/clanky/firmy-ve-zlinskem-kraji-si-diky-stazim-vychovavaji-budouci-zamestnance/"],["Novinky: Business Day na UTB","https://www.novinky.cz/clanek/veda-skoly-studentum-zlinske-univerzity-nabidne-praci-70-firem-40013299"],["UTB FMK: veletrh iKariéra","https://fmk.utb.cz/?p=30422"],["Pracomat: číšník, servírka ve Zlíně","https://www.pracomat.cz/hledam-praci/region-zlin/profese-cisnik-servirka"],["Pracomat: výpomoc, pomocník ve Zlínském kraji","https://www.pracomat.cz/hledam-praci/region-zlinsky-kraj/profese-vypomoc-pomocnik"],["Finance.cz: potravinářský průkaz","https://www.finance.cz/clanky/525620-jak-vyridit-potravinarsky-prukaz/"]]]
 ];
 
-/* =====================================================
-   RENDER (čtecí, bez vstupů)
-   ===================================================== */
+/* Verze (zvýšit při každém vydání) a novinky pro okno „Nová pekelná verze je online!“ */
+const VERSION="2026-11-02-d";
+const WHATS_NEW=["Podnikový plán jako plnohodnotný dokument se stažením do Wordu","Nová záložka Dotazník (19 otázek) a terénní ověření","Zásady zaměstnávání a nábor studentů UTB na brigády","Přehled rozhodnutí a nové zdroje"];
+
+/* Dotazník, terénní ověření, rozhodnutí */
+const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
+const QEND="Děkujeme! Sledujte nás, brzy se ozveme se zkušebními večery.";
+const QUEST=[
+ ["A. Znalost a zájem",[
+  [1,"Znáte hotpot?","jedna odpověď",["Ano, už jsem ho jedl/a","Znám ho, ale ještě jsem ho nejedl/a","Ne, nevím, co to je"]],
+  [2,"Kde jste hotpot jedl/a?","více odpovědí, jen pokud jste v otázce 1 zvolil/a „už jsem ho jedl/a“",["V Praze","V Brně","V jiném městě v ČR","V zahraničí","Doma"]],
+  [3,"Chtěl/a byste mít hotpot restauraci ve Zlíně?","škála 1–5 (1 = rozhodně ne, 5 = rozhodně ano)",[]],
+  [4,"Jak často byste restauraci navštěvoval/a?","jedna odpověď",["Jednou týdně nebo častěji","2–3× měsíčně","Jednou měsíčně","Několikrát za rok","Spíš bych nechodil/a"]]
+ ]],
+ ["B. Návyky",[
+  [5,"S kým byste nejčastěji šel/šla?","více odpovědí",["S přáteli (parta 4+ lidí)","S partnerem/partnerkou","S rodinou","S kolegy (firemní akce)","Sám/sama"]],
+  [6,"Kdy byste přišel/přišla?","více odpovědí",["Všední den večer","Pátek nebo sobota večer","Víkend odpoledne","Oběd ve všední den","Při oslavě nebo speciální příležitosti"]],
+  [7,"Jaký typ nabídky byste preferoval/a?","jedna odpověď",["All-you-can-eat (pevná cena, neomezeně)","Sety pro 2–4 osoby","À la carte (platím za to, co si vyberu)","Nevím, záleží na ceně"]]
+ ]],
+ ["C. Cena",[
+  [8,"Kolik jste ochotni utratit na jednu osobu za jídlo (bez alkoholu)?","jedna odpověď",["Do 300 Kč","300–400 Kč","400–500 Kč","500–600 Kč","600–700 Kč","700–800 Kč","Více než 800 Kč"]]
+ ]],
+ ["D. Co je pro vás důležité",[
+  [9,"Vyberte tři nejdůležitější věci při výběru restaurace.","nejvýše 3 odpovědi",["Cena","Kvalita masa a surovin","Výběr vývarů","Atmosféra a vzhled","Rychlost obsluhy","Poloha a parkování","Vegetariánské a bezmasé možnosti","Zážitek a fotky na sociální sítě"]],
+  [10,"Jaké vývary byste chtěl/a?","více odpovědí",["Jemný kuřecí","Pálivý sečuánský","Houbový","Rajčatový","Thajský (tom yum)","Bezmasý/vegan"]],
+  [11,"Jak pálivé jídlo máte rád/a?","škála 1–5 (1 = vůbec ne, 5 = co nejpálivější)",[]],
+  [12,"Kde ve Zlíně byste restauraci chtěl/a?","jedna odpověď",["V centru","Blízko univerzity","V nákupním centru","Nezáleží, hlavně dobré jídlo"]]
+ ]],
+ ["E. Komunikace",[
+  [13,"Kde se o nové restauraci nejspíš dozvíte?","více odpovědí",["Instagram","TikTok","Facebook","Google Maps","Od kamarádů","Plakát nebo leták (například na univerzitě)"]]
+ ]],
+ ["F. O vás",[
+  [14,"Jste:","jedna odpověď",["Student/ka UTB","Student/ka jiné školy","Pracující","Jiné"]],
+  [15,"Věk:","jedna odpověď",["do 18","19–24","25–34","35–44","45 a více"]],
+  [16,"Bydlíte:","jedna odpověď",["Ve Zlíně","V okolí Zlína","Jinde"]]
+ ]],
+ ["G. Otevřené otázky (nepovinné)",[
+  [17,"Co by vás přesvědčilo, abyste přišel/přišla?","volná odpověď",[]],
+  [18,"Co by vás naopak odradilo?","volná odpověď",[]],
+  [19,"Chcete se dozvědět o otevření a o zkušebních večerech? Zadejte e-mail.","nepovinné; zadáním souhlasíte, že vám napíšeme pouze o DevilsPotu a kdykoliv se můžete odhlásit",[]]
+ ]]
+];
+const QVW=["Při jaké ceně na osobu byste hotpot považoval/a za tak levný, že pochybujete o kvalitě?","Při jaké ceně by to byla výhodná nabídka?","Při jaké ceně by to začalo být drahé, ale ještě byste šel/šla?","Při jaké ceně by to bylo příliš drahé a nešel/nešla byste?"];
+const QDIST=["QR kód na plakátu nebo letáku (kolej, menza, fakulty). Pro vyvěšení na UTB se zeptat studentských organizací.","Skupiny na Facebooku a Instagramu: zlínské komunity, studentské skupiny, spolky.","Osobně: deset minut ve Zlíně s tabletem nebo telefonem dává často víc kvalitních odpovědí než sdílení online.","Motivace: malá odměna (slosování o večeři pro dva na zkušebním večeru) zvýší počet odpovědí."];
+const QEVAL=["Zájem: podíl odpovědí 4 a 5 v otázce 3. Pokud je to přes polovinu a zájemci chtějí chodit alespoň jednou měsíčně, je to dobrý signál.","Cena: medián odpovědí na otázku 8 (nebo průsečík křivek ve Van Westendorpu). Porovnat s modelem (průměrná útrata 500 Kč).","Menu: nejčastěji vybrané vývary a pálivost určí základní nabídku.","Kanály: pořadí v otázce 13 ukáže, kam dát marketingový rozpočet.","Segmenty: výsledky srovnat zvlášť pro studenty a pracující, mívají jinou ochotu platit."];
+
+const FIELD=[
+ ["Hotpot ve Zlíně","Projít centrum (okolí náměstí Míru) a okolí UTB (náměstí T. G. Masaryka). Zkontrolovat Mapy.cz, Google Maps, Firmy.cz, Wolt a Instagram. Zeptat se pár místních. Cíl: potvrdit nebo vyvrátit, že hotpot ve Zlíně není."],
+ ["Stávající konkurence","Zapsat asijské a čínské restaurace (Shun Li, Makalu, MIOMI sushi a další), jejich ceny, nabídku a obsazenost v pátek a v sobotu večer."],
+ ["Volné prostory","Zapsat adresu, rozlohu, nájem, kontakt na majitele, stav (gastro schválení, odtah, příkon elektřiny), nafotit. Hledat i zavřené restaurace, které lze převzít."],
+ ["Frekvence a parkování","V okolí zajímavých míst počítat chodce 10 minut ve večerní špičce, ověřit parkování a dostupnost MHD."],
+ ["Rozhovory","Zeptat se alespoň 10 lidí (studenti, pracující) na zájem o hotpot a cenu, ideálně doplnit dotazníkem."]
+];
+
+const DECISIONS=[
+ ["2. 11. 2026","Zásady zaměstnávání: jasné, legálně podložené, vstřícné, klidné a férové podmínky pro všechny, šance růst a bezpečné, čisté a profesionální prostředí."],
+ ["2. 11. 2026","Chceme verbovat studenty UTB na brigády (DPP/DPČ). Kanály, právní rámec a postup náboru jsou v dashboardu v záložce Nábor brigádníků."],
+ ["2. 11. 2026","Název podniku: DevilsPot. Hotpot restaurace ve Zlíně."],
+ ["2. 11. 2026","Zakladatelé jsou dva: Erik a Filip."],
+ ["2. 11. 2026","Role: Filip vede celé gastro (vyučení, praxe, vášeň pro obor). Erik vede byznys a marketing a učí se."],
+ ["2. 11. 2026","Formát nabídky: sety pro skupiny a à la carte suroviny (ne all-you-can-eat)."],
+ ["2. 11. 2026","Oba zakladatelé jsou zatím zaměstnaní, žádný termín otevření, důraz na kvalitní přípravu."],
+ ["2. 11. 2026","Financování: bez vlastního kapitálu, z půjčky. Doporučeno nejdřív ověřit poptávku zkušebním provozem a až poté jednat s bankou."],
+ ["2. 11. 2026","Dashboard je čistě informační, bez políček k psaní. Obsah doplňuje a aktualizuje Claude podle domluvy."],
+ ["2. 11. 2026","Dashboard běží na GitHub Pages z repozitáře Hound-Protocol/DevilsPot_Dashboard. Repozitář je veřejný, obsah vidí každý, kdo zná adresu."],
+ ["2. 11. 2026","Texty v dashboardu jsou neutrální, bez „já“. Úloha asistenta je popsána v sekci „O co se postará Claude“."],
+ ["2. 11. 2026","„Roadmapa“ přejmenována na „Harmonogram“."],
+ ["2. 11. 2026","Při každé nové verzi se zobrazí okno „Nová pekelná verze je online!“ s tlačítkem „Zažehni mě, synku“."],
+ ["2. 11. 2026","Zákaznický dotazník (19 otázek, hlavně studenti UTB) je součástí dashboardu i přílohou plánu."],
+ ["2. 11. 2026","Podnikový plán je plnohodnotný dokument v dashboardu se stažením do Wordu. S každou diskuzí se aktualizují data v dashboardu i v plánu."]
+];
+
+/* Nábor studentů UTB na brigády */
+const BRIG_SLOTS=3, BRIG_HOURS=6;
+const brigH=BRIG_SLOTS*BRIG_HOURS*M.days;           // hodin brigádníků měsíčně
+const brigRate=220;                                 // Kč/h
+const brigStudentsDPP=Math.ceil(brigH/25);          // DPP: 300 h/rok = 25 h/měs
+const brigStudentsDPC=Math.ceil(brigH/80);          // DPČ: až 20 h/týden ~ 80 h/měs
+const BRIG=[
+ ["Kde studenty oslovit","fact",["Job centrum UTB: zprostředkovává nabídky studentům a absolventům. Zjistit kontakt a podmínky zveřejnění nabídky.","Studentská unie UTB: spolupořádá s Job centrem veletrh Business Day. Oslovit kvůli sdílení nabídky a spolupráci.","Veletrhy: Business Day UTB (dříve 70 firem a 1 700 návštěvníků) a iKariéra Zlín (31. ročník v roce 2025).","Zlin.Jobs: bezplatný regionální portál (TIC Zlín a Zlínský kraj), registrace i zveřejnění nabídek zdarma, zaměřený i na stáže.","Portály brigád: Jobs.cz, Prace.cz, JenPráce.cz, Pracomat, Dobraprace.cz a aplikace Grason (gastro a eventy).","Sociální sítě DevilsPotu a studentské skupiny na Facebooku a Instagramu.","Plakáty s QR kódem (koleje, menza, fakulty), vývěska ve výloze, doporučení od stávajících brigádníků."]],
+ ["Co studenti dostávají jinde","fact",["Brigády ve Zlíně na portálech: McDonald's 150 Kč/h, sklady 170–198 Kč/h, pomocné práce 180–190 Kč/h.","Průměrná nabízená mzda brigády pomocník ve Zlínském kraji: asi 160 Kč/h.","Restaurace ve Zlíně hledá číšníka/servírku od 220 Kč/h na DPP/DPČ (duben 2026).","Minimální mzda 2026: 134,40 Kč/h.","Zlínský kraj měl dle Echo24 nejvyšší meziroční nárůst hodinových sazeb brigád (až 20 %).","Závěr: pro konkurenceschopnost nabídnout 200–220 Kč/h plus spropitné. Model počítá s "+brigRate+" Kč/h."]],
+ ["Student a pojištění","fact",["Za studenta do 26 let (prezenční vysokoškolské studium) platí zdravotní pojištění stát. Zaměstnavatel potřebuje potvrzení o studiu.","Do 11 999 Kč měsíčně u DPP student neplatí zdravotní ani sociální pojištění. Od 12 000 Kč platí jako zaměstnanec.","Po ukončení studia nebo ve 26 letech student status ztrácí.","Bez podepsaného prohlášení poplatníka je daň z DPP do 12 000 Kč srážková (15 %). S prohlášením (podepsat jen u jednoho zaměstnavatele v měsíci) se uplatní sleva na poplatníka a při příjmu kolem 11 000 Kč vychází daň nula.","Sleva na studenta byla zrušena, její obnovení je v daňovém balíčku schváleném Sněmovnou (ověřit)."]],
+ ["Povinnosti zaměstnavatele (2026)","fact",["Registrace zaměstnavatele u ČSSZ (přihláška do registru zaměstnavatelů).","Od 1. 7. 2026 je nutné přihlásit zaměstnance do evidence zaměstnanců ČSSZ před zahájením práce, i u DPP.","Od 1. 4. 2026 se podává jednotné měsíční hlášení zaměstnavatele (JMHZ), tiskopis ONZ se nepoužívá.","Dohoda musí být písemná, s popisem práce, dobou a u DPČ rozsahem hodin.","Každý měsíc hlídat limity u každého studenta (11 999 Kč a 300 hodin ročně u DPP).","Vyřídí mzdová účetní. Model počítá s 20 tis. Kč měsíčně na účetní a ostatní."]],
+ ["Hygiena a zdraví","est",["Podle dostupných zdrojů se při práci s pokrmy vyžaduje zdravotní průkaz pracovníka v potravinářství a znalosti o ochraně veřejného zdraví, i u brigádníků.","Průkaz vystavuje praktický lékař po vyšetření, trvá několik dní a nelze jej vyřídit na počkání. Platí i pro více zaměstnavatelů.","Aktuální požadavky potvrdit u Krajské hygienické stanice. Součástí je i školení HACCP."]],
+ ["Jaké pracovní smlouvy vybrat","est",["DPP: nárazová práce, max. 300 hodin ročně u zaměstnavatele (asi 25 hodin měsíčně v průměru). Vhodná pro rezervní studenty.","DPČ: pravidelná práce, max. polovina týdenní pracovní doby (20 hodin týdně). Vhodná pro hlavní brigádníky. Odvody vznikají od 4 500 Kč měsíčně.","Od 1. 1. 2027 se limity zvyšují: DPP 12 500 Kč a DPČ 5 000 Kč.","Zvolenou kombinaci potvrdit s mzdovou účetní."]],
+ ["Co nabídnout studentům","est",["Flexibilní směny podle rozvrhu, rozpis předem.","Hodinová mzda 200–220 Kč, spropitné (od 2027 osvobozené od daně pro zaměstnance do 7 % tržeb, pokud zákon projde).","Zaučení, školení, růst na vedoucího směny.","Staff meal a zaměstnanecká sleva (k rozhodnutí).","Značka „Devil crew“, parta studentů, atmosféra."]],
+ ["Kdy a jak často","est",["Poptávka po brigádách roste po zkouškovém období a v létě, počítat se zkouškovými obdobími a prázdninami.","Nábor začít 1–2 měsíce před zkušebním provozem a držet rezervu navíc kvůli absencím."]]
+];
+const BRIG_CALC=[
+ ["Pracovní místa na směně (2 číšníci + pomocná kuchyně)",BRIG_SLOTS+""],
+ ["Hodin na směnu",BRIG_HOURS+""],
+ ["Provozních dní měsíčně",M.days+""],
+ ["Hodin brigádníků měsíčně",brigH+" h"],
+ ["Hrubá mzda při "+brigRate+" Kč/h",fmtS(brigH*brigRate)+" měsíčně (bez odvodů)"],
+ ["Studentů jen na DPP (25 h měsíčně)","asi "+brigStudentsDPP],
+ ["Studentů jen na DPČ (80 h měsíčně)","asi "+brigStudentsDPC],
+ ["Doporučená kombinace","3 hlavní na DPČ (asi 240 h) + 9–10 na DPP (asi 225 h) = 12–13 studentů + rezerva"]
+];
+const BRIG_STEPS=["Připravit nabídku, inzerát a vzor dohody (DPP/DPČ).","Osobně kontaktovat Job centrum UTB a Studentskou unii UTB, zjistit podmínky zveřejnění a spolupráce.","Zveřejnit nabídku na Zlin.Jobs, portálech a sociálních sítích, vyvěsit plakáty s QR kódem.","Krátký pohovor a zkušební směna (nebo vstupní školení).","Vybrat dokumenty: občanský průkaz, potvrzení o studiu, kód zdravotní pojišťovny, zdravotní průkaz, prohlášení poplatníka.","Podepsat písemnou dohodu před nástupem.","Přihlásit zaměstnance do evidence ČSSZ před zahájením práce.","Zaučení a školení hygieny (HACCP).","Sestavit rozpis směn a sdílet ho předem.","Každý měsíc zkontrolovat limity (11 999 Kč, 300 hodin) a podat měsíční hlášení."];
+const BRIG_AD="Hledáme studenty na brigádu do nové hotpot restaurace DevilsPot ve Zlíně! Hledáme číšníky/číšnice a pomocné síly do kuchyně na večery a víkendy. Nabízíme hodinovou mzdu od 200 Kč, flexibilní směny podle rozvrhu, spropitné, zaučení a partu mladých lidí. Nevadí, že nemáte praxi, zaučíme vás. Požadujeme: studium na UTB, spolehlivost a chuť pracovat s lidmi. Ozvěte se na (kontakt doplnit).";
+const BRIG_TODO=["Kontakt na Job centrum UTB a Studentskou unii UTB, podmínky zveřejnění nabídky.","Potvrdit aktuální požadavek na zdravotní průkaz a školení u KHS.","Potvrdit s mzdovou účetní kombinaci DPP/DPČ, odvody u DPČ a výši mzdových nákladů.","Rozhodnout o staff meal, zaměstnanecké slevě a spropitném.","Doplnit kontakt do inzerátu a vytvořit QR kód na plakát."];
+
+/* Zásady zaměstnávání */
+const ZAS_MOTTO="Pro všechny účastníky zaměstnání chceme jasné, legálně podložené, vstřícné, klidné a férové podmínky. Každý dostane férové podmínky, každý bude mít šanci růst a pracovat v bezpečném, čistém a profesionálním prostředí.";
+const ZAS=[
+ ["Jasné","Písemná dohoda před nástupem s popisem práce, mzdou a dobou. Rozpis směn předem. Jasná pravidla docházky, výplaty a spropitného."],
+ ["Legálně podložené","Správná smluvní forma (DPP/DPČ nebo pracovní poměr) podle limitů, přihlášení u ČSSZ před nástupem, správné odvody a daně, minimální mzda, evidence hodin. Žádná práce načerno."],
+ ["Vstřícné a klidné","Rozpis podle rozvrhu a zkouškových období, možnost výměny směn, přiměřené obsazení směn, aby nevznikal stres. Zpětná vazba v klidu a soukromě."],
+ ["Férové","Stejné podmínky pro stejnou pozici, mzda vždy včas, transparentní rozdělení spropitného, hodnocení podle práce a ne podle sympatií."],
+ ["Šance růst","Cesta od brigádníka přes zkušeného člena týmu a vedoucího směny až po vyšší odpovědnost. Zaškolení, školení a postupná zodpovědnost."],
+ ["Bezpečné","Školení BOZP, práce s vroucími vývary a indukcí (prevence popálenin), lékárnička a postup první pomoci, bezpečné prostředí bez obtěžování."],
+ ["Čisté a profesionální","Hygienické standardy a HACCP, úklidové plány, jednotné pracovní oblečení, jasné postupy a respekt mezi kolegy i vůči hostům."]
+];
+const ZAS_TODO=["Sepsat jednoduchý zaměstnanecký řád (práva, povinnosti, docházka, spropitné, výměna směn).","Připravit vzory písemných dohod (DPP, DPČ) a vstupní dokument s podmínkami.","Připravit školení BOZP, hygieny (HACCP) a práce s vroucími vývary.","Určit osobu pro zpětnou vazbu a řešení problémů (nulová tolerance k šikaně a obtěžování).","Nastavit pevný den výplaty a pravidla spropitného.","Popsat kariérní cestu (brigádník, zkušený člen týmu, vedoucí směny)."];
+
+/* PODNIKOVÝ PLÁN jako dokument. Zdroj pro záložku Podnikový plán i pro export do Wordu.
+   Bloky: p (odstavec, **tučně**), h (podnadpis), ul, ol, table (head, rows), note */
+const pp=x=>({t:"p",x}), hh=x=>({t:"h",x}), ul=x=>({t:"ul",x}), ol=x=>({t:"ol",x}), nt=x=>({t:"note",x}), tb=(head,rows)=>({t:"table",head,rows});
+const K=n=>Math.round(n).toLocaleString("cs-CZ");
+const pcs=x=>Math.round(x*100)+" %";
+const base=calc(.45,M.price), hi=calc(.6,M.price), lo=calc(.35,M.price);
+
+const PLAN_META={
+ title:"DevilsPot",
+ sub:"Podnikatelský plán hotpot restaurace ve Zlíně",
+ lines:["Zakladatelé: Erik a Filip","Místo: Zlín, Česká republika","Stav: pracovní verze k "+UPDATED,"Dokument se průběžně aktualizuje podle nových zjištění"]
+};
+
+const PLAN_DOC=[
+ {id:"shrnuti",title:"Shrnutí",b:[
+  pp("**DevilsPot** je plánovaná hotpot restaurace ve Zlíně, kde si hosté sami vaří suroviny v hrnci s vývarem na indukční plotýnce přímo u stolu. Koncept stojí na sdíleném zážitku pro party přátel, páry, studenty a firemní oslavy. Nabídku tvoří sety pro 2, 4 a 6 osob a à la carte suroviny."),
+  pp("Zakladatelé jsou dva. **Filip** (vyučení, praxe v gastronomii) odpovídá za celé gastro. **Erik** vede byznys a marketing. Oba jsou zatím zaměstnaní a nespěchají: důraz je na kvalitní přípravu. Vlastní kapitál nemají, start se bude financovat úvěrem."),
+  hh("Klíčová zjištění"),
+  ul([
+   "Příležitost: hotpot podnik ve Zlíně nebyl ve vyhledávání nalezen (k ověření v terénu). V ČR se hotpot koncentruje v Praze, kde all-you-can-eat stojí asi 700–800 Kč na osobu.",
+   "Trh: Zlínský kraj má 576 120 obyvatel, Univerzita Tomáše Bati asi 9 tisíc studentů a v kraji žije 27 432 cizinců. Mzdy v kraji jsou o 12 % pod průměrem ČR.",
+   "Finance (model): investice "+fmtS(invT)+", splátka úvěru asi "+fmtS(pay)+" měsíčně. Při ceně "+fmtS(M.price)+" na hosta je potřeba "+pcs(beOcc)+" obsazenosti, při ceně 600 Kč "+pcs(beGuests(600)/capMonth)+", při ceně 700 Kč "+pcs(beGuests(700)/capMonth)+".",
+   "Hlavní rizika: nízká obsazenost, nižší kupní síla ve Zlíně, ručení za úvěr a závislost na Filipovi jako klíčové osobě.",
+   "Doporučený postup: terénní ověření ve Zlíně, zákaznický dotazník, zkušební provoz (pop-up večery) a teprve potom jednání s bankou o úvěru se zárukou."
+  ]),
+  tb(["Ukazatel","Hodnota (model, odhad)"],[
+   ["Počet míst","40"],["Odhad investice",fmtS(invT)],["Stálé měsíční náklady",fmtS(fixT)],["Splátka úvěru (9 %, 5 let)",fmtS(pay)+" / měs"],
+   ["Hostů při 45 % obsazenosti",K(base.g)+" / měs"],["Zisk po splátce při 45 % (před daní)",fmtS(base.profit)+" / měs"],["Break-even obsazenost při 500 Kč",pcs(beOcc)]
+  ])
+ ]},
+ {id:"vize",title:"Vize, mise a hodnoty",b:[
+  nt("Návrh k diskuzi mezi zakladateli."),
+  pp("**Vize:** stát se zlínskou adresou pro společné večeře, kde se u stolu vaří, povídá a fotí."),
+  pp("**Mise:** nabídnout čerstvý a zároveň přátelský hotpot za férové ceny, s úrovní ostrosti podle chuti každého hosta."),
+  ul(["Čerstvé a kvalitní suroviny","Společný zážitek, ne jen jídlo","Férová cena odpovídající zlínským příjmům","Hygiena a bezpečnost na prvním místě","Férové podmínky a šance růst pro každého zaměstnance","Ostrost podle chuti: koncept „Devil level“ 1–5"]),
+  pp("**Název DevilsPot** odkazuje na ohnivý charakter konceptu: pálivé vývary, ohnivá značka a hra s úrovněmi ostrosti.")
+ ]},
+ {id:"tym",title:"Zakladatelé a tým",b:[
+  tb(["Osoba","Role","Odpovědnost","Kvalifikace"],[
+   ["Filip","Gastro","Kuchyň, menu, receptury, dodavatelé, hygiena, provoz","Vyučení v oboru, praxe v gastronomii, vášeň pro obor"],
+   ["Erik","Byznys a marketing","Podnikatelský plán, finance, jednání s bankou, značka, sociální sítě, nábor","V procesu učení; odpovídá za byznysovou stránku"]
+  ]),
+  hh("Odborná způsobilost"),
+  pp("Hostinská činnost je ohlašovací živnost řemeslná a vyžaduje odbornou způsobilost. Filip má vyučení i praxi, což by podmínku mělo splnit. Doklady (výuční list, doklady o praxi) je třeba potvrdit na živnostenském úřadě. U s.r.o. by byl Filip odpovědným zástupcem."),
+  hh("Další pracovníci"),
+  ul(["Pomocná kuchyně a obsluha na DPP nebo DPČ (nabídky ve Zlíně od 220 Kč/h), studenti UTB jako brigádníci.","V modelu: pomocná kuchyně a 2 číšníci, celkem "+fmtS(FIXED[2][1])+" měsíčně včetně odvodů.","Do budoucna zaučení druhého kuchaře, aby podnik nezávisel jen na Filipovi."]),
+  hh("Odměna zakladatelů"),
+  pp("Model počítá se zakladateli bez mzdy, včetně Filipa v kuchyni. Před úvěrem je nutné dohodnout, z čeho budou zakladatelé v prvním roce žít a jakou odměnu si bude provoz moci dovolit.")
+ ]},
+
+ {id:"zamestnani",title:"Zásady zaměstnávání a nábor brigádníků",b:[
+  pp("**"+ZAS_MOTTO+"**"),
+  hh("Zásady"),
+  tb(["Zásada","Jak ji naplníme"],ZAS.map(z=>[z[0],z[1]])),
+  hh("Nábor studentů UTB"),
+  pp("Do provozu chceme zapojit studenty Univerzity Tomáše Bati na brigády. Model počítá se "+BRIG_SLOTS+" pracovními místy na směně (2 číšníci a pomocná kuchyně) po "+BRIG_HOURS+" hodinách, tedy asi "+brigH+" hodinami brigádníků měsíčně."),
+  hh("Kde studenty oslovit"),ul(BRIG[0][2]),
+  hh("Mzdy na trhu"),ul(BRIG[1][2]),
+  hh("Smluvní formy a limity (2026)"),
+  tb(["Parametr","DPP","DPČ"],[["Rozsah práce","300 hodin ročně u zaměstnavatele","Nejvýše polovina týdenní pracovní doby (20 h týdně)"],["Odvody pojistného","Do 11 999 Kč měsíčně u jednoho zaměstnavatele nevznikají","Do 4 499 Kč měsíčně nevznikají"],["Forma","Písemná dohoda","Písemná dohoda"],["Minimální hodinová mzda","134,40 Kč","134,40 Kč"],["Od 1. 1. 2027","Limit 12 500 Kč","Limit 5 000 Kč"]]),
+  hh("Student a pojištění, daně"),ul(BRIG[2][2]),
+  hh("Povinnosti zaměstnavatele"),ul(BRIG[3][2]),
+  hh("Hygiena a zdraví"),ul(BRIG[4][2]),
+  hh("Kolik studentů je potřeba"),
+  tb(["Položka","Hodnota"],BRIG_CALC),
+  pp("Model počítá se mzdovými náklady "+fmtS(FIXED[2][1])+" měsíčně včetně odvodů. Při "+brigRate+" Kč/h vychází hrubá mzda "+fmtS(brigH*brigRate)+" a odvody u DPČ ji mohou zvýšit, proto je třeba mzdové náklady v modelu upřesnit s mzdovou účetní."),
+  hh("Co nabídnout studentům"),ul(BRIG[6][2]),
+  hh("Postup náboru"),ol(BRIG_STEPS),
+  hh("Návrh inzerátu"),pp(BRIG_AD),
+  hh("Co ještě zjistit"),ul(BRIG_TODO.concat(ZAS_TODO))
+ ]},
+ {id:"produkt",title:"Produkt a nabídka",b:[
+  hh("Koncept zážitku"),
+  pp("Každý stůl má indukční plotýnku s hrncem. Host si vybere vývar a suroviny, obsluha je přinese a hosté si je sami uvaří. Doplňují je omáčkový bar a dezerty. Koncept je skupinový a vhodný pro sdílení na sociálních sítích."),
+  hh("Vývary (návrh)"),
+  tb(["Vývar","Charakter","Pro koho"],[
+   ["Jemný kuřecí","Neutrální, bohatý vývar","Začátečníci, rodiny"],["Pálivý sečuánský (mala)","Ostrý a koření s „brněním“","Milovníci pálivého, značka Devil"],["Houbový","Zemitý, aromatický","Širší publikum"],["Bezmasý/vegan","Zeleninový základ","Vegetariáni a vegani"],["Rajčatový, thajský tom yum","Rozšíření nabídky","Až podle zájmu v dotazníku"]
+  ]),
+  hh("Suroviny a sety"),
+  ul(["Maso: hovězí plátky, vepřové, kuřecí, jehněčí (podle kalkulace)","Mořské plody: krevety, kalamáry, mušle","Tofu, houby, zelenina, knedlíčky, nudle","Omáčkový bar a dezerty, nápoje","Sety pro 2, 4 a 6 osob + doobjednání à la carte"]),
+  pp("Ceny setů se určí kalkulací surovin a ověří dotazníkem. Srovnání: v pražském NALI vychází talíř asi 500 g na osobu na 599–699 Kč, menší set pro dva v Sushi DuHa na asi 475 Kč na osobu. Model počítá s průměrnou útratou "+fmtS(M.price)+" na hosta s DPH."),
+  hh("Další pravidla"),
+  ul(["Alergeny u každé položky jsou povinné","Úrovně ostrosti „Devil level“ 1–5 u každého vývaru","Sezónnost: hotpot je silnější na podzim a v zimě, v létě pomůže lehčí nabídka a firemní akce"])
+ ]},
+ {id:"trh",title:"Analýza trhu",b:[
+  tb(["Ukazatel","Hodnota","Zdroj"],[
+   ["Obyvatelé Zlínského kraje (30. 6. 2026)","576 120 (v 1. pololetí 2026 −1 395)","ČSÚ"],
+   ["Okres Zlín (SLDB 2021)","187 371","ČSÚ"],
+   ["Průměrná mzda v kraji (2. čtvrtletí 2026)","45 615 Kč (ČR 51 966 Kč)","ČSÚ"],
+   ["Studenti UTB","asi 9 000 (THE: 8 964, 12 % zahraniční)","UTB, Times Higher Education"],
+   ["Největší fakulty UTB (2025)","FHS 1 959, FaME 1 943, FMK 1 141","ČSÚ"],
+   ["Cizinci v kraji (31. 12. 2025)","27 432 (4,8 %), z toho 10 903 v okrese Zlín","ČSÚ"]
+  ]),
+  hh("Spotřebitelské návyky"),
+  ul(["Podíl lidí, kteří chodí na oběd do restaurace v okolí práce, klesl z 33 % (2024) na 26 % (2025).","Podíl lidí, kteří si nosí jídlo z domova, vzrostl ze 46 % na více než 57 %.","Restaurace patří mezi první výdaje, které lidé omezují (téměř 90 % respondentů)."]),
+  pp("**Závěr:** hotpot je třeba stavět jako večerní a víkendový zážitek pro skupiny, ne jako polední menu. Nižší mzdy ve Zlínském kraji znamenají, že pražské ceny nelze přenést bez rizika."),
+  hh("Akce ve Zlíně využitelné pro marketing"),
+  ul(["Food Truck Festival na náměstí Míru (září)","Svatomartinské hody na náměstí Míru: 14. 11. 2026","Adventní Zlín (vánoční trhy na náměstí Míru)","Festival Zlín žije, Masters of Rock ve Vizovicích (červenec)"])
+ ]},
+ {id:"konkurence",title:"Konkurence",b:[
+  tb(["Podnik","Formát","Cena","Poznámka"],COMP.map(r=>[r[0],r[1],r[2],r[3]])),
+  hh("Co z toho plyne"),
+  ul(["Přímý hotpot konkurent ve Zlíně nebyl nalezen. Ve Zlíně existují asijské restaurace (Shun Li, Makalu, MIOMI sushi) a české restaurace jako nepřímá konkurence.","V Praze je all-you-can-eat 699–800 Kč, talíř v NALI 599–699 Kč, set pro dva asi 475 Kč na osobu.","Většina pražských nabídek se prodává přes vouchery se slevou 12–24 %.","Zahraniční srovnání: Budapešť (HiBeef) asi 670 Kč all-you-can-eat; In Town v Budapešti kolem 40 € za jídlo s pitím.","Absenci hotpotu ve Zlíně a okolí je třeba ověřit v terénu."])
+ ]},
+ {id:"zakaznici",title:"Zákazníci",b:[
+  nt("Chování skupin jsou hypotézy. Ověří je zákaznický dotazník (viz příloha A) a zkušební provoz."),
+  tb(["Skupina","Kdy a jak","Hypotéza"],[
+   ["Studenti UTB","Večer, skupiny 4–8 osob","Cenově citliví, silný vliv sociálních sítí (Instagram, TikTok)"],
+   ["Mladí dospělí a páry (22–35)","Pátek a sobota večer","Zážitek a fotky, ochota zaplatit víc za kvalitu"],
+   ["Party přátel a oslavy","Víkend, rezervace","Sety pro 4–6 osob, delší pobyt"],
+   ["Firemní akce","Všední večer, rezervace","Pevný rozpočet na osobu, potřeba rezervací"],
+   ["Rodiny","Víkend odpoledne","Jemné vývary, bezmasé možnosti"],
+   ["Cizinci a zájemci o autentickou kuchyni","Večer","Hledají autentický hotpot, doporučují dál"]
+  ])
+ ]},
+ {id:"marketing",title:"Marketing a prodej",b:[
+  hh("Strategie"),
+  ul(["Zacílit na studenty UTB a mladé dospělé přes Instagram a TikTok (video vaření, ostrost challenge).","Značka „Devil“: ohnivý vizuál, úrovně ostrosti, věrnostní program „Devil level“.","Cena odpovídající zlínským příjmům, sety pro 2–4 osoby jako hlavní nabídka.","Rezervace online, nabídka firemních akcí a oslav."]),
+  hh("Kanály"),
+  tb(["Kanál","Použití"],[
+   ["Instagram, TikTok","Video vaření, ostrost challenge, odpočet do otevření, spolupráce se zlínskými tvůrci"],
+   ["Google Maps","Profil, fotky, sbírání recenzí od zkušebních večerů"],
+   ["UTB a studentské spolky","Plakáty, QR kód s dotazníkem, studentské akce"],
+   ["E-mailový seznam","Zájemci z dotazníku, pozvánky na zkušební večery"],
+   ["Akce ve Zlíně","Food Truck Festival, svatomartinské hody, vánoční trhy"],
+   ["Vouchery","Až po stabilizaci provozu, slevy jsou drahé"]
+  ]),
+  hh("Spuštění"),
+  ol(["Před otevřením: dotazník, sociální sítě, e-mailový seznam zájemců.","Zkušební večery (pop-up) pro ověření poptávky, ceny a menu.","Zkušební otevření pro pozvané hosty a sbírání recenzí.","Velké otevření a marketingový start.","Po otevření: věrnostní program, firemní nabídka, spolupráce s UTB."]),
+  pp("Marketingový rozpočet v modelu: "+fmtS(FIXED[3][1])+" měsíčně. Rozpočet úvodní kampaně je třeba doplnit.")
+ ]},
+ {id:"provoz",title:"Provoz",b:[
+  hh("Lokalita a prostor"),
+  ul(["Kapacita 30–50 míst, rozloha zhruba 80–120 m².","Pěší frekvence, blízkost univerzity, parkování a dostupnost MHD.","Prostor s gastro schválením, odtahem a dostatečným elektrickým příkonem (indukce).","Nájem: komerční prostory ve Zlíně se nabízejí zhruba za 2 000–3 700 Kč/m²/rok (např. 63 m² za 16 900 Kč, 90 m² za 22 500 Kč, 108 m² za 29 900 Kč měsíčně). Model počítá s "+fmtS(FIXED[0][1])+" včetně služeb."]),
+  hh("Vybavení"),
+  ul(["Stoly s vestavěnými indukčními plotýnkami (stolní indukční vařič 3,5 kW stojí asi 4 800–6 100 Kč, profesionální vestavěné vyšší).","Odtah, chlazení a mražení, příprava masa a zeleniny, mycí zázemí.","Investice do vybavení a úprav: viz finanční plán."]),
+  hh("Energie"),
+  ul(["Silová elektřina pro podnikatele: průměr asi 2,24 Kč/kWh bez DPH (duben 2026), nabídky od 2 421 Kč/MWh s fixací na 2 roky.","Od ledna 2026 odpadl poplatek na obnovitelné zdroje (celková cena elektřiny zhruba −10 %).","Model počítá s "+fmtS(FIXED[1][1])+" měsíčně."]),
+  hh("Dodavatelé a personál"),
+  ul(["Maso a zelenina: velkoobchod a místní farmáři, asijské suroviny od specializovaného velkoobchodu. Cíl: 2 dodavatelé na každou kategorii.","Minimální mzda 2026: 22 400 Kč (134,40 Kč/h). Zaměstnavatel navíc platí odvody zhruba třetinu hrubé mzdy.","Provozní doba (návrh): večery a víkendy, v modelu "+M.days+" provozních dní měsíčně."]),
+  hh("Hygiena a bezpečnost"),
+  ul(["Kontrola Krajské hygienické stanice, vyhláška 137/2004 Sb., systém HACCP (kontrola hygieny při práci s jídlem).","Alergeny u každé položky, školení personálu.","Požární ochrana a BOZP (bezpečnost práce), pojištění provozu."])
+ ]},
+ {id:"pravo",title:"Právní a daňové aspekty",b:[
+  nt("Informace nejsou právní ani účetní poradenství. Je nutné je ověřit s účetní, daňovým poradcem a na úřadech."),
+  hh("Živnost"),
+  ul(["Hostinská činnost je ohlašovací živnost řemeslná, vyžaduje odbornou způsobilost (vzdělání v oboru nebo praxi).","Ohlášení stojí 1 000 Kč, oprávnění vzniká dnem ohlášení.","Odpovědným zástupcem by byl Filip (vyučení, praxe)."]),
+  hh("Právní forma"),
+  ul(["Doporučeno zvážit s.r.o. pro dva společníky: omezené ručení firmou, banka však u úvěru často chce osobní ručení.","Základní kapitál může být už 1 Kč, banky a investoři ale preferují víc. Do 20 tis. Kč jde složit hotově u správce vkladu.","Založení s.r.o. vyjde zhruba na 5–11 tis. Kč (starší údaje, ověřit).","Smlouva společníků (podíly, role, odchod, rozhodování) je nejdůležitější dokument."]),
+  hh("DPH a evidence tržeb"),
+  ul(["Plátcem DPH se podnikatel stane při obratu nad 2 mil. Kč za rok (od 1. 1. dalšího roku), nebo ihned nad 2 536 500 Kč. Model počítá s obratem kolem "+K(base.rev*12/1000000*10)/10+" mil. Kč ročně, tedy s plátcovstvím.","Jídla ve stravovacích službách mají 12 %, alkohol 21 %. Od 1. 1. 2027 se 12 % rozšíří i na nealkoholické nápoje v rámci stravovací služby.","Evidence tržeb (EET 2.0): Sněmovna schválila obnovení 15. 7. 2026, účinnost se plánuje od 1. 1. 2027 (po Senátu a podpisu prezidenta, stav ověřit). Bez povinnosti tisknout účtenky. Spropitné je osvobozeno od daně jen pro zaměstnance, nejvýše do 7 % tržeb."]),
+  hh("Hygiena a provoz"),
+  ul(["Provoz kontroluje Krajská hygienická stanice (vyhláška 137/2004 Sb., HACCP).","Změna užívání prostoru a stavební řízení: ověřit na stavebním úřadu ve Zlíně."])
+ ]},
+ {id:"finance",title:"Finanční plán",b:[
+  nt("Všechna čísla jsou odhady, ne zjištěná fakta. Ceny hostů jsou s DPH 12 %, model počítá s plátcovstvím DPH. Přepočítají se podle nabídek dodavatelů a nájmů."),
+  hh("Startovní investice"),
+  tb(["Položka","Částka"],[...INV.map(r=>[r[0],fmtS(r[1])]),["Celkem",fmtS(invT)]]),
+  hh("Stálé měsíční náklady"),
+  tb(["Položka","Částka"],[...FIXED.map(r=>[r[0],fmtS(r[1])]),["Celkem",fmtS(fixT)]]),
+  hh("Předpoklady"),
+  ul(["Míst: "+M.seats+", kolikrát se stůl za den vystřídá: "+M.turns+", provozních dní: "+M.days+" měsíčně, kapacita "+K(capMonth)+" hostů měsíčně.","Průměrná útrata "+fmtS(M.price)+" na hosta s DPH, suroviny "+Math.round(M.food*100)+" % z tržeb bez DPH.","Úvěr "+fmtS(P)+" (100 % investice), sazba "+Math.round(M.rate*100)+" %, splatnost "+M.years+" let, splátka "+fmtS(pay)+" měsíčně.","Zakladatelé jsou v modelu bez mzdy, zisk je před daní z příjmů."]),
+  hh("Scénáře (měsíčně, cena "+fmtS(M.price)+")"),
+  tb(["","Pesimistický (35 %)","Základní (45 %)","Optimistický (60 %)"],[
+   ["Hostů",K(lo.g),K(base.g),K(hi.g)],["Tržby s DPH",fmtS(lo.rev),fmtS(base.rev),fmtS(hi.rev)],["Tržby bez DPH",fmtS(lo.net),fmtS(base.net),fmtS(hi.net)],["Zbývá po odečtení surovin",fmtS(lo.gm),fmtS(base.gm),fmtS(hi.gm)],["Zisk po splátce (před daní)",fmtS(lo.profit),fmtS(base.profit),fmtS(hi.profit)]
+  ]),
+  hh("Citlivost na cenu"),
+  tb(["Průměrná útrata","Hostů k vyrovnání / měs","Potřebná obsazenost","Zisk při 45 %"],PRICES.map(p=>[fmtS(p),K(beGuests(p)),pcs(beGuests(p)/capMonth),fmtS(calc(.45,p).profit)])),
+  pp("**Závěr:** při ceně 500 Kč je model mírně ztrátový a k vyrovnání je potřeba "+pcs(beOcc)+" obsazenosti. Cena 600 Kč a více model výrazně zlepšuje, ale ve Zlíně je nižší kupní síla, proto je třeba cenu ověřit dotazníkem a zkušebním provozem. Rizikem je také to, že zakladatelé jsou v modelu bez odměny.")
+ ]},
+ {id:"financovani",title:"Financování",b:[
+  pp("Zakladatelé nemají vlastní kapitál. Start se bude financovat úvěrem, proto je klíčové držet investici nízko a mít doloženou poptávku."),
+  hh("Bankovní úvěr se zárukou"),
+  ul(["Program **Garant InvestEU** (NRB) nahrazuje Národní záruku. Úvěry 0,5–20 mil. Kč, záruka až 70 % jistiny, doba ručení až 10 let.","Vše se vyřizuje jen přes komerční banku. Žádosti o záruku by mělo být možné podávat od října 2026, spuštění do konce roku. Podmínky zveřejní banky.","Bez historie a vkladu čekejte přísné posuzování a osobní ručení."]),
+  hh("Leasing vybavení"),
+  ul(["NRB rozšířila Národní záruku i na leasingové společnosti.","Chlazení, technika a indukce na leasing sníží potřebu hotovosti na startu."]),
+  hh("Poradenství a další zdroje"),
+  ul(["Regionální kancelář CzechInvest ve Zlíně (Vavrečkova 5262) pořádá konzultační dny pro startupy a malé podniky.","Technologické inovační centrum Zlín: akcelerátor Můj první milion, platforma ZLINNOVATION (ověřit, zda se hodí pro gastro).","Rodina a známí s půjčkovou smlouvou, investor za podíl, crowdfunding s předprodejem voucherů.","Příspěvek z úřadu práce je jen pro uchazeče o zaměstnání a není nárokový, zakladatelů se teď netýká.","Přímé dotace pro začínající gastro podnikatele ve Zlínském kraji nalezeny nebyly."]),
+  hh("Co banka obvykle chce"),
+  ul(BANK)
+ ]},
+ {id:"rizika",title:"Rizika a opatření",b:[
+  tb(["Riziko","Dopad","Opatření"],[
+   ["Nízká obsazenost","Vysoký","Dotazník, zkušební provoz, marketing před otevřením, firemní akce"],
+   ["Nižší kupní síla ve Zlíně","Vysoký","Ověřit cenu dotazníkem, sety pro 2–4 osoby, studentské nabídky"],
+   ["Ručení za úvěr","Vysoký","s.r.o., menší investice, leasing, záruka NRB do 70 %, rezerva v investici"],
+   ["Závislost na Filipovi","Vysoký","Dokumentace receptur, zaučení druhého kuchaře"],
+   ["Růst cen surovin a energií","Střední","Fixace energií na 2 roky, 2 dodavatelé na kategorii, úprava menu"],
+   ["Sezónnost","Střední","Lehčí letní nabídka, firemní akce, akce ve městě"],
+   ["Nedostatek personálu","Střední","Studenti UTB na brigády, férové ohodnocení"],
+   ["Změny legislativy (EET 2.0, DPH)","Střední","Účetní, kasa kompatibilní s EET 2.0"],
+   ["Hygiena a alergeny","Vysoký (málo pravděpodobné)","HACCP, školení, označení alergenů"],
+   ["Úbytek obyvatel kraje","Nízký (dlouhodobě)","Zaměřit se na zážitek a studenty"]
+  ])
+ ]},
+ {id:"harmonogram",title:"Harmonogram",b:[
+  pp("Pět fází bez časového tlaku. Stav je aktualizován k "+UPDATED+" (hotovo "+ROAD.reduce((a,p)=>a+p[1].filter(x=>x[1]==="done").length,0)+" z "+ROAD.reduce((a,p)=>a+p[1].length,0)+" kroků)."),
+  ...ROAD.flatMap(([t,it])=>[hh(t),tb(["Krok","Stav"],it.map(([x,s])=>[x,s==="done"?"Hotovo":s==="doing"?"Probíhá":"Čeká"]))])
+ ]},
+ {id:"vyzkum",title:"Výzkum zákazníků a terénní ověření",b:[
+  pp("Poptávka a cena se ověří dvěma způsoby: zákaznickým dotazníkem (cíl alespoň 100, lépe 200 odpovědí, viz příloha A) a osobním terénním ověřením ve Zlíně."),
+  hh("Terénní ověření"),
+  tb(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]])),
+  hh("Výsledky"),
+  pp("Zatím nejsou k dispozici. Po vyhodnocení dotazníku a terénního ověření se zde doplní: zájem (podíl odpovědí 4–5), ochota platit (medián), preferované vývary a pálivost, nejlepší kanály a zjištění o konkurenci a prostorách.")
+ ]},
+ {id:"otazky",title:"Otevřené otázky",b:[
+  ul(ASK[0][1]),
+  hh("O co se postará Claude"),
+  ul(ASK[1][1])
+ ]},
+ {id:"zdroje",title:"Zdroje",b:[
+  ...SRC.flatMap(([t,l])=>[hh(t),{t:"links",x:l}])
+ ]}
+];
+
+const PLAN_APPX=[
+ {id:"pA",title:"Příloha A: Zákaznický dotazník",b:[
+  pp("Připraveno ke zkopírování do Google Forms nebo Microsoft Forms. Vyplnění zabere asi 3 minuty, dotazník je anonymní, e-mail je nepovinný."),
+  hh("Úvodní text"),pp(QINTRO),
+  ...QUEST.flatMap(([sec,qs])=>[hh(sec),...qs.map(q=>({t:"quest",q}))]),
+  hh("Volitelný blok: cenové pásmo (Van Westendorp)"),
+  pp("Čtyři otevřené otázky s číselnou odpovědí. Z odpovědí se spočítá cenové pásmo, které zákazníci považují za přijatelné."),
+  ol(QVW),
+  hh("Závěrečný text"),pp(QEND),
+  hh("Jak dotazník rozeslat"),ul(QDIST),
+  hh("Jak výsledky vyhodnotit"),ul(QEVAL),
+  hh("Osobní údaje"),ul(["Dotazník je anonymní kromě nepovinného e-mailu.","E-maily používat jen na to, k čemu dal respondent souhlas, a umožnit odhlášení.","Neptat se na rodné číslo ani citlivé údaje."])
+ ]},
+ {id:"pB",title:"Příloha B: Přehled rozhodnutí",b:[
+  tb(["Datum","Rozhodnutí"],DECISIONS.map(d=>[d[0],d[1]]))
+ ]}
+];
+
+
 const $=s=>document.querySelector(s);
 const fmt=fmtS;
 const num=n=>Math.round(n).toLocaleString("cs-CZ");
@@ -252,7 +599,6 @@ const cl=v=>v>=0?"pos":"neg";
 const V={};
 V.prehled=`<h2>Přehled</h2><div class="kpi">${KPI.map(([l,v])=>`<div><small>${l}</small><b>${v}</b></div>`).join("")}<div><small>Harmonogram</small><b id="rp"></b></div></div>
 <div class="note"><b>Hlavní zjištění:</b> hotpot ve Zlíně nebyl nalezen, což je příležitost. Při ceně 500 Kč na hosta ale model vychází ztrátově. Cenu je potřeba zvednout na 600 Kč a víc, nebo snížit náklady a investici. Dřív než cokoliv jiného je třeba vyřešit odbornou způsobilost pro hostinskou činnost.</div>${cards(OVERVIEW)}`;
-V.plan=`<h2>Podnikový plán</h2><p class="small">První návrh. Bude se doplňovat podle nových zjištění.</p><div class="grid">${PLAN.map(([t,x])=>`<div class="card"><h3>${t}</h3><p>${x}</p></div>`).join("")}</div>`;
 V.trh=`<h2>Trh a konkurence</h2>
 <div class="kpi"><div><small>Obyvatelé kraje (30. 6. 2026)</small><b>576 120</b></div><div><small>Okres Zlín (SLDB 2021)</small><b>187 371</b></div><div><small>Studenti UTB</small><b>asi 9 000</b></div><div><small>Mzda v kraji (2Q 2026)</small><b>45 615 Kč</b></div><div><small>Průměr ČR</small><b>51 966 Kč</b></div><div><small>Cizinci v kraji</small><b>27 432</b></div></div>
 <div class="card"><h3>Hotpot a konkurence <span class="tag fact">zjištěno</span></h3><div class="tw"><table><tr><th>Podnik</th><th>Formát</th><th>Cena</th><th>Poznámka</th></tr>${COMP.map(([a,b,c,d])=>`<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td><td>${d}</td></tr>`).join("")}</table></div></div>
@@ -280,14 +626,129 @@ V.road=`<h2>Harmonogram</h2><div class="bar"><i style="--w:${pct}%"></i></div><p
 V.zdroje=`<h2>Zdroje</h2><p class="small">Údaje v dashboardu vycházejí z těchto veřejných zdrojů (stav k ${UPDATED}).</p><div class="grid">${SRC.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(([a,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${a}</a></li>`).join("")}</ul></div>`).join("")}</div>`;
 V.otazky=`<h2>Otevřené otázky</h2><div class="grid">${ASK.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`;
 
-// nav + tabs
+
+/* ---------- společné renderery bloků ---------- */
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const rich=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+const tabl=(head,rows)=>`<div class="tw"><table><tr>${head.map(h=>`<th>${rich(h)}</th>`).join("")}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${rich(c)}</td>`).join("")}</tr>`).join("")}</table></div>`;
+function blockHTML(b){
+ switch(b.t){
+  case"p":return `<p>${rich(b.x)}</p>`;
+  case"h":return `<h5>${rich(b.x)}</h5>`;
+  case"ul":return `<ul>${b.x.map(i=>`<li>${rich(i)}</li>`).join("")}</ul>`;
+  case"ol":return `<ol>${b.x.map(i=>`<li>${rich(i)}</li>`).join("")}</ol>`;
+  case"note":return `<div class="note">${rich(b.x)}</div>`;
+  case"table":return tabl(b.head,b.rows);
+  case"links":return `<ul>${b.x.map(([a,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(a)}</a></li>`).join("")}</ul>`;
+  case"quest":{const [n,t,ty,o]=b.q;return `<div class="q"><b>${n}. ${rich(t)}</b> <span class="small">(${rich(ty)})</span>${o.length?`<ul>${o.map(x=>`<li>${rich(x)}</li>`).join("")}</ul>`:""}</div>`}
+ }return "";
+}
+const chapHTML=(c,i,label)=>`<div class="card chap" id="ch-${c.id}"><h3>${label||(i+1)+". "+esc(c.title)}</h3>${c.b.map(blockHTML).join("")}</div>`;
+
+/* ---------- Podnikový plán (dokument + stažení do Wordu) ---------- */
+V.plan=`<h2>Podnikový plán</h2>
+<div class="card dlbar"><div><b>Podnikatelský plán DevilsPot</b><br><span class="small">Aktuální dokument ke stažení. Vždy odpovídá obsahu dashboardu (stav ${UPDATED}).</span></div><button type="button" id="dl" class="dlbtn">⬇ Stáhnout do Wordu (.docx)</button></div><p class="small" id="dlmsg"></p>
+<div class="toc">${PLAN_DOC.map((c,i)=>`<button type="button" data-go="ch-${c.id}">${i+1}. ${esc(c.title)}</button>`).join("")}${PLAN_APPX.map(c=>`<button type="button" data-go="ch-${c.id}">${esc(c.title)}</button>`).join("")}</div>
+${PLAN_DOC.map((c,i)=>chapHTML(c,i)).join("")}${PLAN_APPX.map((c,i)=>chapHTML(c,i,esc(c.title))).join("")}`;
+
+/* ---------- Dotazník ---------- */
+V.dotaznik=`<h2>Zákaznický dotazník</h2>
+<div class="note">Připraveno ke zkopírování do Google Forms nebo Microsoft Forms. Vyplnění zabere asi 3 minuty, dotazník je anonymní, e-mail je nepovinný. Je také přílohou A podnikového plánu.</div>
+<div class="card chap"><h3>Úvodní text pro respondenty</h3><p>${esc(QINTRO)}</p></div>
+${QUEST.map(([sec,qs])=>`<div class="card chap"><h3>${esc(sec)}</h3>${qs.map(q=>blockHTML({t:"quest",q})).join("")}</div>`).join("")}
+<div class="card chap"><h3>Volitelný blok: cenové pásmo (Van Westendorp)</h3><p>Čtyři otevřené otázky s číselnou odpovědí. Z odpovědí se spočítá cenové pásmo, které zákazníci považují za přijatelné.</p><ol>${QVW.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>
+<div class="card chap"><h3>Závěrečný text</h3><p>${esc(QEND)}</p></div>
+<div class="grid"><div class="card"><h3>Jak dotazník rozeslat</h3><ul>${QDIST.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="card"><h3>Jak výsledky vyhodnotit</h3><ul>${QEVAL.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
+<div class="card chap"><h3>Terénní ověření: co přesně <span class="tag est">k provedení</span></h3>${tabl(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]]))}</div>
+<div class="card chap"><h3>Výsledky</h3><p>Zatím nejsou k dispozici. Doplní se po vyhodnocení.</p></div>`;
+
+/* ---------- Nábor brigádníků ---------- */
+V.brig=`<h2>Zásady zaměstnávání a nábor brigádníků</h2>
+<div class="note"><b>${esc(ZAS_MOTTO)}</b></div>
+<div class="card chap"><h3>Zásady a jak je naplníme</h3>${tabl(["Zásada","Jak ji naplníme"],ZAS.map(z=>[z[0],z[1]]))}</div>
+<h2 style="margin-top:22px">Nábor studentů UTB</h2>
+${cards(BRIG)}
+<div class="card chap"><h3>Smluvní formy a limity (2026)</h3>${tabl(["Parametr","DPP","DPČ"],[["Rozsah práce","300 hodin ročně u zaměstnavatele","Nejvýše polovina týdenní pracovní doby (20 h týdně)"],["Odvody pojistného","Do 11 999 Kč měsíčně u jednoho zaměstnavatele nevznikají","Do 4 499 Kč měsíčně nevznikají"],["Forma","Písemná dohoda","Písemná dohoda"],["Minimální hodinová mzda","134,40 Kč","134,40 Kč"],["Od 1. 1. 2027","Limit 12 500 Kč","Limit 5 000 Kč"]])}</div>
+<div class="card chap"><h3>Kolik studentů je potřeba <span class="tag est">modelový odhad</span></h3>${tabl(["Položka","Hodnota"],BRIG_CALC)}<p class="small">Model počítá se mzdovými náklady ${fmtS(FIXED[2][1])} měsíčně včetně odvodů. Při ${brigRate} Kč/h vychází hrubá mzda ${fmtS(brigH*brigRate)} a odvody u DPČ ji mohou zvýšit, proto je třeba mzdové náklady v modelu upřesnit s mzdovou účetní.</p></div>
+<div class="grid"><div class="card"><h3>Postup náboru</h3><ol>${BRIG_STEPS.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div><div class="card"><h3>Návrh inzerátu</h3><p>${esc(BRIG_AD)}</p></div><div class="card"><h3>Co ještě zjistit</h3><ul>${BRIG_TODO.concat(ZAS_TODO).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>`;
+
+/* ---------- Rozhodnutí ---------- */
+V.rozh=`<h2>Přehled rozhodnutí</h2><p class="small">Záznam toho, co jsme se domluvili. Je také přílohou B podnikového plánu.</p><div class="card chap">${tabl(["Datum","Rozhodnutí"],DECISIONS.map(d=>[d[0],d[1]]))}</div>`;
+
+/* Terénní ověření do harmonogramu */
+const _road=V.road;
+V.road=_road+`<div class="card chap"><h3>Terénní ověření: co přesně</h3><p>Terénní ověření znamená zjistit věci osobně ve Zlíně, protože je online vyhledávání nepotvrdí.</p>${tabl(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]]))}</div>`;
+
+/* ---------- Word (.docx) ---------- */
+function loadDocx(){return new Promise((res,rej)=>{if(window.docx)return res(window.docx);const s=document.createElement("script");s.src="vendor/docx.umd.js";s.onload=()=>window.docx?res(window.docx):rej(new Error("docx"));s.onerror=()=>rej(new Error("load"));document.head.appendChild(s)})}
+async function buildDocx(){
+ const D=await loadDocx();
+ const {Document,Packer,Paragraph,TextRun,HeadingLevel,Table,TableRow,TableCell,WidthType,ShadingType,AlignmentType,Footer,Header,PageNumber,ExternalHyperlink,BorderStyle,PageBreak,LevelFormat}=D;
+ const FONT="Calibri", W=9638;
+ const runs=(text,o={})=>String(text).split(/(\*\*.+?\*\*)/g).filter(Boolean).map(part=>{const m=/^\*\*(.+)\*\*$/.exec(part);return new TextRun({text:m?m[1]:part,bold:!!m||o.bold,color:o.color,size:o.size,font:FONT,italics:o.italics})});
+ const P=(text,o={})=>new Paragraph({children:runs(text,o),spacing:{after:o.after==null?120:o.after,before:o.before||0,line:276},alignment:o.align,keepNext:o.keepNext,shading:o.fill?{type:ShadingType.CLEAR,fill:o.fill,color:"auto"}:undefined,border:o.leftBorder?{left:{style:BorderStyle.SINGLE,size:24,color:"E03A2B",space:8}}:undefined,indent:o.leftBorder?{left:200}:undefined});
+ const H1=t=>new Paragraph({heading:HeadingLevel.HEADING_1,children:[new TextRun({text:t,font:FONT})],keepNext:true,pageBreakBefore:false});
+ const H2=t=>new Paragraph({heading:HeadingLevel.HEADING_2,children:[new TextRun({text:t,font:FONT})],keepNext:true});
+ const border={style:BorderStyle.SINGLE,size:4,color:"D9C4BC"};
+ const borders={top:border,bottom:border,left:border,right:border};
+ const table=(head,rows)=>{const n=head.length;const w=Math.floor(W/n);const cell=(t,h)=>new TableCell({width:{size:w,type:WidthType.DXA},borders,shading:h?{type:ShadingType.CLEAR,fill:"F6D9CF",color:"auto"}:undefined,margins:{top:60,bottom:60,left:100,right:100},children:[P(t,{after:0,size:19,bold:h})]});
+  return new Table({width:{size:W,type:WidthType.DXA},columnWidths:Array(n).fill(w),rows:[new TableRow({tableHeader:true,cantSplit:true,children:head.map(h=>cell(h,true))}),...rows.map(r=>new TableRow({cantSplit:true,children:r.map(c=>cell(c,false))}))]})};
+ let olInst=0;
+ const blocks=b=>{
+  switch(b.t){
+   case"p":return [P(b.x)];
+   case"h":return [H2(b.x)];
+   case"note":return [P(b.x,{fill:"FDECE6",leftBorder:true,italics:false,before:60,after:160})];
+   case"ul":return b.x.map(i=>new Paragraph({children:runs(i),bullet:{level:0},spacing:{after:60,line:276}}));
+   case"ol":{const inst=++olInst;return b.x.map(i=>new Paragraph({children:runs(i),numbering:{reference:"ol",level:0,instance:inst},spacing:{after:60,line:276}}))}
+   case"table":return [table(b.head,b.rows),P("",{after:120})];
+   case"links":return b.x.map(([a,u])=>new Paragraph({children:[new ExternalHyperlink({link:u,children:[new TextRun({text:a,style:"Hyperlink",font:FONT,color:"0563C1",underline:{}})]})],bullet:{level:0},spacing:{after:60}}));
+   case"quest":{const [n,t,ty,o]=b.q;const out=[new Paragraph({children:[new TextRun({text:n+". "+t,bold:true,font:FONT}),new TextRun({text:"  ("+ty+")",italics:true,color:"6B6B6B",font:FONT,size:19})],spacing:{before:100,after:40},keepNext:true})];o.forEach(x=>out.push(new Paragraph({children:runs(x),bullet:{level:0},spacing:{after:20}})));return out}
+  }return []};
+ const kids=[];
+ kids.push(new Paragraph({spacing:{before:2600},children:[new TextRun({text:PLAN_META.title,bold:true,size:112,color:"C0261A",font:FONT})]}));
+ kids.push(new Paragraph({spacing:{after:300},children:[new TextRun({text:PLAN_META.sub,size:40,color:"3A2A24",font:FONT})]}));
+ PLAN_META.lines.forEach(l=>kids.push(P(l,{size:24,color:"555555",after:60})));
+ kids.push(new Paragraph({children:[new PageBreak()]}));
+ kids.push(H1("Obsah"));
+ PLAN_DOC.forEach((c,i)=>kids.push(P((i+1)+". "+c.title,{after:40})));
+ PLAN_APPX.forEach(c=>kids.push(P(c.title,{after:40})));
+ kids.push(new Paragraph({children:[new PageBreak()]}));
+ PLAN_DOC.forEach((c,i)=>{kids.push(H1((i+1)+". "+c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+ PLAN_APPX.forEach(c=>{kids.push(new Paragraph({children:[new PageBreak()]}));kids.push(H1(c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+ const doc=new Document({
+  creator:"DevilsPot",title:"DevilsPot – Podnikatelský plán",description:"Pracovní verze k "+UPDATED,
+  styles:{default:{document:{run:{font:FONT,size:22}}},paragraphStyles:[
+   {id:"Heading1",name:"Heading 1",basedOn:"Normal",next:"Normal",quickFormat:true,run:{size:34,bold:true,color:"B3261E",font:FONT},paragraph:{spacing:{before:360,after:160},outlineLevel:0}},
+   {id:"Heading2",name:"Heading 2",basedOn:"Normal",next:"Normal",quickFormat:true,run:{size:26,bold:true,color:"C2410C",font:FONT},paragraph:{spacing:{before:240,after:100},outlineLevel:1}}]},
+  numbering:{config:[{reference:"ol",levels:[{level:0,format:LevelFormat.DECIMAL,text:"%1.",alignment:AlignmentType.LEFT,style:{paragraph:{indent:{left:720,hanging:360}}}}]}]},
+  sections:[{properties:{page:{margin:{top:1134,bottom:1134,left:1134,right:1134}}},
+   headers:{default:new Header({children:[new Paragraph({alignment:AlignmentType.RIGHT,children:[new TextRun({text:"DevilsPot – podnikatelský plán",size:18,color:"888888",font:FONT})]})]})},
+   footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"Strana ",size:18,color:"888888",font:FONT}),new TextRun({children:[PageNumber.CURRENT],size:18,color:"888888",font:FONT})]})]})},
+   children:kids}]});
+ return Packer.toBlob(doc);
+}
+async function downloadWord(){
+ const btn=$("#dl"),msg=$("#dlmsg");if(!btn)return;btn.disabled=true;const old=btn.textContent;btn.textContent="Připravuji dokument…";msg.textContent="";
+ try{
+  const blob=await buildDocx();
+  const d=new Date(),ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="DevilsPot_podnikatelsky_plan_"+ds+".docx";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  msg.textContent="Dokument byl stažen: "+a.download;
+ }catch(e){msg.textContent="Stažení se nepodařilo ("+(e&&e.message||e)+"). Zkuste stránku obnovit.";}
+ btn.disabled=false;btn.textContent=old;
+}
+
+/* ---------- navigace ---------- */
 const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;
 function show(id){main.innerHTML=`<section class="on">${V[id]}</section>`;nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.id===id));
  const rp=$("#rp");if(rp)rp.textContent=dn+" / "+tot;
+ const dl=$("#dl");if(dl)dl.onclick=downloadWord;
+ main.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.go);el&&el.scrollIntoView({behavior:"smooth",block:"start"})});
  requestAnimationFrame(()=>document.querySelectorAll(".bar i").forEach(i=>i.style.width=getComputedStyle(i).getPropertyValue("--w")));
  try{location.hash=id}catch(e){}window.scrollTo({top:0,behavior:"smooth"})}
 TABS.forEach(([id,t])=>{const b=document.createElement("button");b.textContent=t;b.dataset.id=id;b.onclick=()=>show(id);nav.appendChild(b)});
-const h=(location.hash||"").slice(1);show(TABS.some(t=>t[0]===h)?h:"prehled");
+const h0=(location.hash||"").slice(1);show(TABS.some(t=>t[0]===h0)?h0:"prehled");
 window.addEventListener("hashchange",()=>{const x=location.hash.slice(1);if(TABS.some(t=>t[0]===x))show(x)});
 
 // spotlight na kartách
@@ -310,17 +771,16 @@ document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.c
  f()})();
 
 // oznámení o nové verzi
-const VERSION="2026-11-02-c";
-const WHATS_NEW=["Roadmapa se jmenuje Harmonogram (česky a přesněji)","Průzkum trhu, ceny a konkurence z minulé verze zůstávají","Finanční model s citlivostí na cenu"];
 (function(){let seen=null;try{seen=localStorage.getItem("dp_ver")}catch(e){}
  if(seen===VERSION)return;
  const ov=document.createElement("div");ov.className="ov";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");
- ov.innerHTML=`<div class="mb"><div class="em">😈</div><h4>Nová pekelná verze je online!</h4><ul>${WHATS_NEW.map(x=>`<li>${x}</li>`).join("")}</ul><button type="button" id="ign">Zažehni mě, synku</button><div class="mv">verze ${VERSION}</div></div>`;
+ ov.innerHTML=`<div class="mb"><div class="em">😈</div><h4>Nová pekelná verze je online!</h4><ul>${WHATS_NEW.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><button type="button" id="ign">Zažehni mě, synku</button><div class="mv">verze ${VERSION}</div></div>`;
  document.body.appendChild(ov);document.body.style.overflow="hidden";
  const go=()=>{try{localStorage.setItem("dp_ver",VERSION)}catch(e){}ov.classList.add("out");document.body.style.overflow="";setTimeout(()=>ov.remove(),700)};
  ov.querySelector("#ign").onclick=go;
  setTimeout(()=>{const b=ov.querySelector("#ign");b&&b.focus()},300);
 })();
+
 </script>
 </body>
 </html>

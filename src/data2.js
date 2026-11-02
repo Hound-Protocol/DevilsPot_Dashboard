@@ -1,0 +1,110 @@
+/* Dotazník, terénní ověření, rozhodnutí */
+const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
+const QEND="Děkujeme! Sledujte nás, brzy se ozveme se zkušebními večery.";
+const QUEST=[
+ ["A. Znalost a zájem",[
+  [1,"Znáte hotpot?","jedna odpověď",["Ano, už jsem ho jedl/a","Znám ho, ale ještě jsem ho nejedl/a","Ne, nevím, co to je"]],
+  [2,"Kde jste hotpot jedl/a?","více odpovědí, jen pokud jste v otázce 1 zvolil/a „už jsem ho jedl/a“",["V Praze","V Brně","V jiném městě v ČR","V zahraničí","Doma"]],
+  [3,"Chtěl/a byste mít hotpot restauraci ve Zlíně?","škála 1–5 (1 = rozhodně ne, 5 = rozhodně ano)",[]],
+  [4,"Jak často byste restauraci navštěvoval/a?","jedna odpověď",["Jednou týdně nebo častěji","2–3× měsíčně","Jednou měsíčně","Několikrát za rok","Spíš bych nechodil/a"]]
+ ]],
+ ["B. Návyky",[
+  [5,"S kým byste nejčastěji šel/šla?","více odpovědí",["S přáteli (parta 4+ lidí)","S partnerem/partnerkou","S rodinou","S kolegy (firemní akce)","Sám/sama"]],
+  [6,"Kdy byste přišel/přišla?","více odpovědí",["Všední den večer","Pátek nebo sobota večer","Víkend odpoledne","Oběd ve všední den","Při oslavě nebo speciální příležitosti"]],
+  [7,"Jaký typ nabídky byste preferoval/a?","jedna odpověď",["All-you-can-eat (pevná cena, neomezeně)","Sety pro 2–4 osoby","À la carte (platím za to, co si vyberu)","Nevím, záleží na ceně"]]
+ ]],
+ ["C. Cena",[
+  [8,"Kolik jste ochotni utratit na jednu osobu za jídlo (bez alkoholu)?","jedna odpověď",["Do 300 Kč","300–400 Kč","400–500 Kč","500–600 Kč","600–700 Kč","700–800 Kč","Více než 800 Kč"]]
+ ]],
+ ["D. Co je pro vás důležité",[
+  [9,"Vyberte tři nejdůležitější věci při výběru restaurace.","nejvýše 3 odpovědi",["Cena","Kvalita masa a surovin","Výběr vývarů","Atmosféra a vzhled","Rychlost obsluhy","Poloha a parkování","Vegetariánské a bezmasé možnosti","Zážitek a fotky na sociální sítě"]],
+  [10,"Jaké vývary byste chtěl/a?","více odpovědí",["Jemný kuřecí","Pálivý sečuánský","Houbový","Rajčatový","Thajský (tom yum)","Bezmasý/vegan"]],
+  [11,"Jak pálivé jídlo máte rád/a?","škála 1–5 (1 = vůbec ne, 5 = co nejpálivější)",[]],
+  [12,"Kde ve Zlíně byste restauraci chtěl/a?","jedna odpověď",["V centru","Blízko univerzity","V nákupním centru","Nezáleží, hlavně dobré jídlo"]]
+ ]],
+ ["E. Komunikace",[
+  [13,"Kde se o nové restauraci nejspíš dozvíte?","více odpovědí",["Instagram","TikTok","Facebook","Google Maps","Od kamarádů","Plakát nebo leták (například na univerzitě)"]]
+ ]],
+ ["F. O vás",[
+  [14,"Jste:","jedna odpověď",["Student/ka UTB","Student/ka jiné školy","Pracující","Jiné"]],
+  [15,"Věk:","jedna odpověď",["do 18","19–24","25–34","35–44","45 a více"]],
+  [16,"Bydlíte:","jedna odpověď",["Ve Zlíně","V okolí Zlína","Jinde"]]
+ ]],
+ ["G. Otevřené otázky (nepovinné)",[
+  [17,"Co by vás přesvědčilo, abyste přišel/přišla?","volná odpověď",[]],
+  [18,"Co by vás naopak odradilo?","volná odpověď",[]],
+  [19,"Chcete se dozvědět o otevření a o zkušebních večerech? Zadejte e-mail.","nepovinné; zadáním souhlasíte, že vám napíšeme pouze o DevilsPotu a kdykoliv se můžete odhlásit",[]]
+ ]]
+];
+const QVW=["Při jaké ceně na osobu byste hotpot považoval/a za tak levný, že pochybujete o kvalitě?","Při jaké ceně by to byla výhodná nabídka?","Při jaké ceně by to začalo být drahé, ale ještě byste šel/šla?","Při jaké ceně by to bylo příliš drahé a nešel/nešla byste?"];
+const QDIST=["QR kód na plakátu nebo letáku (kolej, menza, fakulty). Pro vyvěšení na UTB se zeptat studentských organizací.","Skupiny na Facebooku a Instagramu: zlínské komunity, studentské skupiny, spolky.","Osobně: deset minut ve Zlíně s tabletem nebo telefonem dává často víc kvalitních odpovědí než sdílení online.","Motivace: malá odměna (slosování o večeři pro dva na zkušebním večeru) zvýší počet odpovědí."];
+const QEVAL=["Zájem: podíl odpovědí 4 a 5 v otázce 3. Pokud je to přes polovinu a zájemci chtějí chodit alespoň jednou měsíčně, je to dobrý signál.","Cena: medián odpovědí na otázku 8 (nebo průsečík křivek ve Van Westendorpu). Porovnat s modelem (průměrná útrata 500 Kč).","Menu: nejčastěji vybrané vývary a pálivost určí základní nabídku.","Kanály: pořadí v otázce 13 ukáže, kam dát marketingový rozpočet.","Segmenty: výsledky srovnat zvlášť pro studenty a pracující, mívají jinou ochotu platit."];
+
+const FIELD=[
+ ["Hotpot ve Zlíně","Projít centrum (okolí náměstí Míru) a okolí UTB (náměstí T. G. Masaryka). Zkontrolovat Mapy.cz, Google Maps, Firmy.cz, Wolt a Instagram. Zeptat se pár místních. Cíl: potvrdit nebo vyvrátit, že hotpot ve Zlíně není."],
+ ["Stávající konkurence","Zapsat asijské a čínské restaurace (Shun Li, Makalu, MIOMI sushi a další), jejich ceny, nabídku a obsazenost v pátek a v sobotu večer."],
+ ["Volné prostory","Zapsat adresu, rozlohu, nájem, kontakt na majitele, stav (gastro schválení, odtah, příkon elektřiny), nafotit. Hledat i zavřené restaurace, které lze převzít."],
+ ["Frekvence a parkování","V okolí zajímavých míst počítat chodce 10 minut ve večerní špičce, ověřit parkování a dostupnost MHD."],
+ ["Rozhovory","Zeptat se alespoň 10 lidí (studenti, pracující) na zájem o hotpot a cenu, ideálně doplnit dotazníkem."]
+];
+
+const DECISIONS=[
+ ["2. 11. 2026","Zásady zaměstnávání: jasné, legálně podložené, vstřícné, klidné a férové podmínky pro všechny, šance růst a bezpečné, čisté a profesionální prostředí."],
+ ["2. 11. 2026","Chceme verbovat studenty UTB na brigády (DPP/DPČ). Kanály, právní rámec a postup náboru jsou v dashboardu v záložce Nábor brigádníků."],
+ ["2. 11. 2026","Název podniku: DevilsPot. Hotpot restaurace ve Zlíně."],
+ ["2. 11. 2026","Zakladatelé jsou dva: Erik a Filip."],
+ ["2. 11. 2026","Role: Filip vede celé gastro (vyučení, praxe, vášeň pro obor). Erik vede byznys a marketing a učí se."],
+ ["2. 11. 2026","Formát nabídky: sety pro skupiny a à la carte suroviny (ne all-you-can-eat)."],
+ ["2. 11. 2026","Oba zakladatelé jsou zatím zaměstnaní, žádný termín otevření, důraz na kvalitní přípravu."],
+ ["2. 11. 2026","Financování: bez vlastního kapitálu, z půjčky. Doporučeno nejdřív ověřit poptávku zkušebním provozem a až poté jednat s bankou."],
+ ["2. 11. 2026","Dashboard je čistě informační, bez políček k psaní. Obsah doplňuje a aktualizuje Claude podle domluvy."],
+ ["2. 11. 2026","Dashboard běží na GitHub Pages z repozitáře Hound-Protocol/DevilsPot_Dashboard. Repozitář je veřejný, obsah vidí každý, kdo zná adresu."],
+ ["2. 11. 2026","Texty v dashboardu jsou neutrální, bez „já“. Úloha asistenta je popsána v sekci „O co se postará Claude“."],
+ ["2. 11. 2026","„Roadmapa“ přejmenována na „Harmonogram“."],
+ ["2. 11. 2026","Při každé nové verzi se zobrazí okno „Nová pekelná verze je online!“ s tlačítkem „Zažehni mě, synku“."],
+ ["2. 11. 2026","Zákaznický dotazník (19 otázek, hlavně studenti UTB) je součástí dashboardu i přílohou plánu."],
+ ["2. 11. 2026","Podnikový plán je plnohodnotný dokument v dashboardu se stažením do Wordu. S každou diskuzí se aktualizují data v dashboardu i v plánu."]
+];
+
+/* Nábor studentů UTB na brigády */
+const BRIG_SLOTS=3, BRIG_HOURS=6;
+const brigH=BRIG_SLOTS*BRIG_HOURS*M.days;           // hodin brigádníků měsíčně
+const brigRate=220;                                 // Kč/h
+const brigStudentsDPP=Math.ceil(brigH/25);          // DPP: 300 h/rok = 25 h/měs
+const brigStudentsDPC=Math.ceil(brigH/80);          // DPČ: až 20 h/týden ~ 80 h/měs
+const BRIG=[
+ ["Kde studenty oslovit","fact",["Job centrum UTB: zprostředkovává nabídky studentům a absolventům. Zjistit kontakt a podmínky zveřejnění nabídky.","Studentská unie UTB: spolupořádá s Job centrem veletrh Business Day. Oslovit kvůli sdílení nabídky a spolupráci.","Veletrhy: Business Day UTB (dříve 70 firem a 1 700 návštěvníků) a iKariéra Zlín (31. ročník v roce 2025).","Zlin.Jobs: bezplatný regionální portál (TIC Zlín a Zlínský kraj), registrace i zveřejnění nabídek zdarma, zaměřený i na stáže.","Portály brigád: Jobs.cz, Prace.cz, JenPráce.cz, Pracomat, Dobraprace.cz a aplikace Grason (gastro a eventy).","Sociální sítě DevilsPotu a studentské skupiny na Facebooku a Instagramu.","Plakáty s QR kódem (koleje, menza, fakulty), vývěska ve výloze, doporučení od stávajících brigádníků."]],
+ ["Co studenti dostávají jinde","fact",["Brigády ve Zlíně na portálech: McDonald's 150 Kč/h, sklady 170–198 Kč/h, pomocné práce 180–190 Kč/h.","Průměrná nabízená mzda brigády pomocník ve Zlínském kraji: asi 160 Kč/h.","Restaurace ve Zlíně hledá číšníka/servírku od 220 Kč/h na DPP/DPČ (duben 2026).","Minimální mzda 2026: 134,40 Kč/h.","Zlínský kraj měl dle Echo24 nejvyšší meziroční nárůst hodinových sazeb brigád (až 20 %).","Závěr: pro konkurenceschopnost nabídnout 200–220 Kč/h plus spropitné. Model počítá s "+brigRate+" Kč/h."]],
+ ["Student a pojištění","fact",["Za studenta do 26 let (prezenční vysokoškolské studium) platí zdravotní pojištění stát. Zaměstnavatel potřebuje potvrzení o studiu.","Do 11 999 Kč měsíčně u DPP student neplatí zdravotní ani sociální pojištění. Od 12 000 Kč platí jako zaměstnanec.","Po ukončení studia nebo ve 26 letech student status ztrácí.","Bez podepsaného prohlášení poplatníka je daň z DPP do 12 000 Kč srážková (15 %). S prohlášením (podepsat jen u jednoho zaměstnavatele v měsíci) se uplatní sleva na poplatníka a při příjmu kolem 11 000 Kč vychází daň nula.","Sleva na studenta byla zrušena, její obnovení je v daňovém balíčku schváleném Sněmovnou (ověřit)."]],
+ ["Povinnosti zaměstnavatele (2026)","fact",["Registrace zaměstnavatele u ČSSZ (přihláška do registru zaměstnavatelů).","Od 1. 7. 2026 je nutné přihlásit zaměstnance do evidence zaměstnanců ČSSZ před zahájením práce, i u DPP.","Od 1. 4. 2026 se podává jednotné měsíční hlášení zaměstnavatele (JMHZ), tiskopis ONZ se nepoužívá.","Dohoda musí být písemná, s popisem práce, dobou a u DPČ rozsahem hodin.","Každý měsíc hlídat limity u každého studenta (11 999 Kč a 300 hodin ročně u DPP).","Vyřídí mzdová účetní. Model počítá s 20 tis. Kč měsíčně na účetní a ostatní."]],
+ ["Hygiena a zdraví","est",["Podle dostupných zdrojů se při práci s pokrmy vyžaduje zdravotní průkaz pracovníka v potravinářství a znalosti o ochraně veřejného zdraví, i u brigádníků.","Průkaz vystavuje praktický lékař po vyšetření, trvá několik dní a nelze jej vyřídit na počkání. Platí i pro více zaměstnavatelů.","Aktuální požadavky potvrdit u Krajské hygienické stanice. Součástí je i školení HACCP."]],
+ ["Jaké pracovní smlouvy vybrat","est",["DPP: nárazová práce, max. 300 hodin ročně u zaměstnavatele (asi 25 hodin měsíčně v průměru). Vhodná pro rezervní studenty.","DPČ: pravidelná práce, max. polovina týdenní pracovní doby (20 hodin týdně). Vhodná pro hlavní brigádníky. Odvody vznikají od 4 500 Kč měsíčně.","Od 1. 1. 2027 se limity zvyšují: DPP 12 500 Kč a DPČ 5 000 Kč.","Zvolenou kombinaci potvrdit s mzdovou účetní."]],
+ ["Co nabídnout studentům","est",["Flexibilní směny podle rozvrhu, rozpis předem.","Hodinová mzda 200–220 Kč, spropitné (od 2027 osvobozené od daně pro zaměstnance do 7 % tržeb, pokud zákon projde).","Zaučení, školení, růst na vedoucího směny.","Staff meal a zaměstnanecká sleva (k rozhodnutí).","Značka „Devil crew“, parta studentů, atmosféra."]],
+ ["Kdy a jak často","est",["Poptávka po brigádách roste po zkouškovém období a v létě, počítat se zkouškovými obdobími a prázdninami.","Nábor začít 1–2 měsíce před zkušebním provozem a držet rezervu navíc kvůli absencím."]]
+];
+const BRIG_CALC=[
+ ["Pracovní místa na směně (2 číšníci + pomocná kuchyně)",BRIG_SLOTS+""],
+ ["Hodin na směnu",BRIG_HOURS+""],
+ ["Provozních dní měsíčně",M.days+""],
+ ["Hodin brigádníků měsíčně",brigH+" h"],
+ ["Hrubá mzda při "+brigRate+" Kč/h",fmtS(brigH*brigRate)+" měsíčně (bez odvodů)"],
+ ["Studentů jen na DPP (25 h měsíčně)","asi "+brigStudentsDPP],
+ ["Studentů jen na DPČ (80 h měsíčně)","asi "+brigStudentsDPC],
+ ["Doporučená kombinace","3 hlavní na DPČ (asi 240 h) + 9–10 na DPP (asi 225 h) = 12–13 studentů + rezerva"]
+];
+const BRIG_STEPS=["Připravit nabídku, inzerát a vzor dohody (DPP/DPČ).","Osobně kontaktovat Job centrum UTB a Studentskou unii UTB, zjistit podmínky zveřejnění a spolupráce.","Zveřejnit nabídku na Zlin.Jobs, portálech a sociálních sítích, vyvěsit plakáty s QR kódem.","Krátký pohovor a zkušební směna (nebo vstupní školení).","Vybrat dokumenty: občanský průkaz, potvrzení o studiu, kód zdravotní pojišťovny, zdravotní průkaz, prohlášení poplatníka.","Podepsat písemnou dohodu před nástupem.","Přihlásit zaměstnance do evidence ČSSZ před zahájením práce.","Zaučení a školení hygieny (HACCP).","Sestavit rozpis směn a sdílet ho předem.","Každý měsíc zkontrolovat limity (11 999 Kč, 300 hodin) a podat měsíční hlášení."];
+const BRIG_AD="Hledáme studenty na brigádu do nové hotpot restaurace DevilsPot ve Zlíně! Hledáme číšníky/číšnice a pomocné síly do kuchyně na večery a víkendy. Nabízíme hodinovou mzdu od 200 Kč, flexibilní směny podle rozvrhu, spropitné, zaučení a partu mladých lidí. Nevadí, že nemáte praxi, zaučíme vás. Požadujeme: studium na UTB, spolehlivost a chuť pracovat s lidmi. Ozvěte se na (kontakt doplnit).";
+const BRIG_TODO=["Kontakt na Job centrum UTB a Studentskou unii UTB, podmínky zveřejnění nabídky.","Potvrdit aktuální požadavek na zdravotní průkaz a školení u KHS.","Potvrdit s mzdovou účetní kombinaci DPP/DPČ, odvody u DPČ a výši mzdových nákladů.","Rozhodnout o staff meal, zaměstnanecké slevě a spropitném.","Doplnit kontakt do inzerátu a vytvořit QR kód na plakát."];
+
+/* Zásady zaměstnávání */
+const ZAS_MOTTO="Pro všechny účastníky zaměstnání chceme jasné, legálně podložené, vstřícné, klidné a férové podmínky. Každý dostane férové podmínky, každý bude mít šanci růst a pracovat v bezpečném, čistém a profesionálním prostředí.";
+const ZAS=[
+ ["Jasné","Písemná dohoda před nástupem s popisem práce, mzdou a dobou. Rozpis směn předem. Jasná pravidla docházky, výplaty a spropitného."],
+ ["Legálně podložené","Správná smluvní forma (DPP/DPČ nebo pracovní poměr) podle limitů, přihlášení u ČSSZ před nástupem, správné odvody a daně, minimální mzda, evidence hodin. Žádná práce načerno."],
+ ["Vstřícné a klidné","Rozpis podle rozvrhu a zkouškových období, možnost výměny směn, přiměřené obsazení směn, aby nevznikal stres. Zpětná vazba v klidu a soukromě."],
+ ["Férové","Stejné podmínky pro stejnou pozici, mzda vždy včas, transparentní rozdělení spropitného, hodnocení podle práce a ne podle sympatií."],
+ ["Šance růst","Cesta od brigádníka přes zkušeného člena týmu a vedoucího směny až po vyšší odpovědnost. Zaškolení, školení a postupná zodpovědnost."],
+ ["Bezpečné","Školení BOZP, práce s vroucími vývary a indukcí (prevence popálenin), lékárnička a postup první pomoci, bezpečné prostředí bez obtěžování."],
+ ["Čisté a profesionální","Hygienické standardy a HACCP, úklidové plány, jednotné pracovní oblečení, jasné postupy a respekt mezi kolegy i vůči hostům."]
+];
+const ZAS_TODO=["Sepsat jednoduchý zaměstnanecký řád (práva, povinnosti, docházka, spropitné, výměna směn).","Připravit vzory písemných dohod (DPP, DPČ) a vstupní dokument s podmínkami.","Připravit školení BOZP, hygieny (HACCP) a práce s vroucími vývary.","Určit osobu pro zpětnou vazbu a řešení problémů (nulová tolerance k šikaně a obtěžování).","Nastavit pevný den výplaty a pravidla spropitného.","Popsat kariérní cestu (brigádník, zkušený člen týmu, vedoucí směny)."];
