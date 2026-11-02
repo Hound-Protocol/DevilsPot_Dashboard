@@ -4,7 +4,7 @@ const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dota
 
 /* Finanční model – všechna čísla jsou ODHADY, ne zjištěná fakta */
 const INV=[["Rekonstrukce a úpravy prostoru",500000],["Kuchyň: chlazení, odtah, technika",300000],["Stoly s indukcí, nádobí, nádoby",200000],["Interiér a nábytek",200000],["Kauce, první nájmy, povolení",150000],["Rezerva na první měsíce",250000]];
-const FIXED=[["Nájem + služby",30000],["Energie",30000],["Mzdy včetně odvodů (pomocná kuchyně a 2 číšníci na brigádu; zakladatelé včetně Filipa v kuchyni bez mzdy)",100000],["Marketing",10000],["Účetní, pojištění, ostatní",20000]];
+const FIXED=[["Nájem + služby",30000],["Energie",30000],["Mzdy včetně odvodů (pomocná kuchyně a 2 číšníci na brigádu; zakladatelé včetně Filipa v kuchyni bez mzdy)",100000],["Marketing",10000],["Jídlo pro zaměstnance (odhad; převážně zbytky a suroviny do vývaru)",4000],["Účetní, pojištění, ostatní",20000]];
 const M={seats:40,turns:1.5,days:26,price:500,food:.33,vat:.12,loanShare:1,rate:.09,years:5};
 const SCEN=[["Pesimistický",.35],["Základní",.45],["Optimistický",.6]];
 const PRICES=[450,500,600,700];
@@ -53,6 +53,7 @@ const PROV=[
  ["Vybavení","fact",["Indukční plotýnky ve stolech (bezpečnější než plyn). Ověřit elektrický příkon prostoru.","Odtah, chlazení, mražení, příprava surovin.","Stolní indukční vařič 3,5 kW stojí asi 4 800–6 100 Kč (ceny z e-shopů), vestavěné profesionální vyšší."]],
  ["Energie","fact",["Silová elektřina pro podnikatele: průměr asi 2,24 Kč/kWh bez DPH (duben 2026), nabídky od 2 421 Kč/MWh při fixaci na 2 roky.","Od ledna 2026 odpadl poplatek na obnovitelné zdroje, celková cena elektřiny klesla zhruba o 10 %.","Model počítá s 30 tis. Kč měsíčně na energie (odhad)."]],
  ["Dodavatelé",null,["Maso a zelenina: velkoobchod, místní farmáři","Asijské suroviny: specializovaný velkoobchod","Cíl: 2 dodavatelé na každou kategorii"]],
+ ["Jídlo pro zaměstnance a zbytky","est",["Zaměstnanci dostanou oběd a večeři na účet podniku, nebo se silnou slevou (např. za 50 Kč). Navrhl Filip podle zkušeností z gastra.","Zbytků bude málo: hodně surovin lze využít do vývaru nebo přímo do hotpotu.","Model počítá s 4 000 Kč měsíčně (odhad). Daňové a pojistné dopady jídla pro zaměstnance, zejména u dohod, ověřit s účetní."]],
  ["Lidé a mzdy","fact",["Filip vede kuchyň. Model s ním počítá jako se zakladatelem bez mzdy.","Minimální mzda 2026: 22 400 Kč měsíčně (134,40 Kč/h).","Nabídka práce ve Zlíně: servírka/číšník od 220 Kč/h na DPP/DPČ (duben 2026).","Číšník a kuchař: průměrné platy kolem 24 a 25 tis. Kč hrubého (celostátní údaj), pro případ najmutí dalšího kuchaře.","Zaměstnavatel navíc platí odvody (zhruba třetinu hrubé mzdy)."]]
 ];
 const LAW=[
@@ -93,5 +94,5 @@ const SRC=[
 ];
 
 /* Verze (zvýšit při každém vydání) a novinky pro okno „Nová pekelná verze je online!“ */
-const VERSION="2026-11-02-d";
-const WHATS_NEW=["Podnikový plán jako plnohodnotný dokument se stažením do Wordu","Nová záložka Dotazník (19 otázek) a terénní ověření","Zásady zaměstnávání a nábor studentů UTB na brigády","Přehled rozhodnutí a nové zdroje"];
+const VERSION="2026-11-02-e";
+const WHATS_NEW=["Jídlo pro zaměstnance (oběd a večeře zdarma nebo za 50 Kč) a využití zbytků, podle Filipa","Finanční model počítá s jídlem pro zaměstnance","Plán a přehled rozhodnutí aktualizovány"];

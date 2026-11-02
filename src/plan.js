@@ -137,7 +137,7 @@ const PLAN_DOC=[
   hh("Energie"),
   ul(["Silová elektřina pro podnikatele: průměr asi 2,24 Kč/kWh bez DPH (duben 2026), nabídky od 2 421 Kč/MWh s fixací na 2 roky.","Od ledna 2026 odpadl poplatek na obnovitelné zdroje (celková cena elektřiny zhruba −10 %).","Model počítá s "+fmtS(FIXED[1][1])+" měsíčně."]),
   hh("Dodavatelé a personál"),
-  ul(["Maso a zelenina: velkoobchod a místní farmáři, asijské suroviny od specializovaného velkoobchodu. Cíl: 2 dodavatelé na každou kategorii.","Minimální mzda 2026: 22 400 Kč (134,40 Kč/h). Zaměstnavatel navíc platí odvody zhruba třetinu hrubé mzdy.","Provozní doba (návrh): večery a víkendy, v modelu "+M.days+" provozních dní měsíčně."]),
+  ul(["Maso a zelenina: velkoobchod a místní farmáři, asijské suroviny od specializovaného velkoobchodu. Cíl: 2 dodavatelé na každou kategorii.","Minimální mzda 2026: 22 400 Kč (134,40 Kč/h). Zaměstnavatel navíc platí odvody zhruba třetinu hrubé mzdy.","Provozní doba (návrh): večery a víkendy, v modelu "+M.days+" provozních dní měsíčně.","Jídlo pro zaměstnance: oběd a večeře na účet podniku nebo se silnou slevou (např. za 50 Kč). Podle Filipa je zbytků málo, protože se hodně surovin využije do vývaru nebo hotpotu. Model počítá s "+fmtS(FIXED[4][1])+" měsíčně (odhad)."]),
   hh("Hygiena a bezpečnost"),
   ul(["Kontrola Krajské hygienické stanice, vyhláška 137/2004 Sb., systém HACCP (kontrola hygieny při práci s jídlem).","Alergeny u každé položky, školení personálu.","Požární ochrana a BOZP (bezpečnost práce), pojištění provozu."])
  ]},

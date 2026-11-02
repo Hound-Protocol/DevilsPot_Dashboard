@@ -151,7 +151,7 @@ const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dota
 
 /* Finanční model – všechna čísla jsou ODHADY, ne zjištěná fakta */
 const INV=[["Rekonstrukce a úpravy prostoru",500000],["Kuchyň: chlazení, odtah, technika",300000],["Stoly s indukcí, nádobí, nádoby",200000],["Interiér a nábytek",200000],["Kauce, první nájmy, povolení",150000],["Rezerva na první měsíce",250000]];
-const FIXED=[["Nájem + služby",30000],["Energie",30000],["Mzdy včetně odvodů (pomocná kuchyně a 2 číšníci na brigádu; zakladatelé včetně Filipa v kuchyni bez mzdy)",100000],["Marketing",10000],["Účetní, pojištění, ostatní",20000]];
+const FIXED=[["Nájem + služby",30000],["Energie",30000],["Mzdy včetně odvodů (pomocná kuchyně a 2 číšníci na brigádu; zakladatelé včetně Filipa v kuchyni bez mzdy)",100000],["Marketing",10000],["Jídlo pro zaměstnance (odhad; převážně zbytky a suroviny do vývaru)",4000],["Účetní, pojištění, ostatní",20000]];
 const M={seats:40,turns:1.5,days:26,price:500,food:.33,vat:.12,loanShare:1,rate:.09,years:5};
 const SCEN=[["Pesimistický",.35],["Základní",.45],["Optimistický",.6]];
 const PRICES=[450,500,600,700];
@@ -200,6 +200,7 @@ const PROV=[
  ["Vybavení","fact",["Indukční plotýnky ve stolech (bezpečnější než plyn). Ověřit elektrický příkon prostoru.","Odtah, chlazení, mražení, příprava surovin.","Stolní indukční vařič 3,5 kW stojí asi 4 800–6 100 Kč (ceny z e-shopů), vestavěné profesionální vyšší."]],
  ["Energie","fact",["Silová elektřina pro podnikatele: průměr asi 2,24 Kč/kWh bez DPH (duben 2026), nabídky od 2 421 Kč/MWh při fixaci na 2 roky.","Od ledna 2026 odpadl poplatek na obnovitelné zdroje, celková cena elektřiny klesla zhruba o 10 %.","Model počítá s 30 tis. Kč měsíčně na energie (odhad)."]],
  ["Dodavatelé",null,["Maso a zelenina: velkoobchod, místní farmáři","Asijské suroviny: specializovaný velkoobchod","Cíl: 2 dodavatelé na každou kategorii"]],
+ ["Jídlo pro zaměstnance a zbytky","est",["Zaměstnanci dostanou oběd a večeři na účet podniku, nebo se silnou slevou (např. za 50 Kč). Navrhl Filip podle zkušeností z gastra.","Zbytků bude málo: hodně surovin lze využít do vývaru nebo přímo do hotpotu.","Model počítá s 4 000 Kč měsíčně (odhad). Daňové a pojistné dopady jídla pro zaměstnance, zejména u dohod, ověřit s účetní."]],
  ["Lidé a mzdy","fact",["Filip vede kuchyň. Model s ním počítá jako se zakladatelem bez mzdy.","Minimální mzda 2026: 22 400 Kč měsíčně (134,40 Kč/h).","Nabídka práce ve Zlíně: servírka/číšník od 220 Kč/h na DPP/DPČ (duben 2026).","Číšník a kuchař: průměrné platy kolem 24 a 25 tis. Kč hrubého (celostátní údaj), pro případ najmutí dalšího kuchaře.","Zaměstnavatel navíc platí odvody (zhruba třetinu hrubé mzdy)."]]
 ];
 const LAW=[
@@ -240,8 +241,8 @@ const SRC=[
 ];
 
 /* Verze (zvýšit při každém vydání) a novinky pro okno „Nová pekelná verze je online!“ */
-const VERSION="2026-11-02-d";
-const WHATS_NEW=["Podnikový plán jako plnohodnotný dokument se stažením do Wordu","Nová záložka Dotazník (19 otázek) a terénní ověření","Zásady zaměstnávání a nábor studentů UTB na brigády","Přehled rozhodnutí a nové zdroje"];
+const VERSION="2026-11-02-e";
+const WHATS_NEW=["Jídlo pro zaměstnance (oběd a večeře zdarma nebo za 50 Kč) a využití zbytků, podle Filipa","Finanční model počítá s jídlem pro zaměstnance","Plán a přehled rozhodnutí aktualizovány"];
 
 /* Dotazník, terénní ověření, rozhodnutí */
 const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
@@ -294,6 +295,7 @@ const FIELD=[
 ];
 
 const DECISIONS=[
+ ["2. 11. 2026","Jídlo pro zaměstnance (návrh Filipa, k potvrzení): oběd a večeře na účet podniku nebo se silnou slevou (např. 50 Kč). Zbytků bude málo, suroviny se využijí do vývaru nebo hotpotu. Model počítá s 4 000 Kč měsíčně (odhad)."],
  ["2. 11. 2026","Zásady zaměstnávání: jasné, legálně podložené, vstřícné, klidné a férové podmínky pro všechny, šance růst a bezpečné, čisté a profesionální prostředí."],
  ["2. 11. 2026","Chceme verbovat studenty UTB na brigády (DPP/DPČ). Kanály, právní rámec a postup náboru jsou v dashboardu v záložce Nábor brigádníků."],
  ["2. 11. 2026","Název podniku: DevilsPot. Hotpot restaurace ve Zlíně."],
@@ -324,7 +326,7 @@ const BRIG=[
  ["Povinnosti zaměstnavatele (2026)","fact",["Registrace zaměstnavatele u ČSSZ (přihláška do registru zaměstnavatelů).","Od 1. 7. 2026 je nutné přihlásit zaměstnance do evidence zaměstnanců ČSSZ před zahájením práce, i u DPP.","Od 1. 4. 2026 se podává jednotné měsíční hlášení zaměstnavatele (JMHZ), tiskopis ONZ se nepoužívá.","Dohoda musí být písemná, s popisem práce, dobou a u DPČ rozsahem hodin.","Každý měsíc hlídat limity u každého studenta (11 999 Kč a 300 hodin ročně u DPP).","Vyřídí mzdová účetní. Model počítá s 20 tis. Kč měsíčně na účetní a ostatní."]],
  ["Hygiena a zdraví","est",["Podle dostupných zdrojů se při práci s pokrmy vyžaduje zdravotní průkaz pracovníka v potravinářství a znalosti o ochraně veřejného zdraví, i u brigádníků.","Průkaz vystavuje praktický lékař po vyšetření, trvá několik dní a nelze jej vyřídit na počkání. Platí i pro více zaměstnavatelů.","Aktuální požadavky potvrdit u Krajské hygienické stanice. Součástí je i školení HACCP."]],
  ["Jaké pracovní smlouvy vybrat","est",["DPP: nárazová práce, max. 300 hodin ročně u zaměstnavatele (asi 25 hodin měsíčně v průměru). Vhodná pro rezervní studenty.","DPČ: pravidelná práce, max. polovina týdenní pracovní doby (20 hodin týdně). Vhodná pro hlavní brigádníky. Odvody vznikají od 4 500 Kč měsíčně.","Od 1. 1. 2027 se limity zvyšují: DPP 12 500 Kč a DPČ 5 000 Kč.","Zvolenou kombinaci potvrdit s mzdovou účetní."]],
- ["Co nabídnout studentům","est",["Flexibilní směny podle rozvrhu, rozpis předem.","Hodinová mzda 200–220 Kč, spropitné (od 2027 osvobozené od daně pro zaměstnance do 7 % tržeb, pokud zákon projde).","Zaučení, školení, růst na vedoucího směny.","Staff meal a zaměstnanecká sleva (k rozhodnutí).","Značka „Devil crew“, parta studentů, atmosféra."]],
+ ["Co nabídnout studentům","est",["Flexibilní směny podle rozvrhu, rozpis předem.","Hodinová mzda 200–220 Kč, spropitné (od 2027 osvobozené od daně pro zaměstnance do 7 % tržeb, pokud zákon projde).","Zaučení, školení, růst na vedoucího směny.","Jídlo pro zaměstnance: oběd a večeře zdarma nebo se silnou slevou (např. za 50 Kč). Podle Filipa je to běžná praxe a zbytků je málo, protože se hodně věcí dá využít do vývaru nebo hotpotu.","Značka „Devil crew“, parta studentů, atmosféra."]],
  ["Kdy a jak často","est",["Poptávka po brigádách roste po zkouškovém období a v létě, počítat se zkouškovými obdobími a prázdninami.","Nábor začít 1–2 měsíce před zkušebním provozem a držet rezervu navíc kvůli absencím."]]
 ];
 const BRIG_CALC=[
@@ -339,7 +341,7 @@ const BRIG_CALC=[
 ];
 const BRIG_STEPS=["Připravit nabídku, inzerát a vzor dohody (DPP/DPČ).","Osobně kontaktovat Job centrum UTB a Studentskou unii UTB, zjistit podmínky zveřejnění a spolupráce.","Zveřejnit nabídku na Zlin.Jobs, portálech a sociálních sítích, vyvěsit plakáty s QR kódem.","Krátký pohovor a zkušební směna (nebo vstupní školení).","Vybrat dokumenty: občanský průkaz, potvrzení o studiu, kód zdravotní pojišťovny, zdravotní průkaz, prohlášení poplatníka.","Podepsat písemnou dohodu před nástupem.","Přihlásit zaměstnance do evidence ČSSZ před zahájením práce.","Zaučení a školení hygieny (HACCP).","Sestavit rozpis směn a sdílet ho předem.","Každý měsíc zkontrolovat limity (11 999 Kč, 300 hodin) a podat měsíční hlášení."];
 const BRIG_AD="Hledáme studenty na brigádu do nové hotpot restaurace DevilsPot ve Zlíně! Hledáme číšníky/číšnice a pomocné síly do kuchyně na večery a víkendy. Nabízíme hodinovou mzdu od 200 Kč, flexibilní směny podle rozvrhu, spropitné, zaučení a partu mladých lidí. Nevadí, že nemáte praxi, zaučíme vás. Požadujeme: studium na UTB, spolehlivost a chuť pracovat s lidmi. Ozvěte se na (kontakt doplnit).";
-const BRIG_TODO=["Kontakt na Job centrum UTB a Studentskou unii UTB, podmínky zveřejnění nabídky.","Potvrdit aktuální požadavek na zdravotní průkaz a školení u KHS.","Potvrdit s mzdovou účetní kombinaci DPP/DPČ, odvody u DPČ a výši mzdových nákladů.","Rozhodnout o staff meal, zaměstnanecké slevě a spropitném.","Doplnit kontakt do inzerátu a vytvořit QR kód na plakát."];
+const BRIG_TODO=["Kontakt na Job centrum UTB a Studentskou unii UTB, podmínky zveřejnění nabídky.","Potvrdit aktuální požadavek na zdravotní průkaz a školení u KHS.","Potvrdit s mzdovou účetní kombinaci DPP/DPČ, odvody u DPČ a výši mzdových nákladů.","Potvrdit pravidla jídla pro zaměstnance (zdarma nebo za 50 Kč) a jeho daňové a pojistné dopady s účetní, zejména u dohod.","Doplnit kontakt do inzerátu a vytvořit QR kód na plakát."];
 
 /* Zásady zaměstnávání */
 const ZAS_MOTTO="Pro všechny účastníky zaměstnání chceme jasné, legálně podložené, vstřícné, klidné a férové podmínky. Každý dostane férové podmínky, každý bude mít šanci růst a pracovat v bezpečném, čistém a profesionálním prostředí.";
@@ -493,7 +495,7 @@ const PLAN_DOC=[
   hh("Energie"),
   ul(["Silová elektřina pro podnikatele: průměr asi 2,24 Kč/kWh bez DPH (duben 2026), nabídky od 2 421 Kč/MWh s fixací na 2 roky.","Od ledna 2026 odpadl poplatek na obnovitelné zdroje (celková cena elektřiny zhruba −10 %).","Model počítá s "+fmtS(FIXED[1][1])+" měsíčně."]),
   hh("Dodavatelé a personál"),
-  ul(["Maso a zelenina: velkoobchod a místní farmáři, asijské suroviny od specializovaného velkoobchodu. Cíl: 2 dodavatelé na každou kategorii.","Minimální mzda 2026: 22 400 Kč (134,40 Kč/h). Zaměstnavatel navíc platí odvody zhruba třetinu hrubé mzdy.","Provozní doba (návrh): večery a víkendy, v modelu "+M.days+" provozních dní měsíčně."]),
+  ul(["Maso a zelenina: velkoobchod a místní farmáři, asijské suroviny od specializovaného velkoobchodu. Cíl: 2 dodavatelé na každou kategorii.","Minimální mzda 2026: 22 400 Kč (134,40 Kč/h). Zaměstnavatel navíc platí odvody zhruba třetinu hrubé mzdy.","Provozní doba (návrh): večery a víkendy, v modelu "+M.days+" provozních dní měsíčně.","Jídlo pro zaměstnance: oběd a večeře na účet podniku nebo se silnou slevou (např. za 50 Kč). Podle Filipa je zbytků málo, protože se hodně surovin využije do vývaru nebo hotpotu. Model počítá s "+fmtS(FIXED[4][1])+" měsíčně (odhad)."]),
   hh("Hygiena a bezpečnost"),
   ul(["Kontrola Krajské hygienické stanice, vyhláška 137/2004 Sb., systém HACCP (kontrola hygieny při práci s jídlem).","Alergeny u každé položky, školení personálu.","Požární ochrana a BOZP (bezpečnost práce), pojištění provozu."])
  ]},
