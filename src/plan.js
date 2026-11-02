@@ -202,7 +202,7 @@ const PLAN_DOC=[
  ]},
  {id:"vyzkum",title:"Výzkum zákazníků a terénní ověření",b:[
   pp("Poptávka a cena se ověří dvěma způsoby: zákaznickým dotazníkem (cíl alespoň 100, lépe 200 odpovědí, viz příloha A) a osobním terénním ověřením ve Zlíně."),
-  pp("**Digitální dotazník** je na adrese "+SITE_URL+"dotaznik.html a lze jej vyplnit na mobilu i počítači. Odpovědi se ukládají do samostatného soukromého repozitáře na GitHubu (DevilsPot_Data), nikoli do veřejného repozitáře dashboardu. Každý kanál (plakát, Instagram, Facebook, koleje, osobně) má vlastní odkaz, takže je vidět, odkud odpovědi přišly. Stav připojení: "+(QFORM_URL?"připojeno.":"čeká na připojení ukládání odpovědí.")),
+  pp("**Digitální dotazník** je na adrese "+SITE_URL+"dotaznik.html a lze jej vyplnit na mobilu i počítači. Anonymní odpovědi (volby a čísla) se ukládají do větve data v repozitáři DevilsPot_Dashboard, e-maily a volné texty jen do soukromého repozitáře DevilsPot_Data. Každý kanál (plakát, Instagram, Facebook, koleje, osobně) má vlastní odkaz, takže je vidět, odkud odpovědi přišly. Stav připojení: "+(QFORM_URL?"připojeno.":"čeká na připojení ukládání odpovědí.")),
   hh("Terénní ověření"),
   tb(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]])),
   hh("Výsledky"),

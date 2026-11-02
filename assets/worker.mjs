@@ -1,11 +1,13 @@
 /**
- * DevilsPot: příjem odpovědí z dotazníku a uložení do SOUKROMÉHO GitHub repozitáře.
- * Cloudflare Worker (zdarma). Nastavení (Settings > Variables and Secrets):
- *   GH_REPO       text    např. Hound-Protocol/devilspot-data   (soukromý repozitář s README)
- *   GH_TOKEN      secret  fine-grained token jen pro tento repozitář, oprávnění Contents: Read and write
- *   ALLOW_ORIGIN  text    https://hound-protocol.github.io    (odkud smí stránka volat Worker)
- *   GH_BRANCH     text    (volitelné) výchozí main
- * Do repozitáře se zapisuje: odpovedi/RRRR-MM/<id>.json (každá odpověď) a souhrn.json (počty bez e-mailů a textů).
+ * DevilsPot: příjem odpovědí z dotazníku a uložení na GitHub. Cloudflare Worker (zdarma).
+ * Nastavení (Settings > Variables and Secrets):
+ *   GH_REPO          text    repozitář pro ANONYMNÍ odpovědi, např. Hound-Protocol/DevilsPot_Dashboard
+ *   GH_BRANCH        text    větev pro data, např. data (aby se nespouštěl web z main)
+ *   GH_REPO_PRIVATE  text    SOUKROMÝ repozitář pro e-maily a volné texty, např. Hound-Protocol/DevilsPot_Data (volitelné)
+ *   GH_TOKEN         secret  fine-grained token pro oba repozitáře, oprávnění Contents: Read and write
+ *   ALLOW_ORIGIN     text    https://hound-protocol.github.io
+ * Veřejná část (GH_REPO): odpovedi/RRRR-MM/<id>.json (jen volby a čísla) a souhrn.json (počty).
+ * Soukromá část (GH_REPO_PRIVATE): kontakty/RRRR-MM/<id>.json (e-mail a volné texty). Bez GH_REPO_PRIVATE se e-mail a texty NEUKLÁDAJÍ.
  */
 const OPTIONS = {"1":["Ano, už jsem ho jedl/a","Znám ho, ale ještě jsem ho nejedl/a","Ne, nevím, co to je"],"2":["V Praze","V Brně","V jiném městě v ČR","V zahraničí","Doma"],"3":[],"4":["Jednou týdně nebo častěji","2–3× měsíčně","Jednou měsíčně","Několikrát za rok","Spíš bych nechodil/a"],"5":["S přáteli (parta 4+ lidí)","S partnerem/partnerkou","S rodinou","S kolegy (firemní akce)","Sám/sama"],"6":["Všední den večer","Pátek nebo sobota večer","Víkend odpoledne","Oběd ve všední den","Při oslavě nebo speciální příležitosti"],"7":["All-you-can-eat (pevná cena, neomezeně)","Sety pro 2–4 osoby","À la carte (platím za to, co si vyberu)","Nevím, záleží na ceně"],"8":["Do 300 Kč","300–400 Kč","400–500 Kč","500–600 Kč","600–700 Kč","700–800 Kč","Více než 800 Kč"],"9":["Cena","Kvalita masa a surovin","Výběr vývarů","Atmosféra a vzhled","Rychlost obsluhy","Poloha a parkování","Vegetariánské a bezmasé možnosti","Zážitek a fotky na sociální sítě"],"10":["Jemný kuřecí","Pálivý sečuánský","Houbový","Rajčatový","Thajský (tom yum)","Bezmasý/vegan"],"11":[],"12":["V centru","Blízko univerzity","V nákupním centru","Nezáleží, hlavně dobré jídlo"],"13":["Instagram","TikTok","Facebook","Google Maps","Od kamarádů","Plakát nebo leták (například na univerzitě)"],"14":["Student/ka UTB","Student/ka jiné školy","Pracující","Jiné"],"15":["do 18","19–24","25–34","35–44","45 a více"],"16":["Ve Zlíně","V okolí Zlína","Jinde"],"17":[],"18":[],"19":[]};
 const CHOICE = [1, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16];
@@ -16,9 +18,11 @@ const b64 = s => { const by = new TextEncoder().encode(s); let t = ""; for (cons
 const unb64 = s => { const bin = atob(s.replace(/\n/g, "")); return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))); };
 const emptyAgg = () => ({ n: 0, c: {}, s: { 3: [0, 0, 0, 0, 0], 11: [0, 0, 0, 0, 0] }, vw: { vw1: [], vw2: [], vw3: [], vw4: [] }, src: {} });
 
-function gh(env, method, path, body) {
-  const branch = env.GH_BRANCH || "main";
-  const url = `https://api.github.com/repos/${env.GH_REPO}/contents/${path}` + (method === "GET" ? `?ref=${branch}` : "");
+function gh(env, method, path, body, priv) {
+  const repo = priv ? env.GH_REPO_PRIVATE : env.GH_REPO;
+  const branch = priv ? "main" : (env.GH_BRANCH || "main");
+  if (body && !priv && env.GH_BRANCH) body = { ...body, branch };
+  const url = `https://api.github.com/repos/${repo}/contents/${path}` + (method === "GET" ? `?ref=${branch}` : "");
   return fetch(url, {
     method,
     headers: { Authorization: `Bearer ${env.GH_TOKEN}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "devilspot-form", "Content-Type": "application/json" },
@@ -36,14 +40,13 @@ function clean(d) {
     r["q" + n] = v;
   }
   for (const n of SCALE) { const x = Math.round(Number(d["q" + n])); r["q" + n] = x >= 1 && x <= 5 ? x : ""; }
-  for (const n of [17, 18]) r["q" + n] = String(d["q" + n] || "").slice(0, 800);
   const email = String(d.q19 || "").trim().slice(0, 120);
   const consent = !!d.consent && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-  r.q19 = consent ? email : "";
   r.souhlas_email = consent;
   for (let i = 1; i <= 4; i++) { const x = Number(d["vw" + i]); r["vw" + i] = x > 0 && x <= 5000 ? Math.round(x) : ""; }
   r.zdroj = /^[a-z0-9_-]{1,20}$/i.test(String(d.src || "")) ? String(d.src) : "";
   const t = Number(d.t); r.sekund = t >= 0 && t <= 7200 ? Math.round(t) : null;
+  r.__priv = { q17: String(d.q17 || "").slice(0, 800), q18: String(d.q18 || "").slice(0, 800), q19: consent ? email : "", souhlas_email: consent };
   return r;
 }
 
@@ -105,14 +108,22 @@ export default {
       const d = JSON.parse(text);
       if (d.hp) return out({ ok: true });                         // past na roboty
       const rec = clean(d);
+      const priv = rec.__priv; delete rec.__priv;
       if (!REQUIRED.every(n => rec["q" + n] !== "" && rec["q" + n] != null)) return out({ ok: false, chyba: "chybi_povinne" }, 400);
       const now = new Date(), id = now.toISOString().replace(/[-:T]/g, "").slice(0, 14) + "-" + crypto.randomUUID().slice(0, 8);
       const path = `odpovedi/${now.toISOString().slice(0, 7)}/${id}.json`;
       const r = await gh(env, "PUT", path, { message: "Nová odpověď " + id, content: b64(JSON.stringify(rec, null, 2)) });
       if (!r.ok) return out({ ok: false, chyba: "github_" + r.status }, 502);
+      let kontakt = false;
+      if (env.GH_REPO_PRIVATE && (priv.q17 || priv.q18 || priv.q19)) {
+        try {
+          const pr = await gh(env, "PUT", `kontakty/${now.toISOString().slice(0, 7)}/${id}.json`, { message: "Kontakt " + id, content: b64(JSON.stringify({ id, cas: rec.cas, ...priv }, null, 2)) }, true);
+          kontakt = pr.ok;
+        } catch (e) { /* soukromá část se nepovedla, anonymní odpověď je uložena */ }
+      }
       let souhrn = false;
       try { souhrn = await updateAgg(env, rec); } catch (e) { /* odpověď je uložena, souhrn lze přepočítat */ }
-      return out({ ok: true, souhrn });
+      return out({ ok: true, souhrn, kontakt });
     } catch (e) {
       return out({ ok: false }, 500);
     }

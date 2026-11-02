@@ -5,7 +5,7 @@ const TYPE={1:"radio",2:"check",3:"scale",4:"radio",5:"check",6:"check",7:"radio
 const REQ=[1,3,4,8,14];
 const QM={};QUEST.forEach(([sec,qs])=>qs.forEach(q=>QM[q[0]]={n:q[0],t:q[1],ty:q[2],o:q[3]}));
 // kroky: oddíly A–C, volitelné cenové pásmo, oddíly D–G
-const STEPS=[];QUEST.forEach(([sec,qs],i)=>{STEPS.push({title:sec,qs:qs.map(q=>q[0])});if(i===2)STEPS.push({title:"Cena: vaše představa (nepovinné)",vw:true,qs:[]})});
+const STEPS=[];QUEST.forEach(([sec,qs],i)=>{if(!QPRIVATE&&qs.some(q=>[17,18,19].includes(q[0])))return;STEPS.push({title:sec,qs:qs.map(q=>q[0])});if(i===2)STEPS.push({title:"Cena: vaše představa (nepovinné)",vw:true,qs:[]})});
 const ans={};let step=0;const t0=Date.now();
 const src=(new URLSearchParams(location.search)).get("z")||"";
 const SEEN="Ano, už jsem ho jedl/a";
@@ -75,7 +75,7 @@ function thanks(){$("#intro").style.display="none";
  toTop();
 }
 // start
-$("#intro").textContent=QINTRO;
+$("#intro").textContent=QINTRO;if(QPRIVATE)$("#priv").textContent="Dotazník je anonymní. E-mail je nepovinný a použijeme ho jen k oznámení o otevření. Neukládá se veřejně.";
 if(!QFORM_URL)$("#test").style.display="block";
 render();
 // uhlíky

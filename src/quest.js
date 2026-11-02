@@ -2,6 +2,8 @@
 const SITE_URL="https://hound-protocol.github.io/DevilsPot_Dashboard/";
 /* Adresa Cloudflare Workeru, který ukládá odpovědi do soukromého repozitáře DevilsPot_Data. Prázdné = testovací režim, odpovědi se neukládají. */
 const QFORM_URL="";
+/* Zapnout (true) až když má Worker nastavený soukromý repozitář GH_REPO_PRIVATE. Bez něj se e-mail a volné otázky ve formuláři nezobrazují. */
+const QPRIVATE=false;
 const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
 const QEND="Děkujeme! Sledujte nás, brzy se ozveme se zkušebními večery.";
 const QUEST=[

@@ -11,7 +11,7 @@ const FIELD=[
 ];
 
 const DECISIONS=[
- ["2. 11. 2026","Digitální dotazník: veřejná stránka dotaznik.html. Odpovědi se ukládají jen do soukromého GitHub repozitáře DevilsPot_Data (bez Google), zapisuje je malý bezplatný Cloudflare Worker s tokenem uloženým mimo web. Odkazy s parametrem ?z= měří kanály, výsledky se zobrazují v dashboardu."],
+ ["2. 11. 2026","Digitální dotazník: veřejná stránka dotaznik.html. Anonymní odpovědi (volby a čísla) se ukládají do větve data v repozitáři DevilsPot_Dashboard. E-maily a volné texty se kvůli ochraně respondentů ukládají jen do soukromého repozitáře DevilsPot_Data (bez něj se tyto otázky nezobrazují). Zápis zajišťuje malý bezplatný Cloudflare Worker s tokenem mimo web, odkazy s ?z= měří kanály."],
  ["2. 11. 2026","Jídlo pro zaměstnance (návrh Filipa, k potvrzení): oběd a večeře na účet podniku nebo se silnou slevou (např. 50 Kč). Zbytků bude málo, suroviny se využijí do vývaru nebo hotpotu. Model počítá s 4 000 Kč měsíčně (odhad)."],
  ["2. 11. 2026","Zásady zaměstnávání: jasné, legálně podložené, vstřícné, klidné a férové podmínky pro všechny, šance růst a bezpečné, čisté a profesionální prostředí."],
  ["2. 11. 2026","Chceme verbovat studenty UTB na brigády (DPP/DPČ). Kanály, právní rámec a postup náboru jsou v dashboardu v záložce Nábor brigádníků."],

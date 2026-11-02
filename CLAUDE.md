@@ -16,7 +16,7 @@ Statická stránka (GitHub Pages) s přehledem projektu hotpot restaurace Devils
 - `src/data.js`: model financí (INV, FIXED, M), přehled, konkurence, marketing, provoz, právo, financování, harmonogram, zdroje, VERSION, WHATS_NEW.
 - `src/data2.js`: dotazník (QUEST), terénní ověření (FIELD), rozhodnutí (DECISIONS), nábor brigádníků (BRIG), zásady zaměstnávání (ZAS), SWOT, slovníček (GLOSS), rozjezd prvního roku a jednotková ekonomika (ramp, unit).
 - `src/quest.js`: otázky dotazníku, SITE_URL a QFORM_URL (adresa Cloudflare Workeru; prázdná = testovací režim).
-- `src/form.js`, `src/dotaznik.tpl.html`: veřejná stránka dotazníku (`dotaznik.html`). `src/worker/worker.mjs`: Cloudflare Worker, který ukládá odpovědi do SOUKROMÉHO repozitáře Hound-Protocol/DevilsPot_Data (sestavený do `assets/worker.mjs`). Osobní data patří jen do soukromého repozitáře, nikdy sem. `src/make_qr.py`: QR kódy do `assets/qr/`.
+- `src/form.js`, `src/dotaznik.tpl.html`: veřejná stránka dotazníku (`dotaznik.html`). `src/worker/worker.mjs`: Cloudflare Worker (sestavený do `assets/worker.mjs`): anonymní odpovědi zapisuje do větve `data` tohoto repozitáře, e-maily a volné texty jen do SOUKROMÉHO repozitáře Hound-Protocol/DevilsPot_Data. Do veřejného repozitáře nikdy nepatří e-maily ani volné texty respondentů. Příznak `QPRIVATE` v `src/quest.js` zapnout až po nastavení GH_REPO_PRIVATE ve Workeru. `src/make_qr.py`: QR kódy do `assets/qr/`.
 - `src/plan.js`: podnikový plán jako dokument (PLAN_DOC, PLAN_APPX).
 - `src/app.js`: vykreslení, navigace, export do Wordu, efekty.
 - `src/hell.css`, `src/index.tpl.html`: vzhled a šablona.
