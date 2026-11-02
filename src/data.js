@@ -1,6 +1,6 @@
 /* DATA DASHBOARDU DevilsPot: veškerý obsah. Aktualizuje Claude podle domluvy; viz CLAUDE.md */
 const UPDATED="2. 11. 2026";
-const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dotazník"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["brig","Nábor brigádníků"],["pravo","Právo a daně"],["road","Harmonogram"],["rozh","Rozhodnutí"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
+const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dotazník"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["brig","Nábor brigádníků"],["pravo","Právo a daně"],["road","Harmonogram"],["rozh","Rozhodnutí"],["slov","Slovníček"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
 
 /* Finanční model – všechna čísla jsou ODHADY, ne zjištěná fakta */
 const INV=[["Rekonstrukce a úpravy prostoru",500000],["Kuchyň: chlazení, odtah, technika",300000],["Stoly s indukcí, nádobí, nádoby",200000],["Interiér a nábytek",200000],["Kauce, první nájmy, povolení",150000],["Rezerva na první měsíce",250000]];
@@ -94,5 +94,5 @@ const SRC=[
 ];
 
 /* Verze (zvýšit při každém vydání) a novinky pro okno „Nová pekelná verze je online!“ */
-const VERSION="2026-11-02-e";
-const WHATS_NEW=["Jídlo pro zaměstnance (oběd a večeře zdarma nebo za 50 Kč) a využití zbytků, podle Filipa","Finanční model počítá s jídlem pro zaměstnance","Plán a přehled rozhodnutí aktualizovány"];
+const VERSION="2026-11-02-f";
+const WHATS_NEW=["Graf citlivosti zisku na cenu a obsazenost","Rozjezd prvního roku a jednotková ekonomika hosta","SWOT analýza a Slovníček pojmů","Nejbližší kroky na přehledu, stažení dotazníku do Wordu","Lepší mobil, tisk do PDF a plynulejší efekty"];

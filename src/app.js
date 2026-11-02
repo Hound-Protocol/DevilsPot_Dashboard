@@ -1,3 +1,4 @@
+const NEXT=ROAD.flatMap(([t,it])=>it.filter(x=>x[1]!=="done").map(x=>x[0])).slice(0,6);
 
 const $=s=>document.querySelector(s);
 const fmt=fmtS;
@@ -8,7 +9,7 @@ const cl=v=>v>=0?"pos":"neg";
 
 const V={};
 V.prehled=`<h2>Přehled</h2><div class="kpi">${KPI.map(([l,v])=>`<div><small>${l}</small><b>${v}</b></div>`).join("")}<div><small>Harmonogram</small><b id="rp"></b></div></div>
-<div class="note"><b>Hlavní zjištění:</b> hotpot ve Zlíně nebyl nalezen, což je příležitost. Při ceně 500 Kč na hosta ale model vychází ztrátově. Cenu je potřeba zvednout na 600 Kč a víc, nebo snížit náklady a investici. Dřív než cokoliv jiného je třeba vyřešit odbornou způsobilost pro hostinskou činnost.</div>${cards(OVERVIEW)}`;
+<div class="note"><b>Hlavní zjištění:</b> hotpot ve Zlíně nebyl nalezen, což je příležitost. Při ceně 500 Kč na hosta ale model vychází ztrátově. Cenu je potřeba zvednout na 600 Kč a víc, nebo snížit náklady a investici. Dřív než cokoliv jiného je třeba na živnostenském úřadě potvrdit, že Filipovo vyučení a praxe stačí pro hostinskou činnost.</div><div class="card chap"><h3>Nejbližší kroky</h3><ol>${NEXT.map(x=>`<li>${x}</li>`).join("")}</ol></div>${cards(OVERVIEW)}`;
 V.trh=`<h2>Trh a konkurence</h2>
 <div class="kpi"><div><small>Obyvatelé kraje (30. 6. 2026)</small><b>576 120</b></div><div><small>Okres Zlín (SLDB 2021)</small><b>187 371</b></div><div><small>Studenti UTB</small><b>asi 9 000</b></div><div><small>Mzda v kraji (2Q 2026)</small><b>45 615 Kč</b></div><div><small>Průměr ČR</small><b>51 966 Kč</b></div><div><small>Cizinci v kraji</small><b>27 432</b></div></div>
 <div class="card"><h3>Hotpot a konkurence <span class="tag fact">zjištěno</span></h3><div class="tw"><table><tr><th>Podnik</th><th>Formát</th><th>Cena</th><th>Poznámka</th></tr>${COMP.map(([a,b,c,d])=>`<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td><td>${d}</td></tr>`).join("")}</table></div></div>
@@ -63,6 +64,7 @@ ${PLAN_DOC.map((c,i)=>chapHTML(c,i)).join("")}${PLAN_APPX.map((c,i)=>chapHTML(c,
 
 /* ---------- Dotazník ---------- */
 V.dotaznik=`<h2>Zákaznický dotazník</h2>
+<div class="card dlbar"><div><b>Dotazník ke stažení</b><br><span class="small">Word dokument připravený ke zkopírování do Google Forms nebo Microsoft Forms.</span></div><button type="button" id="dlq" class="dlbtn">⬇ Stáhnout dotazník (.docx)</button></div><p class="small" id="dlqmsg"></p>
 <div class="note">Připraveno ke zkopírování do Google Forms nebo Microsoft Forms. Vyplnění zabere asi 3 minuty, dotazník je anonymní, e-mail je nepovinný. Je také přílohou A podnikového plánu.</div>
 <div class="card chap"><h3>Úvodní text pro respondenty</h3><p>${esc(QINTRO)}</p></div>
 ${QUEST.map(([sec,qs])=>`<div class="card chap"><h3>${esc(sec)}</h3>${qs.map(q=>blockHTML({t:"quest",q})).join("")}</div>`).join("")}
@@ -89,9 +91,34 @@ V.rozh=`<h2>Přehled rozhodnutí</h2><p class="small">Záznam toho, co jsme se d
 const _road=V.road;
 V.road=_road+`<div class="card chap"><h3>Terénní ověření: co přesně</h3><p>Terénní ověření znamená zjistit věci osobně ve Zlíně, protože je online vyhledávání nepotvrdí.</p>${tabl(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]]))}</div>`;
 
+
+/* ---------- graf, rozjezd, SWOT, slovníček ---------- */
+function chartSVG(){
+ const W=640,H=300,pl=58,pr=16,pt=14,pb=36,x0=.25,x1=.7,ymin=-150000,ymax=150000;
+ const sx=o=>pl+(o-x0)/(x1-x0)*(W-pl-pr), sy=v=>pt+(ymax-v)/(ymax-ymin)*(H-pt-pb);
+ const cols={450:"#ff5a47",500:"#ffc233",600:"#5be28a",700:"#6cb6ff"};
+ let g="";
+ for(let v=ymin;v<=ymax;v+=50000){g+=`<line x1="${pl}" x2="${W-pr}" y1="${sy(v)}" y2="${sy(v)}" stroke="rgba(255,255,255,${v===0?.55:.1})" ${v===0?"":'stroke-dasharray="3 4"'}/><text x="${pl-8}" y="${sy(v)+4}" text-anchor="end">${v/1000} tis.</text>`}
+ for(let o=x0;o<=x1+1e-9;o+=.05){g+=`<text x="${sx(o)}" y="${H-14}" text-anchor="middle">${Math.round(o*100)} %</text>`}
+ PRICES.forEach(p=>{const pts=[];for(let o=x0;o<=x1+1e-9;o+=.05){const v=Math.max(ymin,Math.min(ymax,calc(o,p).profit));pts.push(sx(o).toFixed(1)+","+sy(v).toFixed(1))}g+=`<polyline fill="none" stroke="${cols[p]}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="${pts.join(" ")}"/>`});
+ const mv=calc(.45,M.price).profit;g+=`<circle cx="${sx(.45)}" cy="${sy(mv)}" r="5.5" fill="#fff" stroke="#ff2d1a" stroke-width="2.5"/><text x="${sx(.45)+9}" y="${sy(mv)-8}" style="fill:#fff">model</text>`;
+ g+=`<text x="${(pl+W-pr)/2}" y="${H-1}" text-anchor="middle">Obsazenost</text>`;
+ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Měsíční zisk po splátce podle obsazenosti pro ceny 450 až 700 Kč">${g}</svg><div class="legend">${PRICES.map(p=>`<span><i style="background:${cols[p]}"></i>${p} Kč na hosta</span>`).join("")}</div>`;
+}
+(function(){
+ const rp=ramp();
+ const tail=`<div class="card chap"><h3>Zisk po splátce podle obsazenosti a ceny <span class="tag est">odhad</span></h3><p class="small">Měsíční zisk před daní. Čára nula je hranice, nad kterou je provoz v plusu. Bod „model“ je základní scénář (45 %, ${fmtS(M.price)}).</p>${chartSVG()}</div>
+ <div class="grid"><div class="card"><h3>Jednotková ekonomika hosta <span class="tag est">odhad</span></h3>${tabl(["Položka","Hodnota"],unit(M.price))}</div>
+ <div class="card"><h3>Rozjezd prvního roku <span class="tag est">odhad</span></h3><p class="small">Obsazenost roste z ${Math.round(RAMP.start*100)} % na ${Math.round(RAMP.target*100)} % během ${RAMP.months} měsíců, cena ${fmtS(M.price)}. Po splátce, před daní.</p>${tabl(["Měsíc","Obsazenost","Zisk","Kumulativně"],rp.rows.map(r=>[r.m+"",Math.round(r.occ*100)+" %",fmtS(r.profit),fmtS(r.cum)]))}
+ <p class="small">Nejhlubší propad: <b>${fmtS(rp.min)}</b>. Rezerva v investici: ${fmtS(INV[5][1])}. ${rp.min+INV[5][1]>=0?"Rezerva propad pokryje.":"Rezerva propad nepokryje, je třeba ji navýšit nebo snížit náklady."}</p></div></div>`;
+ V.calc+=tail;
+ V.trh+=`<h2 style="margin-top:22px">SWOT analýza <span class="tag est">návrh</span></h2><div class="swot">${SWOT.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div>`;
+ V.slov=`<h2>Slovníček pojmů</h2><p class="small">Vysvětlení odborných výrazů použitých v dashboardu a plánu. Je také přílohou C podnikového plánu.</p><div class="card chap">${tabl(["Pojem","Vysvětlení"],GLOSS)}</div>`;
+})();
+
 /* ---------- Word (.docx) ---------- */
 function loadDocx(){return new Promise((res,rej)=>{if(window.docx)return res(window.docx);const s=document.createElement("script");s.src="vendor/docx.umd.js";s.onload=()=>window.docx?res(window.docx):rej(new Error("docx"));s.onerror=()=>rej(new Error("load"));document.head.appendChild(s)})}
-async function buildDocx(){
+async function buildDocx(mode){const Q=mode==="quest";
  const D=await loadDocx();
  const {Document,Packer,Paragraph,TextRun,HeadingLevel,Table,TableRow,TableCell,WidthType,ShadingType,AlignmentType,Footer,Header,PageNumber,ExternalHyperlink,BorderStyle,PageBreak,LevelFormat}=D;
  const FONT="Calibri", W=9638;
@@ -117,43 +144,48 @@ async function buildDocx(){
   }return []};
  const kids=[];
  kids.push(new Paragraph({spacing:{before:2600},children:[new TextRun({text:PLAN_META.title,bold:true,size:112,color:"C0261A",font:FONT})]}));
- kids.push(new Paragraph({spacing:{after:300},children:[new TextRun({text:PLAN_META.sub,size:40,color:"3A2A24",font:FONT})]}));
- PLAN_META.lines.forEach(l=>kids.push(P(l,{size:24,color:"555555",after:60})));
+ kids.push(new Paragraph({spacing:{after:300},children:[new TextRun({text:Q?"Zákaznický dotazník":PLAN_META.sub,size:40,color:"3A2A24",font:FONT})]}));
+ (Q?["Pro studenty UTB a obyvatele Zlína","Stav k "+UPDATED]:PLAN_META.lines).forEach(l=>kids.push(P(l,{size:24,color:"555555",after:60})));
  kids.push(new Paragraph({children:[new PageBreak()]}));
- kids.push(H1("Obsah"));
- PLAN_DOC.forEach((c,i)=>kids.push(P((i+1)+". "+c.title,{after:40})));
- PLAN_APPX.forEach(c=>kids.push(P(c.title,{after:40})));
- kids.push(new Paragraph({children:[new PageBreak()]}));
- PLAN_DOC.forEach((c,i)=>{kids.push(H1((i+1)+". "+c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
- PLAN_APPX.forEach(c=>{kids.push(new Paragraph({children:[new PageBreak()]}));kids.push(H1(c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+ if(!Q){
+  kids.push(H1("Obsah"));
+  PLAN_DOC.forEach((c,i)=>kids.push(P((i+1)+". "+c.title,{after:40})));
+  PLAN_APPX.forEach(c=>kids.push(P(c.title,{after:40})));
+  kids.push(new Paragraph({children:[new PageBreak()]}));
+  PLAN_DOC.forEach((c,i)=>{kids.push(H1((i+1)+". "+c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+  PLAN_APPX.forEach(c=>{kids.push(new Paragraph({children:[new PageBreak()]}));kids.push(H1(c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+ }else{
+  const c=PLAN_APPX[0];kids.push(H1("Zákaznický dotazník"));c.b.forEach(b=>kids.push(...blocks(b)));
+ }
  const doc=new Document({
-  creator:"DevilsPot",title:"DevilsPot – Podnikatelský plán",description:"Pracovní verze k "+UPDATED,
+  creator:"DevilsPot",title:Q?"DevilsPot – dotazník":"DevilsPot – Podnikatelský plán",description:"Pracovní verze k "+UPDATED,
   styles:{default:{document:{run:{font:FONT,size:22}}},paragraphStyles:[
    {id:"Heading1",name:"Heading 1",basedOn:"Normal",next:"Normal",quickFormat:true,run:{size:34,bold:true,color:"B3261E",font:FONT},paragraph:{spacing:{before:360,after:160},outlineLevel:0}},
    {id:"Heading2",name:"Heading 2",basedOn:"Normal",next:"Normal",quickFormat:true,run:{size:26,bold:true,color:"C2410C",font:FONT},paragraph:{spacing:{before:240,after:100},outlineLevel:1}}]},
   numbering:{config:[{reference:"ol",levels:[{level:0,format:LevelFormat.DECIMAL,text:"%1.",alignment:AlignmentType.LEFT,style:{paragraph:{indent:{left:720,hanging:360}}}}]}]},
   sections:[{properties:{page:{margin:{top:1134,bottom:1134,left:1134,right:1134}}},
-   headers:{default:new Header({children:[new Paragraph({alignment:AlignmentType.RIGHT,children:[new TextRun({text:"DevilsPot – podnikatelský plán",size:18,color:"888888",font:FONT})]})]})},
+   headers:{default:new Header({children:[new Paragraph({alignment:AlignmentType.RIGHT,children:[new TextRun({text:Q?"DevilsPot – dotazník":"DevilsPot – podnikatelský plán",size:18,color:"888888",font:FONT})]})]})},
    footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"Strana ",size:18,color:"888888",font:FONT}),new TextRun({children:[PageNumber.CURRENT],size:18,color:"888888",font:FONT})]})]})},
    children:kids}]});
  return Packer.toBlob(doc);
 }
-async function downloadWord(){
- const btn=$("#dl"),msg=$("#dlmsg");if(!btn)return;btn.disabled=true;const old=btn.textContent;btn.textContent="Připravuji dokument…";msg.textContent="";
+async function downloadWord(mode,btnSel,msgSel){
+ const btn=$(btnSel),msg=$(msgSel);if(!btn)return;btn.disabled=true;const old=btn.textContent;btn.textContent="Připravuji dokument…";msg.textContent="";
  try{
-  const blob=await buildDocx();
+  const blob=await buildDocx(mode);
   const d=new Date(),ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="DevilsPot_podnikatelsky_plan_"+ds+".docx";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
-  msg.textContent="Dokument byl stažen: "+a.download;
+  const name=(mode==="quest"?"DevilsPot_dotaznik_":"DevilsPot_podnikatelsky_plan_")+ds+".docx";
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  msg.textContent="Dokument byl stažen: "+name;
  }catch(e){msg.textContent="Stažení se nepodařilo ("+(e&&e.message||e)+"). Zkuste stránku obnovit.";}
  btn.disabled=false;btn.textContent=old;
 }
 
 /* ---------- navigace ---------- */
-const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;
+const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;$("#foot").textContent="DevilsPot · verze "+VERSION+" · aktualizováno "+UPDATED;
 function show(id){main.innerHTML=`<section class="on">${V[id]}</section>`;nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.id===id));
  const rp=$("#rp");if(rp)rp.textContent=dn+" / "+tot;
- const dl=$("#dl");if(dl)dl.onclick=downloadWord;
+ const dl=$("#dl");if(dl)dl.onclick=()=>downloadWord("plan","#dl","#dlmsg");const dq=$("#dlq");if(dq)dq.onclick=()=>downloadWord("quest","#dlq","#dlqmsg");
  main.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.go);el&&el.scrollIntoView({behavior:"smooth",block:"start"})});
  requestAnimationFrame(()=>document.querySelectorAll(".bar i").forEach(i=>i.style.width=getComputedStyle(i).getPropertyValue("--w")));
  try{location.hash=id}catch(e){}window.scrollTo({top:0,behavior:"smooth"})}
@@ -171,14 +203,14 @@ document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.c
  const N=Math.round(Math.min(130,W/9));
  function mk(init){return{x:Math.random()*W,y:init?Math.random()*H:H+10,s:Math.random()*2.4+.6,v:Math.random()*.9+.35,sw:Math.random()*Math.PI*2,sa:Math.random()*.9+.2,l:Math.random(),h:Math.random()*35+8}}
  for(let i=0;i<N;i++)ps.push(mk(true));
- function f(){x.clearRect(0,0,W,H);for(const p of ps){p.y-=p.v*(1+(H-p.y)/H*.6);p.sw+=.02;p.x+=Math.sin(p.sw)*p.sa;
+ function f(){if(document.hidden){requestAnimationFrame(f);return}x.clearRect(0,0,W,H);for(const p of ps){p.y-=p.v*(1+(H-p.y)/H*.6);p.sw+=.02;p.x+=Math.sin(p.sw)*p.sa;
   if(mx>0){const dx=p.x-mx,dy=p.y-my,d=dx*dx+dy*dy;if(d<14000){p.x+=dx/Math.sqrt(d+1)*1.4;p.y+=dy/Math.sqrt(d+1)*.8}}
   const a=Math.max(0,Math.min(1,(p.y/H)*1.25));
   const g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,p.s*5);g.addColorStop(0,`hsla(${p.h+20},100%,70%,${a})`);g.addColorStop(.4,`hsla(${p.h},100%,55%,${a*.55})`);g.addColorStop(1,`hsla(${p.h-8},100%,40%,0)`);
   x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.s*5,0,6.283);x.fill();
   if(p.y<-10||p.x<-20||p.x>W+20)Object.assign(p,mk(false))}
   requestAnimationFrame(f)}
- f()})();
+ if(!matchMedia("(prefers-reduced-motion: reduce)").matches)f()})();
 
 // oznámení o nové verzi
 (function(){let seen=null;try{seen=localStorage.getItem("dp_ver")}catch(e){}

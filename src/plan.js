@@ -102,6 +102,7 @@ const PLAN_DOC=[
   hh("Co z toho plyne"),
   ul(["Přímý hotpot konkurent ve Zlíně nebyl nalezen. Ve Zlíně existují asijské restaurace (Shun Li, Makalu, MIOMI sushi) a české restaurace jako nepřímá konkurence.","V Praze je all-you-can-eat 699–800 Kč, talíř v NALI 599–699 Kč, set pro dva asi 475 Kč na osobu.","Většina pražských nabídek se prodává přes vouchery se slevou 12–24 %.","Zahraniční srovnání: Budapešť (HiBeef) asi 670 Kč all-you-can-eat; In Town v Budapešti kolem 40 € za jídlo s pitím.","Absenci hotpotu ve Zlíně a okolí je třeba ověřit v terénu."])
  ]},
+ {id:"swot",title:"SWOT analýza",b:[nt("Návrh vycházející ze zjištění v tomto dokumentu."),...SWOT.flatMap(([t,l])=>[hh(t),ul(l)])]},
  {id:"zakaznici",title:"Zákazníci",b:[
   nt("Chování skupin jsou hypotézy. Ověří je zákaznický dotazník (viz příloha A) a zkušební provoz."),
   tb(["Skupina","Kdy a jak","Hypotéza"],[
@@ -166,6 +167,8 @@ const PLAN_DOC=[
   ]),
   hh("Citlivost na cenu"),
   tb(["Průměrná útrata","Hostů k vyrovnání / měs","Potřebná obsazenost","Zisk při 45 %"],PRICES.map(p=>[fmtS(p),K(beGuests(p)),pcs(beGuests(p)/capMonth),fmtS(calc(.45,p).profit)])),
+  hh("Jednotková ekonomika hosta (cena "+fmtS(M.price)+")"),tb(["Položka","Hodnota"],unit(M.price)),
+  hh("Rozjezd prvního roku (odhad)"),pp("Předpoklad: obsazenost roste z "+pcs(RAMP.start)+" na "+pcs(RAMP.target)+" během "+RAMP.months+" měsíců, cena "+fmtS(M.price)+". Hodnoty jsou po splátce úvěru, před daní."),tb(["Měsíc","Obsazenost","Hostů","Zisk za měsíc","Kumulativně"],ramp().rows.map(r=>[r.m+"",pcs(r.occ),K(r.g),fmtS(r.profit),fmtS(r.cum)])),pp("Nejhlubší kumulativní propad je "+fmtS(ramp().min)+", v investici je rezerva "+fmtS(INV[5][1])+". "+(ramp().min+INV[5][1]>=0?"Rezerva v modelu propad pokryje.":"Rezerva v modelu propad nepokryje, je třeba ji navýšit nebo snížit náklady.")),
   pp("**Závěr:** při ceně 500 Kč je model mírně ztrátový a k vyrovnání je potřeba "+pcs(beOcc)+" obsazenosti. Cena 600 Kč a více model výrazně zlepšuje, ale ve Zlíně je nižší kupní síla, proto je třeba cenu ověřit dotazníkem a zkušebním provozem. Rizikem je také to, že zakladatelé jsou v modelu bez odměny.")
  ]},
  {id:"financovani",title:"Financování",b:[
@@ -206,8 +209,6 @@ const PLAN_DOC=[
  ]},
  {id:"otazky",title:"Otevřené otázky",b:[
   ul(ASK[0][1]),
-  hh("O co se postará Claude"),
-  ul(ASK[1][1])
  ]},
  {id:"zdroje",title:"Zdroje",b:[
   ...SRC.flatMap(([t,l])=>[hh(t),{t:"links",x:l}])
@@ -229,5 +230,6 @@ const PLAN_APPX=[
  ]},
  {id:"pB",title:"Příloha B: Přehled rozhodnutí",b:[
   tb(["Datum","Rozhodnutí"],DECISIONS.map(d=>[d[0],d[1]]))
- ]}
+ ]},
+ {id:"pC",title:"Příloha C: Slovníček pojmů",b:[tb(["Pojem","Vysvětlení"],GLOSS)]}
 ];

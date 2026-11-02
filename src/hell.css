@@ -123,3 +123,28 @@ a{color:var(--org)}a:hover{color:var(--gold)}
 .dlbtn{border:0;cursor:pointer;color:#fff;font:700 15px Oswald,Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:12px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 70%,#ffd166);box-shadow:0 0 26px rgba(255,80,20,.6),inset 0 1px 0 rgba(255,255,255,.4);transition:.2s;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .dlbtn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(255,110,20,.9),inset 0 1px 0 rgba(255,255,255,.5)}
 .dlbtn:disabled{opacity:.7;cursor:wait}
+
+/* ---------- vylepšení: přístupnost, mobil, tisk, grafy ---------- */
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+footer#foot{max-width:1120px;margin:0 auto;padding:6px 20px 40px;text-align:center;color:var(--mut);font-size:12px;letter-spacing:.06em}
+.chart{width:100%;height:auto;display:block;margin-top:6px}
+.chart text{fill:var(--mut);font:11px Inter,sans-serif}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 0;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.swot{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+@media(max-width:700px){
+ nav{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ nav::-webkit-scrollbar{display:none}
+ nav button{white-space:nowrap;flex:0 0 auto;padding:8px 12px}
+ main{padding:16px 12px 60px}.grid{grid-template-columns:1fr}
+}
+@media print{
+ body{background:#fff!important;color:#000!important}
+ .hell,.smoke,.cracks,.lava,#fx,.vig,nav,.ov,.dlbar,.toc,footer#foot,svg[width="0"]{display:none!important}
+ .card,.kpi div,.note{background:#fff!important;color:#000!important;border:1px solid #bbb!important;box-shadow:none!important;backdrop-filter:none!important;break-inside:avoid-page}
+ .card::before,.card::after,.kpi div::after{display:none!important}
+ h1,h2,h3,h4,h5,.kpi b,.res{color:#a01808!important;-webkit-text-fill-color:#a01808!important;background:none!important;filter:none!important;text-shadow:none!important}
+ header h1{font-size:34px!important}a{color:#000!important}
+ td,th,.small,.kpi small,li,p{color:#000!important}
+ section{display:block!important;animation:none!important}
+}

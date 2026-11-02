@@ -14,7 +14,7 @@ Statická stránka (GitHub Pages) s přehledem projektu hotpot restaurace Devils
 
 ## Struktura
 - `src/data.js`: model financí (INV, FIXED, M), přehled, konkurence, marketing, provoz, právo, financování, harmonogram, zdroje, VERSION, WHATS_NEW.
-- `src/data2.js`: dotazník (QUEST), terénní ověření (FIELD), rozhodnutí (DECISIONS), nábor brigádníků (BRIG), zásady zaměstnávání (ZAS).
+- `src/data2.js`: dotazník (QUEST), terénní ověření (FIELD), rozhodnutí (DECISIONS), nábor brigádníků (BRIG), zásady zaměstnávání (ZAS), SWOT, slovníček (GLOSS), rozjezd prvního roku a jednotková ekonomika (ramp, unit).
 - `src/plan.js`: podnikový plán jako dokument (PLAN_DOC, PLAN_APPX).
 - `src/app.js`: vykreslení, navigace, export do Wordu, efekty.
 - `src/hell.css`, `src/index.tpl.html`: vzhled a šablona.

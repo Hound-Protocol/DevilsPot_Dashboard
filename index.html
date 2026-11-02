@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DevilsPot – Dashboard</title>
+<meta name="description" content="DevilsPot: informační přehled projektu hotpot restaurace ve Zlíně.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14110f">
+<meta property="og:title" content="DevilsPot – Dashboard">
+<meta property="og:description" content="Informační přehled projektu hotpot restaurace ve Zlíně.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%98%88%3C/text%3E%3C/svg%3E">
 <style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap');
 :root{--bg:#070304;--card:rgba(28,12,10,.55);--card2:rgba(40,16,12,.6);--line:rgba(255,110,60,.18);--tx:#fbeee6;--mut:#c4a191;--red:#ff2d1a;--org:#ff8a1f;--gold:#ffd166;--ok:#5be28a;--warn:#ffc233;--mx:50%;--my:50%}
 *{box-sizing:border-box}
@@ -129,6 +135,31 @@ a{color:var(--org)}a:hover{color:var(--gold)}
 .dlbtn{border:0;cursor:pointer;color:#fff;font:700 15px Oswald,Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:12px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 70%,#ffd166);box-shadow:0 0 26px rgba(255,80,20,.6),inset 0 1px 0 rgba(255,255,255,.4);transition:.2s;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 .dlbtn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(255,110,20,.9),inset 0 1px 0 rgba(255,255,255,.5)}
 .dlbtn:disabled{opacity:.7;cursor:wait}
+
+/* ---------- vylepšení: přístupnost, mobil, tisk, grafy ---------- */
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+footer#foot{max-width:1120px;margin:0 auto;padding:6px 20px 40px;text-align:center;color:var(--mut);font-size:12px;letter-spacing:.06em}
+.chart{width:100%;height:auto;display:block;margin-top:6px}
+.chart text{fill:var(--mut);font:11px Inter,sans-serif}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 0;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.swot{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+@media(max-width:700px){
+ nav{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ nav::-webkit-scrollbar{display:none}
+ nav button{white-space:nowrap;flex:0 0 auto;padding:8px 12px}
+ main{padding:16px 12px 60px}.grid{grid-template-columns:1fr}
+}
+@media print{
+ body{background:#fff!important;color:#000!important}
+ .hell,.smoke,.cracks,.lava,#fx,.vig,nav,.ov,.dlbar,.toc,footer#foot,svg[width="0"]{display:none!important}
+ .card,.kpi div,.note{background:#fff!important;color:#000!important;border:1px solid #bbb!important;box-shadow:none!important;backdrop-filter:none!important;break-inside:avoid-page}
+ .card::before,.card::after,.kpi div::after{display:none!important}
+ h1,h2,h3,h4,h5,.kpi b,.res{color:#a01808!important;-webkit-text-fill-color:#a01808!important;background:none!important;filter:none!important;text-shadow:none!important}
+ header h1{font-size:34px!important}a{color:#000!important}
+ td,th,.small,.kpi small,li,p{color:#000!important}
+ section{display:block!important;animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -143,11 +174,12 @@ a{color:var(--org)}a:hover{color:var(--gold)}
 </header>
 <nav id="nav"></nav>
 <main id="main"></main>
+<footer id="foot"></footer>
 
 <script>
 /* DATA DASHBOARDU DevilsPot: veškerý obsah. Aktualizuje Claude podle domluvy; viz CLAUDE.md */
 const UPDATED="2. 11. 2026";
-const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dotazník"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["brig","Nábor brigádníků"],["pravo","Právo a daně"],["road","Harmonogram"],["rozh","Rozhodnutí"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
+const TABS=[["prehled","Přehled"],["plan","Podnikový plán"],["dotaznik","Dotazník"],["trh","Trh a konkurence"],["fin","Financování"],["calc","Finance"],["mkt","Marketing"],["prov","Provoz a menu"],["brig","Nábor brigádníků"],["pravo","Právo a daně"],["road","Harmonogram"],["rozh","Rozhodnutí"],["slov","Slovníček"],["zdroje","Zdroje"],["otazky","Otevřené otázky"]];
 
 /* Finanční model – všechna čísla jsou ODHADY, ne zjištěná fakta */
 const INV=[["Rekonstrukce a úpravy prostoru",500000],["Kuchyň: chlazení, odtah, technika",300000],["Stoly s indukcí, nádobí, nádoby",200000],["Interiér a nábytek",200000],["Kauce, první nájmy, povolení",150000],["Rezerva na první měsíce",250000]];
@@ -241,8 +273,8 @@ const SRC=[
 ];
 
 /* Verze (zvýšit při každém vydání) a novinky pro okno „Nová pekelná verze je online!“ */
-const VERSION="2026-11-02-e";
-const WHATS_NEW=["Jídlo pro zaměstnance (oběd a večeře zdarma nebo za 50 Kč) a využití zbytků, podle Filipa","Finanční model počítá s jídlem pro zaměstnance","Plán a přehled rozhodnutí aktualizovány"];
+const VERSION="2026-11-02-f";
+const WHATS_NEW=["Graf citlivosti zisku na cenu a obsazenost","Rozjezd prvního roku a jednotková ekonomika hosta","SWOT analýza a Slovníček pojmů","Nejbližší kroky na přehledu, stažení dotazníku do Wordu","Lepší mobil, tisk do PDF a plynulejší efekty"];
 
 /* Dotazník, terénní ověření, rozhodnutí */
 const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
@@ -356,6 +388,52 @@ const ZAS=[
 ];
 const ZAS_TODO=["Sepsat jednoduchý zaměstnanecký řád (práva, povinnosti, docházka, spropitné, výměna směn).","Připravit vzory písemných dohod (DPP, DPČ) a vstupní dokument s podmínkami.","Připravit školení BOZP, hygieny (HACCP) a práce s vroucími vývary.","Určit osobu pro zpětnou vazbu a řešení problémů (nulová tolerance k šikaně a obtěžování).","Nastavit pevný den výplaty a pravidla spropitného.","Popsat kariérní cestu (brigádník, zkušený člen týmu, vedoucí směny)."];
 
+/* SWOT (návrh) */
+const SWOT=[
+ ["Silné stránky",["Filip: vyučení, praxe a vášeň pro gastro","Zážitkový koncept vhodný pro sociální sítě","Hotpot ve Zlíně nenalezen (ověřit v terénu)","Velká studentská cílová skupina (UTB asi 9 tis.)","Flexibilní brigádnická pracovní síla a jasné zásady zaměstnávání"]],
+ ["Slabé stránky",["Bez vlastního kapitálu, závislost na úvěru a osobní ručení","Erik se byznys teprve učí, zakladatelé jsou zatím zaměstnaní","Závislost na Filipovi jako klíčové osobě","Málo dat o poptávce a ceně ve Zlíně"]],
+ ["Příležitosti",["Nezaplněná kategorie ve městě","27 tis. cizinců v kraji hledá autentickou kuchyni","Akce ve Zlíně (food trucky, hody, trhy) a spolupráce s UTB","Garant InvestEU a leasing snižují potřebu hotovosti","Zkušební provoz (pop-up) před velkou investicí","Rostoucí zájem o hotpot v Evropě (např. Budapešť)"]],
+ ["Hrozby",["Nižší kupní síla ve Zlínském kraji než v Praze","Úbytek obyvatel kraje a citlivost lidí na ceny v restauracích","Růst cen surovin, energií a mezd","Sezónnost a nedostatek personálu","Změny legislativy (EET 2.0, DPH)","Pražské konkurenční nabídky na voucherech"]]
+];
+
+/* Slovníček pojmů */
+const GLOSS=[
+ ["All-you-can-eat (AYCE)","Neomezená konzumace za pevnou cenu na osobu."],
+ ["Break-even","Bod, kdy tržby přesně pokryjí všechny náklady. V modelu je to obsazenost a počet hostů, od kterých provoz nevydělává ztrátu."],
+ ["BOZP","Bezpečnost a ochrana zdraví při práci. Zaměstnavatel zajišťuje školení a bezpečné prostředí."],
+ ["Cash flow","Tok peněz: kolik peněz do podniku přichází a kolik z něj odchází v čase. Podnik může být „v zisku“ a přesto mít málo hotovosti."],
+ ["ČSSZ","Česká správa sociálního zabezpečení. Zaměstnavatel u ní registruje zaměstnance a hlásí příjmy."],
+ ["DPČ","Dohoda o pracovní činnosti. Pravidelná práce nejvýše v polovině týdenní pracovní doby, odvody od 4 500 Kč měsíčně (2026)."],
+ ["DPH","Daň z přidané hodnoty. Plátcem se podnikatel stává při obratu nad 2 mil. Kč ročně. Jídla ve stravovacích službách mají 12 %, alkohol 21 %."],
+ ["DPP","Dohoda o provedení práce. Nárazová práce nejvýše 300 hodin ročně, odvody od 12 000 Kč měsíčně u jednoho zaměstnavatele (2026)."],
+ ["EET 2.0","Elektronická evidence tržeb. Nová verze se má vrátit od 1. 1. 2027, bez povinnosti tisknout účtenky."],
+ ["Garant InvestEU","Program Národní rozvojové banky: státní záruka až 70 % jistiny úvěru od komerční banky."],
+ ["HACCP","Systém kontroly hygieny a bezpečnosti potravin při práci s jídlem. Povinný v gastronomii."],
+ ["Hostinská činnost","Živnost pro provoz restaurace. Je řemeslná a vyžaduje odbornou způsobilost."],
+ ["JMHZ","Jednotné měsíční hlášení zaměstnavatele (od 1. 4. 2026), kterým zaměstnavatel hlásí zaměstnance a příjmy."],
+ ["KHS","Krajská hygienická stanice. Kontroluje hygienu provozů."],
+ ["Leasing","Pronájem vybavení s právem odkupu. Snižuje potřebu hotovosti na startu."],
+ ["Mala (málá)","Sečuánská příchuť: pálivá a koření s „brněním“ na jazyku."],
+ ["Marže","Rozdíl mezi cenou a náklady na suroviny. V modelu „zbývá po odečtení surovin“."],
+ ["Obsazenost","Podíl obsazených míst z celkové kapacity za měsíc."],
+ ["Odborná způsobilost","Doložená kvalifikace pro řemeslnou živnost (vzdělání v oboru nebo praxe)."],
+ ["Odpovědný zástupce","Osoba s odbornou způsobilostí, která za firmu odpovídá za výkon živnosti."],
+ ["OSVČ","Osoba samostatně výdělečně činná (živnostník)."],
+ ["Pop-up","Dočasná akce nebo zkušební večery mimo stálou restauraci, sloužící k ověření poptávky."],
+ ["Prohlášení poplatníka","Takzvaný růžový papír. Zaměstnanec jím u zaměstnavatele uplatní slevu na dani, v jednom měsíci jen u jednoho zaměstnavatele."],
+ ["Ručení","Odpovědnost za dluh celým majetkem. U úvěru banka často žádá osobní ručení společníků i u s.r.o."],
+ ["s.r.o.","Společnost s ručením omezeným. Základní kapitál od 1 Kč, firma ručí svým majetkem."],
+ ["SLDB","Sčítání lidu, domů a bytů (naposledy 2021)."],
+ ["Staff meal","Jídlo pro zaměstnance na účet podniku nebo se slevou."],
+ ["Van Westendorp","Metoda zjištění přijatelného cenového pásma čtyřmi otázkami na cenu."],
+ ["Zkušební otevření","Otevření pro pozvané hosty před velkým otevřením, sloužící k vyladění provozu a sběru recenzí."]
+];
+
+/* Rozjezd prvního roku (odhad) a jednotková ekonomika */
+const RAMP={start:.25,target:.45,months:9};
+function ramp(){const rows=[];let cum=0,min=0;for(let m=1;m<=12;m++){const occ=Math.min(RAMP.target,RAMP.start+(RAMP.target-RAMP.start)*(m-1)/(RAMP.months-1));const c=calc(occ,M.price);cum+=c.profit;min=Math.min(min,cum);rows.push({m,occ,g:c.g,profit:c.profit,cum})}return{rows,min}}
+function unit(price){const net=price/(1+M.vat),food=net*M.food,gm=net-food,occ=.45,g=capMonth*occ;return[["Cena s DPH",fmtS(price)],["DPH ("+Math.round(M.vat*100)+" %)","−"+fmtS(price-net)],["Čistá tržba na hosta",fmtS(net)],["Suroviny ("+Math.round(M.food*100)+" %)","−"+fmtS(food)],["Zbývá po odečtení surovin",fmtS(gm)],["Stálé náklady a splátka na hosta při 45 %",fmtS((fixT+pay)/g)],["Zisk na hosta při 45 % (před daní)",fmtS(gm-(fixT+pay)/g)]]}
+
 /* PODNIKOVÝ PLÁN jako dokument. Zdroj pro záložku Podnikový plán i pro export do Wordu.
    Bloky: p (odstavec, **tučně**), h (podnadpis), ul, ol, table (head, rows), note */
 const pp=x=>({t:"p",x}), hh=x=>({t:"h",x}), ul=x=>({t:"ul",x}), ol=x=>({t:"ol",x}), nt=x=>({t:"note",x}), tb=(head,rows)=>({t:"table",head,rows});
@@ -460,6 +538,7 @@ const PLAN_DOC=[
   hh("Co z toho plyne"),
   ul(["Přímý hotpot konkurent ve Zlíně nebyl nalezen. Ve Zlíně existují asijské restaurace (Shun Li, Makalu, MIOMI sushi) a české restaurace jako nepřímá konkurence.","V Praze je all-you-can-eat 699–800 Kč, talíř v NALI 599–699 Kč, set pro dva asi 475 Kč na osobu.","Většina pražských nabídek se prodává přes vouchery se slevou 12–24 %.","Zahraniční srovnání: Budapešť (HiBeef) asi 670 Kč all-you-can-eat; In Town v Budapešti kolem 40 € za jídlo s pitím.","Absenci hotpotu ve Zlíně a okolí je třeba ověřit v terénu."])
  ]},
+ {id:"swot",title:"SWOT analýza",b:[nt("Návrh vycházející ze zjištění v tomto dokumentu."),...SWOT.flatMap(([t,l])=>[hh(t),ul(l)])]},
  {id:"zakaznici",title:"Zákazníci",b:[
   nt("Chování skupin jsou hypotézy. Ověří je zákaznický dotazník (viz příloha A) a zkušební provoz."),
   tb(["Skupina","Kdy a jak","Hypotéza"],[
@@ -524,6 +603,8 @@ const PLAN_DOC=[
   ]),
   hh("Citlivost na cenu"),
   tb(["Průměrná útrata","Hostů k vyrovnání / měs","Potřebná obsazenost","Zisk při 45 %"],PRICES.map(p=>[fmtS(p),K(beGuests(p)),pcs(beGuests(p)/capMonth),fmtS(calc(.45,p).profit)])),
+  hh("Jednotková ekonomika hosta (cena "+fmtS(M.price)+")"),tb(["Položka","Hodnota"],unit(M.price)),
+  hh("Rozjezd prvního roku (odhad)"),pp("Předpoklad: obsazenost roste z "+pcs(RAMP.start)+" na "+pcs(RAMP.target)+" během "+RAMP.months+" měsíců, cena "+fmtS(M.price)+". Hodnoty jsou po splátce úvěru, před daní."),tb(["Měsíc","Obsazenost","Hostů","Zisk za měsíc","Kumulativně"],ramp().rows.map(r=>[r.m+"",pcs(r.occ),K(r.g),fmtS(r.profit),fmtS(r.cum)])),pp("Nejhlubší kumulativní propad je "+fmtS(ramp().min)+", v investici je rezerva "+fmtS(INV[5][1])+". "+(ramp().min+INV[5][1]>=0?"Rezerva v modelu propad pokryje.":"Rezerva v modelu propad nepokryje, je třeba ji navýšit nebo snížit náklady.")),
   pp("**Závěr:** při ceně 500 Kč je model mírně ztrátový a k vyrovnání je potřeba "+pcs(beOcc)+" obsazenosti. Cena 600 Kč a více model výrazně zlepšuje, ale ve Zlíně je nižší kupní síla, proto je třeba cenu ověřit dotazníkem a zkušebním provozem. Rizikem je také to, že zakladatelé jsou v modelu bez odměny.")
  ]},
  {id:"financovani",title:"Financování",b:[
@@ -564,8 +645,6 @@ const PLAN_DOC=[
  ]},
  {id:"otazky",title:"Otevřené otázky",b:[
   ul(ASK[0][1]),
-  hh("O co se postará Claude"),
-  ul(ASK[1][1])
  ]},
  {id:"zdroje",title:"Zdroje",b:[
   ...SRC.flatMap(([t,l])=>[hh(t),{t:"links",x:l}])
@@ -587,9 +666,11 @@ const PLAN_APPX=[
  ]},
  {id:"pB",title:"Příloha B: Přehled rozhodnutí",b:[
   tb(["Datum","Rozhodnutí"],DECISIONS.map(d=>[d[0],d[1]]))
- ]}
+ ]},
+ {id:"pC",title:"Příloha C: Slovníček pojmů",b:[tb(["Pojem","Vysvětlení"],GLOSS)]}
 ];
 
+const NEXT=ROAD.flatMap(([t,it])=>it.filter(x=>x[1]!=="done").map(x=>x[0])).slice(0,6);
 
 const $=s=>document.querySelector(s);
 const fmt=fmtS;
@@ -600,7 +681,7 @@ const cl=v=>v>=0?"pos":"neg";
 
 const V={};
 V.prehled=`<h2>Přehled</h2><div class="kpi">${KPI.map(([l,v])=>`<div><small>${l}</small><b>${v}</b></div>`).join("")}<div><small>Harmonogram</small><b id="rp"></b></div></div>
-<div class="note"><b>Hlavní zjištění:</b> hotpot ve Zlíně nebyl nalezen, což je příležitost. Při ceně 500 Kč na hosta ale model vychází ztrátově. Cenu je potřeba zvednout na 600 Kč a víc, nebo snížit náklady a investici. Dřív než cokoliv jiného je třeba vyřešit odbornou způsobilost pro hostinskou činnost.</div>${cards(OVERVIEW)}`;
+<div class="note"><b>Hlavní zjištění:</b> hotpot ve Zlíně nebyl nalezen, což je příležitost. Při ceně 500 Kč na hosta ale model vychází ztrátově. Cenu je potřeba zvednout na 600 Kč a víc, nebo snížit náklady a investici. Dřív než cokoliv jiného je třeba na živnostenském úřadě potvrdit, že Filipovo vyučení a praxe stačí pro hostinskou činnost.</div><div class="card chap"><h3>Nejbližší kroky</h3><ol>${NEXT.map(x=>`<li>${x}</li>`).join("")}</ol></div>${cards(OVERVIEW)}`;
 V.trh=`<h2>Trh a konkurence</h2>
 <div class="kpi"><div><small>Obyvatelé kraje (30. 6. 2026)</small><b>576 120</b></div><div><small>Okres Zlín (SLDB 2021)</small><b>187 371</b></div><div><small>Studenti UTB</small><b>asi 9 000</b></div><div><small>Mzda v kraji (2Q 2026)</small><b>45 615 Kč</b></div><div><small>Průměr ČR</small><b>51 966 Kč</b></div><div><small>Cizinci v kraji</small><b>27 432</b></div></div>
 <div class="card"><h3>Hotpot a konkurence <span class="tag fact">zjištěno</span></h3><div class="tw"><table><tr><th>Podnik</th><th>Formát</th><th>Cena</th><th>Poznámka</th></tr>${COMP.map(([a,b,c,d])=>`<tr><td><b>${a}</b></td><td>${b}</td><td>${c}</td><td>${d}</td></tr>`).join("")}</table></div></div>
@@ -655,6 +736,7 @@ ${PLAN_DOC.map((c,i)=>chapHTML(c,i)).join("")}${PLAN_APPX.map((c,i)=>chapHTML(c,
 
 /* ---------- Dotazník ---------- */
 V.dotaznik=`<h2>Zákaznický dotazník</h2>
+<div class="card dlbar"><div><b>Dotazník ke stažení</b><br><span class="small">Word dokument připravený ke zkopírování do Google Forms nebo Microsoft Forms.</span></div><button type="button" id="dlq" class="dlbtn">⬇ Stáhnout dotazník (.docx)</button></div><p class="small" id="dlqmsg"></p>
 <div class="note">Připraveno ke zkopírování do Google Forms nebo Microsoft Forms. Vyplnění zabere asi 3 minuty, dotazník je anonymní, e-mail je nepovinný. Je také přílohou A podnikového plánu.</div>
 <div class="card chap"><h3>Úvodní text pro respondenty</h3><p>${esc(QINTRO)}</p></div>
 ${QUEST.map(([sec,qs])=>`<div class="card chap"><h3>${esc(sec)}</h3>${qs.map(q=>blockHTML({t:"quest",q})).join("")}</div>`).join("")}
@@ -681,9 +763,34 @@ V.rozh=`<h2>Přehled rozhodnutí</h2><p class="small">Záznam toho, co jsme se d
 const _road=V.road;
 V.road=_road+`<div class="card chap"><h3>Terénní ověření: co přesně</h3><p>Terénní ověření znamená zjistit věci osobně ve Zlíně, protože je online vyhledávání nepotvrdí.</p>${tabl(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]]))}</div>`;
 
+
+/* ---------- graf, rozjezd, SWOT, slovníček ---------- */
+function chartSVG(){
+ const W=640,H=300,pl=58,pr=16,pt=14,pb=36,x0=.25,x1=.7,ymin=-150000,ymax=150000;
+ const sx=o=>pl+(o-x0)/(x1-x0)*(W-pl-pr), sy=v=>pt+(ymax-v)/(ymax-ymin)*(H-pt-pb);
+ const cols={450:"#ff5a47",500:"#ffc233",600:"#5be28a",700:"#6cb6ff"};
+ let g="";
+ for(let v=ymin;v<=ymax;v+=50000){g+=`<line x1="${pl}" x2="${W-pr}" y1="${sy(v)}" y2="${sy(v)}" stroke="rgba(255,255,255,${v===0?.55:.1})" ${v===0?"":'stroke-dasharray="3 4"'}/><text x="${pl-8}" y="${sy(v)+4}" text-anchor="end">${v/1000} tis.</text>`}
+ for(let o=x0;o<=x1+1e-9;o+=.05){g+=`<text x="${sx(o)}" y="${H-14}" text-anchor="middle">${Math.round(o*100)} %</text>`}
+ PRICES.forEach(p=>{const pts=[];for(let o=x0;o<=x1+1e-9;o+=.05){const v=Math.max(ymin,Math.min(ymax,calc(o,p).profit));pts.push(sx(o).toFixed(1)+","+sy(v).toFixed(1))}g+=`<polyline fill="none" stroke="${cols[p]}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="${pts.join(" ")}"/>`});
+ const mv=calc(.45,M.price).profit;g+=`<circle cx="${sx(.45)}" cy="${sy(mv)}" r="5.5" fill="#fff" stroke="#ff2d1a" stroke-width="2.5"/><text x="${sx(.45)+9}" y="${sy(mv)-8}" style="fill:#fff">model</text>`;
+ g+=`<text x="${(pl+W-pr)/2}" y="${H-1}" text-anchor="middle">Obsazenost</text>`;
+ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Měsíční zisk po splátce podle obsazenosti pro ceny 450 až 700 Kč">${g}</svg><div class="legend">${PRICES.map(p=>`<span><i style="background:${cols[p]}"></i>${p} Kč na hosta</span>`).join("")}</div>`;
+}
+(function(){
+ const rp=ramp();
+ const tail=`<div class="card chap"><h3>Zisk po splátce podle obsazenosti a ceny <span class="tag est">odhad</span></h3><p class="small">Měsíční zisk před daní. Čára nula je hranice, nad kterou je provoz v plusu. Bod „model“ je základní scénář (45 %, ${fmtS(M.price)}).</p>${chartSVG()}</div>
+ <div class="grid"><div class="card"><h3>Jednotková ekonomika hosta <span class="tag est">odhad</span></h3>${tabl(["Položka","Hodnota"],unit(M.price))}</div>
+ <div class="card"><h3>Rozjezd prvního roku <span class="tag est">odhad</span></h3><p class="small">Obsazenost roste z ${Math.round(RAMP.start*100)} % na ${Math.round(RAMP.target*100)} % během ${RAMP.months} měsíců, cena ${fmtS(M.price)}. Po splátce, před daní.</p>${tabl(["Měsíc","Obsazenost","Zisk","Kumulativně"],rp.rows.map(r=>[r.m+"",Math.round(r.occ*100)+" %",fmtS(r.profit),fmtS(r.cum)]))}
+ <p class="small">Nejhlubší propad: <b>${fmtS(rp.min)}</b>. Rezerva v investici: ${fmtS(INV[5][1])}. ${rp.min+INV[5][1]>=0?"Rezerva propad pokryje.":"Rezerva propad nepokryje, je třeba ji navýšit nebo snížit náklady."}</p></div></div>`;
+ V.calc+=tail;
+ V.trh+=`<h2 style="margin-top:22px">SWOT analýza <span class="tag est">návrh</span></h2><div class="swot">${SWOT.map(([t,l])=>`<div class="card"><h3>${t}</h3><ul>${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div>`;
+ V.slov=`<h2>Slovníček pojmů</h2><p class="small">Vysvětlení odborných výrazů použitých v dashboardu a plánu. Je také přílohou C podnikového plánu.</p><div class="card chap">${tabl(["Pojem","Vysvětlení"],GLOSS)}</div>`;
+})();
+
 /* ---------- Word (.docx) ---------- */
 function loadDocx(){return new Promise((res,rej)=>{if(window.docx)return res(window.docx);const s=document.createElement("script");s.src="vendor/docx.umd.js";s.onload=()=>window.docx?res(window.docx):rej(new Error("docx"));s.onerror=()=>rej(new Error("load"));document.head.appendChild(s)})}
-async function buildDocx(){
+async function buildDocx(mode){const Q=mode==="quest";
  const D=await loadDocx();
  const {Document,Packer,Paragraph,TextRun,HeadingLevel,Table,TableRow,TableCell,WidthType,ShadingType,AlignmentType,Footer,Header,PageNumber,ExternalHyperlink,BorderStyle,PageBreak,LevelFormat}=D;
  const FONT="Calibri", W=9638;
@@ -709,43 +816,48 @@ async function buildDocx(){
   }return []};
  const kids=[];
  kids.push(new Paragraph({spacing:{before:2600},children:[new TextRun({text:PLAN_META.title,bold:true,size:112,color:"C0261A",font:FONT})]}));
- kids.push(new Paragraph({spacing:{after:300},children:[new TextRun({text:PLAN_META.sub,size:40,color:"3A2A24",font:FONT})]}));
- PLAN_META.lines.forEach(l=>kids.push(P(l,{size:24,color:"555555",after:60})));
+ kids.push(new Paragraph({spacing:{after:300},children:[new TextRun({text:Q?"Zákaznický dotazník":PLAN_META.sub,size:40,color:"3A2A24",font:FONT})]}));
+ (Q?["Pro studenty UTB a obyvatele Zlína","Stav k "+UPDATED]:PLAN_META.lines).forEach(l=>kids.push(P(l,{size:24,color:"555555",after:60})));
  kids.push(new Paragraph({children:[new PageBreak()]}));
- kids.push(H1("Obsah"));
- PLAN_DOC.forEach((c,i)=>kids.push(P((i+1)+". "+c.title,{after:40})));
- PLAN_APPX.forEach(c=>kids.push(P(c.title,{after:40})));
- kids.push(new Paragraph({children:[new PageBreak()]}));
- PLAN_DOC.forEach((c,i)=>{kids.push(H1((i+1)+". "+c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
- PLAN_APPX.forEach(c=>{kids.push(new Paragraph({children:[new PageBreak()]}));kids.push(H1(c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+ if(!Q){
+  kids.push(H1("Obsah"));
+  PLAN_DOC.forEach((c,i)=>kids.push(P((i+1)+". "+c.title,{after:40})));
+  PLAN_APPX.forEach(c=>kids.push(P(c.title,{after:40})));
+  kids.push(new Paragraph({children:[new PageBreak()]}));
+  PLAN_DOC.forEach((c,i)=>{kids.push(H1((i+1)+". "+c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+  PLAN_APPX.forEach(c=>{kids.push(new Paragraph({children:[new PageBreak()]}));kids.push(H1(c.title));c.b.forEach(b=>kids.push(...blocks(b)))});
+ }else{
+  const c=PLAN_APPX[0];kids.push(H1("Zákaznický dotazník"));c.b.forEach(b=>kids.push(...blocks(b)));
+ }
  const doc=new Document({
-  creator:"DevilsPot",title:"DevilsPot – Podnikatelský plán",description:"Pracovní verze k "+UPDATED,
+  creator:"DevilsPot",title:Q?"DevilsPot – dotazník":"DevilsPot – Podnikatelský plán",description:"Pracovní verze k "+UPDATED,
   styles:{default:{document:{run:{font:FONT,size:22}}},paragraphStyles:[
    {id:"Heading1",name:"Heading 1",basedOn:"Normal",next:"Normal",quickFormat:true,run:{size:34,bold:true,color:"B3261E",font:FONT},paragraph:{spacing:{before:360,after:160},outlineLevel:0}},
    {id:"Heading2",name:"Heading 2",basedOn:"Normal",next:"Normal",quickFormat:true,run:{size:26,bold:true,color:"C2410C",font:FONT},paragraph:{spacing:{before:240,after:100},outlineLevel:1}}]},
   numbering:{config:[{reference:"ol",levels:[{level:0,format:LevelFormat.DECIMAL,text:"%1.",alignment:AlignmentType.LEFT,style:{paragraph:{indent:{left:720,hanging:360}}}}]}]},
   sections:[{properties:{page:{margin:{top:1134,bottom:1134,left:1134,right:1134}}},
-   headers:{default:new Header({children:[new Paragraph({alignment:AlignmentType.RIGHT,children:[new TextRun({text:"DevilsPot – podnikatelský plán",size:18,color:"888888",font:FONT})]})]})},
+   headers:{default:new Header({children:[new Paragraph({alignment:AlignmentType.RIGHT,children:[new TextRun({text:Q?"DevilsPot – dotazník":"DevilsPot – podnikatelský plán",size:18,color:"888888",font:FONT})]})]})},
    footers:{default:new Footer({children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"Strana ",size:18,color:"888888",font:FONT}),new TextRun({children:[PageNumber.CURRENT],size:18,color:"888888",font:FONT})]})]})},
    children:kids}]});
  return Packer.toBlob(doc);
 }
-async function downloadWord(){
- const btn=$("#dl"),msg=$("#dlmsg");if(!btn)return;btn.disabled=true;const old=btn.textContent;btn.textContent="Připravuji dokument…";msg.textContent="";
+async function downloadWord(mode,btnSel,msgSel){
+ const btn=$(btnSel),msg=$(msgSel);if(!btn)return;btn.disabled=true;const old=btn.textContent;btn.textContent="Připravuji dokument…";msg.textContent="";
  try{
-  const blob=await buildDocx();
+  const blob=await buildDocx(mode);
   const d=new Date(),ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="DevilsPot_podnikatelsky_plan_"+ds+".docx";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
-  msg.textContent="Dokument byl stažen: "+a.download;
+  const name=(mode==="quest"?"DevilsPot_dotaznik_":"DevilsPot_podnikatelsky_plan_")+ds+".docx";
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  msg.textContent="Dokument byl stažen: "+name;
  }catch(e){msg.textContent="Stažení se nepodařilo ("+(e&&e.message||e)+"). Zkuste stránku obnovit.";}
  btn.disabled=false;btn.textContent=old;
 }
 
 /* ---------- navigace ---------- */
-const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;
+const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;$("#foot").textContent="DevilsPot · verze "+VERSION+" · aktualizováno "+UPDATED;
 function show(id){main.innerHTML=`<section class="on">${V[id]}</section>`;nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.id===id));
  const rp=$("#rp");if(rp)rp.textContent=dn+" / "+tot;
- const dl=$("#dl");if(dl)dl.onclick=downloadWord;
+ const dl=$("#dl");if(dl)dl.onclick=()=>downloadWord("plan","#dl","#dlmsg");const dq=$("#dlq");if(dq)dq.onclick=()=>downloadWord("quest","#dlq","#dlqmsg");
  main.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.go);el&&el.scrollIntoView({behavior:"smooth",block:"start"})});
  requestAnimationFrame(()=>document.querySelectorAll(".bar i").forEach(i=>i.style.width=getComputedStyle(i).getPropertyValue("--w")));
  try{location.hash=id}catch(e){}window.scrollTo({top:0,behavior:"smooth"})}
@@ -763,14 +875,14 @@ document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.c
  const N=Math.round(Math.min(130,W/9));
  function mk(init){return{x:Math.random()*W,y:init?Math.random()*H:H+10,s:Math.random()*2.4+.6,v:Math.random()*.9+.35,sw:Math.random()*Math.PI*2,sa:Math.random()*.9+.2,l:Math.random(),h:Math.random()*35+8}}
  for(let i=0;i<N;i++)ps.push(mk(true));
- function f(){x.clearRect(0,0,W,H);for(const p of ps){p.y-=p.v*(1+(H-p.y)/H*.6);p.sw+=.02;p.x+=Math.sin(p.sw)*p.sa;
+ function f(){if(document.hidden){requestAnimationFrame(f);return}x.clearRect(0,0,W,H);for(const p of ps){p.y-=p.v*(1+(H-p.y)/H*.6);p.sw+=.02;p.x+=Math.sin(p.sw)*p.sa;
   if(mx>0){const dx=p.x-mx,dy=p.y-my,d=dx*dx+dy*dy;if(d<14000){p.x+=dx/Math.sqrt(d+1)*1.4;p.y+=dy/Math.sqrt(d+1)*.8}}
   const a=Math.max(0,Math.min(1,(p.y/H)*1.25));
   const g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,p.s*5);g.addColorStop(0,`hsla(${p.h+20},100%,70%,${a})`);g.addColorStop(.4,`hsla(${p.h},100%,55%,${a*.55})`);g.addColorStop(1,`hsla(${p.h-8},100%,40%,0)`);
   x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.s*5,0,6.283);x.fill();
   if(p.y<-10||p.x<-20||p.x>W+20)Object.assign(p,mk(false))}
   requestAnimationFrame(f)}
- f()})();
+ if(!matchMedia("(prefers-reduced-motion: reduce)").matches)f()})();
 
 // oznámení o nové verzi
 (function(){let seen=null;try{seen=localStorage.getItem("dp_ver")}catch(e){}

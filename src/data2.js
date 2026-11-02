@@ -109,3 +109,49 @@ const ZAS=[
  ["Čisté a profesionální","Hygienické standardy a HACCP, úklidové plány, jednotné pracovní oblečení, jasné postupy a respekt mezi kolegy i vůči hostům."]
 ];
 const ZAS_TODO=["Sepsat jednoduchý zaměstnanecký řád (práva, povinnosti, docházka, spropitné, výměna směn).","Připravit vzory písemných dohod (DPP, DPČ) a vstupní dokument s podmínkami.","Připravit školení BOZP, hygieny (HACCP) a práce s vroucími vývary.","Určit osobu pro zpětnou vazbu a řešení problémů (nulová tolerance k šikaně a obtěžování).","Nastavit pevný den výplaty a pravidla spropitného.","Popsat kariérní cestu (brigádník, zkušený člen týmu, vedoucí směny)."];
+
+/* SWOT (návrh) */
+const SWOT=[
+ ["Silné stránky",["Filip: vyučení, praxe a vášeň pro gastro","Zážitkový koncept vhodný pro sociální sítě","Hotpot ve Zlíně nenalezen (ověřit v terénu)","Velká studentská cílová skupina (UTB asi 9 tis.)","Flexibilní brigádnická pracovní síla a jasné zásady zaměstnávání"]],
+ ["Slabé stránky",["Bez vlastního kapitálu, závislost na úvěru a osobní ručení","Erik se byznys teprve učí, zakladatelé jsou zatím zaměstnaní","Závislost na Filipovi jako klíčové osobě","Málo dat o poptávce a ceně ve Zlíně"]],
+ ["Příležitosti",["Nezaplněná kategorie ve městě","27 tis. cizinců v kraji hledá autentickou kuchyni","Akce ve Zlíně (food trucky, hody, trhy) a spolupráce s UTB","Garant InvestEU a leasing snižují potřebu hotovosti","Zkušební provoz (pop-up) před velkou investicí","Rostoucí zájem o hotpot v Evropě (např. Budapešť)"]],
+ ["Hrozby",["Nižší kupní síla ve Zlínském kraji než v Praze","Úbytek obyvatel kraje a citlivost lidí na ceny v restauracích","Růst cen surovin, energií a mezd","Sezónnost a nedostatek personálu","Změny legislativy (EET 2.0, DPH)","Pražské konkurenční nabídky na voucherech"]]
+];
+
+/* Slovníček pojmů */
+const GLOSS=[
+ ["All-you-can-eat (AYCE)","Neomezená konzumace za pevnou cenu na osobu."],
+ ["Break-even","Bod, kdy tržby přesně pokryjí všechny náklady. V modelu je to obsazenost a počet hostů, od kterých provoz nevydělává ztrátu."],
+ ["BOZP","Bezpečnost a ochrana zdraví při práci. Zaměstnavatel zajišťuje školení a bezpečné prostředí."],
+ ["Cash flow","Tok peněz: kolik peněz do podniku přichází a kolik z něj odchází v čase. Podnik může být „v zisku“ a přesto mít málo hotovosti."],
+ ["ČSSZ","Česká správa sociálního zabezpečení. Zaměstnavatel u ní registruje zaměstnance a hlásí příjmy."],
+ ["DPČ","Dohoda o pracovní činnosti. Pravidelná práce nejvýše v polovině týdenní pracovní doby, odvody od 4 500 Kč měsíčně (2026)."],
+ ["DPH","Daň z přidané hodnoty. Plátcem se podnikatel stává při obratu nad 2 mil. Kč ročně. Jídla ve stravovacích službách mají 12 %, alkohol 21 %."],
+ ["DPP","Dohoda o provedení práce. Nárazová práce nejvýše 300 hodin ročně, odvody od 12 000 Kč měsíčně u jednoho zaměstnavatele (2026)."],
+ ["EET 2.0","Elektronická evidence tržeb. Nová verze se má vrátit od 1. 1. 2027, bez povinnosti tisknout účtenky."],
+ ["Garant InvestEU","Program Národní rozvojové banky: státní záruka až 70 % jistiny úvěru od komerční banky."],
+ ["HACCP","Systém kontroly hygieny a bezpečnosti potravin při práci s jídlem. Povinný v gastronomii."],
+ ["Hostinská činnost","Živnost pro provoz restaurace. Je řemeslná a vyžaduje odbornou způsobilost."],
+ ["JMHZ","Jednotné měsíční hlášení zaměstnavatele (od 1. 4. 2026), kterým zaměstnavatel hlásí zaměstnance a příjmy."],
+ ["KHS","Krajská hygienická stanice. Kontroluje hygienu provozů."],
+ ["Leasing","Pronájem vybavení s právem odkupu. Snižuje potřebu hotovosti na startu."],
+ ["Mala (málá)","Sečuánská příchuť: pálivá a koření s „brněním“ na jazyku."],
+ ["Marže","Rozdíl mezi cenou a náklady na suroviny. V modelu „zbývá po odečtení surovin“."],
+ ["Obsazenost","Podíl obsazených míst z celkové kapacity za měsíc."],
+ ["Odborná způsobilost","Doložená kvalifikace pro řemeslnou živnost (vzdělání v oboru nebo praxe)."],
+ ["Odpovědný zástupce","Osoba s odbornou způsobilostí, která za firmu odpovídá za výkon živnosti."],
+ ["OSVČ","Osoba samostatně výdělečně činná (živnostník)."],
+ ["Pop-up","Dočasná akce nebo zkušební večery mimo stálou restauraci, sloužící k ověření poptávky."],
+ ["Prohlášení poplatníka","Takzvaný růžový papír. Zaměstnanec jím u zaměstnavatele uplatní slevu na dani, v jednom měsíci jen u jednoho zaměstnavatele."],
+ ["Ručení","Odpovědnost za dluh celým majetkem. U úvěru banka často žádá osobní ručení společníků i u s.r.o."],
+ ["s.r.o.","Společnost s ručením omezeným. Základní kapitál od 1 Kč, firma ručí svým majetkem."],
+ ["SLDB","Sčítání lidu, domů a bytů (naposledy 2021)."],
+ ["Staff meal","Jídlo pro zaměstnance na účet podniku nebo se slevou."],
+ ["Van Westendorp","Metoda zjištění přijatelného cenového pásma čtyřmi otázkami na cenu."],
+ ["Zkušební otevření","Otevření pro pozvané hosty před velkým otevřením, sloužící k vyladění provozu a sběru recenzí."]
+];
+
+/* Rozjezd prvního roku (odhad) a jednotková ekonomika */
+const RAMP={start:.25,target:.45,months:9};
+function ramp(){const rows=[];let cum=0,min=0;for(let m=1;m<=12;m++){const occ=Math.min(RAMP.target,RAMP.start+(RAMP.target-RAMP.start)*(m-1)/(RAMP.months-1));const c=calc(occ,M.price);cum+=c.profit;min=Math.min(min,cum);rows.push({m,occ,g:c.g,profit:c.profit,cum})}return{rows,min}}
+function unit(price){const net=price/(1+M.vat),food=net*M.food,gm=net-food,occ=.45,g=capMonth*occ;return[["Cena s DPH",fmtS(price)],["DPH ("+Math.round(M.vat*100)+" %)","−"+fmtS(price-net)],["Čistá tržba na hosta",fmtS(net)],["Suroviny ("+Math.round(M.food*100)+" %)","−"+fmtS(food)],["Zbývá po odečtení surovin",fmtS(gm)],["Stálé náklady a splátka na hosta při 45 %",fmtS((fixT+pay)/g)],["Zisk na hosta při 45 % (před daní)",fmtS(gm-(fixT+pay)/g)]]}
