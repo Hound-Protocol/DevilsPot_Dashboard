@@ -116,6 +116,41 @@ function chartSVG(){
  V.slov=`<h2>Slovníček pojmů</h2><p class="small">Vysvětlení odborných výrazů použitých v dashboardu a plánu. Je také přílohou C podnikového plánu.</p><div class="card chap">${tabl(["Pojem","Vysvětlení"],GLOSS)}</div>`;
 })();
 
+
+/* ---------- Digitální dotazník ---------- */
+const QCH=[["Hlavní odkaz",""],["Plakát a leták","plakat"],["Instagram","ig"],["Facebook","fb"],["Koleje a menza","kolej"],["Osobně (tablet)","osobne"]];
+const QCHF={"":"hlavni",plakat:"plakat",ig:"instagram",fb:"facebook",kolej:"kolej",osobne:"osobne"};
+const qUrl=z=>SITE_URL+"dotaznik.html"+(z?"?z="+z:"");
+const QM2={};QUEST.forEach(([sec,qs])=>qs.forEach(q=>QM2[q[0]]={t:q[1],o:q[3]}));
+const SETUP=["Vytvořte novou Google tabulku (sheets.new) na účtu, kde chcete odpovědi mít.","V tabulce otevřete Rozšíření a Apps Script, smažte vše v souboru Code.gs a vložte kód níže.","Klikněte na Nasadit a Nové nasazení, typ „Webová aplikace“. Nastavte Spustit jako: Já a Přístup: Kdokoli.","Povolte oprávnění (Google upozorní na neověřenou aplikaci, zvolte Rozšířené a Pokračovat).","Zkopírujte adresu webové aplikace (končí na /exec) a pošlete ji Claudovi. Ten ji vloží do dashboardu a dotazník se přepne z testovacího režimu do ostrého."];
+V.dotaznik=V.dotaznik.replace('<div class="note">',`<div class="card chap" id="digi"><h3>Digitální dotazník <span class="tag ${QFORM_URL?"fact":"est"}">${QFORM_URL?"připojeno":"čeká na připojení"}</span></h3>
+<p>Respondenti vyplňují samostatnou stránku (3 minuty, mobil i počítač) <a href="${qUrl("")}" target="_blank" rel="noopener">${qUrl("")}</a>. Odpovědi se ukládají do Google tabulky zakladatelů a souhrn se zobrazuje v sekci Výsledky níže. ${QFORM_URL?"":"Dokud není ukládání připojeno, stránka běží v testovacím režimu a odpovědi se neukládají."}</p>
+<div class="tw"><table><tr><th>Kanál</th><th>Odkaz</th><th>QR kód</th></tr>${QCH.map(([n,z])=>`<tr><td><b>${n}</b></td><td><a href="${qUrl(z)}" target="_blank" rel="noopener">${qUrl(z).replace(SITE_URL,"…/")}</a></td><td><a href="assets/qr/qr-${QCHF[z]}.png" download="qr-${QCHF[z]}.png"><img class="qr" src="assets/qr/qr-${QCHF[z]}.png" alt="QR kód: ${n}" width="84" height="84"></a><div class="small">kliknutím stáhnout</div></td></tr>`).join("")}</table></div></div>
+<div class="card chap"><h3>Jak zprovoznit ukládání odpovědí <span class="tag est">jednorázově, asi 5 minut</span></h3><ol>${SETUP.map(x=>`<li>${esc(x)}</li>`).join("")}</ol><button type="button" class="dlbtn" id="cpgs">Zkopírovat kód skriptu</button> <span class="small" id="cpmsg"></span><pre class="code" id="gscode">${esc(APPS_SCRIPT)}</pre><p class="small">Soukromí: e-maily a volné odpovědi zůstávají jen v tabulce. Veřejný souhrn obsahuje pouze počty. E-mail respondent zadává dobrovolně a se souhlasem.</p></div>
+<div class="card chap" id="qres"><h3>Výsledky <button type="button" class="toc-b" id="qrefresh">↻ Obnovit</button></h3><p class="small" id="qresmsg"></p><div id="qresbody"></div></div>
+<div class="note">`);
+function bars(counts,total){const e=Object.entries(counts).sort((a,b)=>b[1]-a[1]);if(!e.length)return"<p class='small'>Zatím bez odpovědí.</p>";return e.map(([k,v])=>`<div class="rb"><span>${esc(k)}</span><div class="rbar"><i style="width:${total?Math.round(100*v/total):0}%"></i></div><b>${v} (${total?Math.round(100*v/total):0} %)</b></div>`).join("")}
+function renderResults(r){
+ const n=r.n||0;const q3=r.q&&r.q[3];const top=q3?(q3.dist[4]+q3.dist[5]):0;
+ let h=`<div class="kpi"><div><small>Odpovědí</small><b>${n}</b></div><div><small>Zájem o hotpot (1–5)</small><b>${q3&&q3.avg!=null?q3.avg.toFixed(1).replace(".",","):"–"}</b></div><div><small>Podíl odpovědí 4–5</small><b>${q3&&q3.n?Math.round(100*top/q3.n)+" %":"–"}</b></div><div><small>Cíl odpovědí</small><b>100–200</b></div></div>`;
+ const choice=[1,2,4,5,6,7,8,9,10,12,13,14,15,16];
+ h+=`<div class="grid">`+choice.map(c=>`<div class="card"><h3>${c}. ${esc(QM2[c].t)}</h3>${bars(r.q[c]||{},n)}</div>`).join("")+`</div>`;
+ h+=`<div class="grid">`+[3,11].map(c=>{const x=r.q[c]||{};const d=x.dist||{};const o={};for(let i=1;i<=5;i++)o[i]=d[i]||0;return `<div class="card"><h3>${c}. ${esc(QM2[c].t)}</h3>${bars(o,x.n||0)}<p class="small">Průměr: ${x.avg!=null?x.avg.toFixed(2).replace(".",","):"–"}</p></div>`}).join("")+`<div class="card"><h3>Cenové pásmo (medián, Kč)</h3><table>${["Příliš levné (pochybnosti o kvalitě)","Výhodná cena","Začíná být drahé","Příliš drahé"].map((t,i)=>`<tr><td>${t}</td><td style="text-align:right">${r.vw&&r.vw["vw"+(i+1)]!=null?r.vw["vw"+(i+1)]+" Kč":"–"}</td></tr>`).join("")}</table></div><div class="card"><h3>Odkud odpovědi přišly</h3>${bars(r.src||{},n)}</div></div>`;
+ return h;
+}
+async function loadResults(){
+ const msg=$("#qresmsg"),body=$("#qresbody");if(!msg)return;
+ if(!QFORM_URL){msg.textContent="Výsledky se zobrazí po připojení ukládání odpovědí.";body.innerHTML="";return}
+ msg.textContent="Načítám výsledky…";
+ try{const r=await (await fetch(QFORM_URL,{cache:"no-store"})).json();msg.textContent="Stav k "+new Date().toLocaleString("cs-CZ")+".";body.innerHTML=renderResults(r)}
+ catch(e){msg.textContent="Výsledky se nepodařilo načíst. Zkontrolujte, zda je webová aplikace nasazená s přístupem Kdokoli.";body.innerHTML=""}
+}
+function wireDotaznik(){
+ const cp=$("#cpgs");if(cp)cp.onclick=async()=>{const m=$("#cpmsg");try{await navigator.clipboard.writeText(APPS_SCRIPT);m.textContent="Zkopírováno."}catch(e){const r=document.createRange();r.selectNodeContents($("#gscode"));const sl=getSelection();sl.removeAllRanges();sl.addRange(r);m.textContent="Kód je označený, zkopírujte jej (Ctrl+C)."}};
+ const rf=$("#qrefresh");if(rf)rf.onclick=loadResults;
+ loadResults();
+}
+
 /* ---------- Word (.docx) ---------- */
 function loadDocx(){return new Promise((res,rej)=>{if(window.docx)return res(window.docx);const s=document.createElement("script");s.src="vendor/docx.umd.js";s.onload=()=>window.docx?res(window.docx):rej(new Error("docx"));s.onerror=()=>rej(new Error("load"));document.head.appendChild(s)})}
 async function buildDocx(mode){const Q=mode==="quest";
@@ -185,7 +220,7 @@ async function downloadWord(mode,btnSel,msgSel){
 const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;$("#foot").textContent="DevilsPot · verze "+VERSION+" · aktualizováno "+UPDATED;
 function show(id){main.innerHTML=`<section class="on">${V[id]}</section>`;nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.id===id));
  const rp=$("#rp");if(rp)rp.textContent=dn+" / "+tot;
- const dl=$("#dl");if(dl)dl.onclick=()=>downloadWord("plan","#dl","#dlmsg");const dq=$("#dlq");if(dq)dq.onclick=()=>downloadWord("quest","#dlq","#dlqmsg");
+ const dl=$("#dl");if(dl)dl.onclick=()=>downloadWord("plan","#dl","#dlmsg");if(id==="dotaznik")wireDotaznik();const dq=$("#dlq");if(dq)dq.onclick=()=>downloadWord("quest","#dlq","#dlqmsg");
  main.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.go);el&&el.scrollIntoView({behavior:"smooth",block:"start"})});
  requestAnimationFrame(()=>document.querySelectorAll(".bar i").forEach(i=>i.style.width=getComputedStyle(i).getPropertyValue("--w")));
  try{location.hash=id}catch(e){}window.scrollTo({top:0,behavior:"smooth"})}

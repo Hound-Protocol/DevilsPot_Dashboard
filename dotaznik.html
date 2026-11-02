@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevilsPot – dotazník</title>
+<meta name="description" content="Krátký dotazník o hotpot restauraci DevilsPot ve Zlíně.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#14110f">
+<meta property="og:title" content="DevilsPot – dotazník">
+<meta property="og:description" content="Krátký dotazník o hotpot restauraci ve Zlíně.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%98%88%3C/text%3E%3C/svg%3E">
+<style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+:root{--bg:#070304;--card:rgba(28,12,10,.55);--card2:rgba(40,16,12,.6);--line:rgba(255,110,60,.18);--tx:#fbeee6;--mut:#c4a191;--red:#ff2d1a;--org:#ff8a1f;--gold:#ffd166;--ok:#5be28a;--warn:#ffc233;--mx:50%;--my:50%}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--tx);font:15px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden}
+/* ---------- HELL BACKGROUND ---------- */
+.hell{position:fixed;inset:0;z-index:-3;background:
+ radial-gradient(120% 70% at 50% 120%,#7a0d00 0%,#3a0500 35%,transparent 70%),
+ radial-gradient(80% 60% at 15% 0%,#2a0508 0%,transparent 60%),
+ radial-gradient(70% 50% at 90% 10%,#210407 0%,transparent 60%),#070304}
+.lava{position:fixed;left:-10%;right:-10%;bottom:-8vh;height:55vh;z-index:-2;filter:url(#heat) blur(14px);opacity:.9;pointer-events:none}
+.lava i{position:absolute;bottom:0;border-radius:50% 50% 0 0;background:radial-gradient(closest-side,rgba(255,200,60,.95),rgba(255,90,20,.8) 45%,rgba(200,20,0,.0) 100%);animation:flame 6s ease-in-out infinite alternate}
+.lava i:nth-child(1){left:2%;width:34%;height:80%;animation-duration:5.2s}
+.lava i:nth-child(2){left:22%;width:40%;height:100%;animation-duration:7s;animation-delay:-2s}
+.lava i:nth-child(3){left:48%;width:36%;height:85%;animation-duration:6s;animation-delay:-1s}
+.lava i:nth-child(4){left:68%;width:38%;height:95%;animation-duration:8s;animation-delay:-3s}
+.lava i:nth-child(5){left:-6%;width:30%;height:70%;animation-duration:5.8s;animation-delay:-4s}
+@keyframes flame{0%{transform:scale(1,.85) translateY(6%);opacity:.7}50%{transform:scale(1.08,1.05) translateY(-2%);opacity:1}100%{transform:scale(.95,.92) translateY(4%);opacity:.8}}
+.cracks{position:fixed;inset:0;z-index:-2;opacity:.18;pointer-events:none;background:
+ repeating-linear-gradient(115deg,transparent 0 120px,rgba(255,80,20,.25) 121px,transparent 123px),
+ repeating-linear-gradient(65deg,transparent 0 200px,rgba(255,60,10,.18) 201px,transparent 203px);
+ mask-image:linear-gradient(to top,#000,transparent 70%);-webkit-mask-image:linear-gradient(to top,#000,transparent 70%)}
+#fx{position:fixed;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:screen}
+.vig{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.65) 100%)}
+.smoke{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.35;background:
+ radial-gradient(40% 30% at 20% 30%,rgba(120,20,10,.35),transparent 70%),
+ radial-gradient(35% 28% at 80% 40%,rgba(160,40,10,.3),transparent 70%);animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(-3%,0,0) scale(1)}to{transform:translate3d(3%,-2%,0) scale(1.1)}}
+/* ---------- HEADER ---------- */
+header{padding:34px 22px 6px;max-width:1120px;margin:0 auto;text-align:center}
+.logo{display:inline-flex;align-items:center;gap:14px}
+.horns{font-size:46px;filter:drop-shadow(0 0 14px #ff4a1a);animation:flick 2.6s infinite}
+h1{margin:0;font:700 clamp(40px,8vw,84px)/1 Oswald,Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+ background:linear-gradient(180deg,#fff3c4 0%,#ffc233 30%,#ff5a1a 62%,#b00 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+ filter:drop-shadow(0 0 18px rgba(255,80,20,.65)) drop-shadow(0 2px 0 #300);animation:flick 3.4s infinite}
+h1 span{background:linear-gradient(180deg,#ff9a6a,#ff1a00 60%,#7a0000);-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes flick{0%,100%{opacity:1}7%{opacity:.88}9%{opacity:1}42%{opacity:.94}44%{opacity:1}73%{opacity:.9}75%{opacity:1}}
+.sub{color:var(--mut);margin:8px 0 14px;letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+/* ---------- NAV ---------- */
+nav{position:sticky;top:10px;z-index:10;margin:8px auto 0;max-width:1120px;padding:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
+ background:rgba(18,6,5,.55);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 40px rgba(255,60,20,.12)}
+nav button{position:relative;background:transparent;color:var(--tx);border:1px solid transparent;border-radius:11px;padding:9px 15px;cursor:pointer;font:600 14px Inter,sans-serif;transition:.25s}
+nav button:hover{background:rgba(255,100,40,.12);border-color:var(--line);transform:translateY(-1px)}
+nav button.on{background:linear-gradient(135deg,#ff2d1a,#ff8a1f);color:#fff;box-shadow:0 0 22px rgba(255,70,20,.65),inset 0 1px 0 rgba(255,255,255,.35);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+/* ---------- LAYOUT ---------- */
+main{max-width:1120px;margin:0 auto;padding:22px 20px 80px}
+section{display:none}
+section.on{display:block;animation:enter .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+h2{margin:8px 0 6px;font:700 clamp(26px,4vw,38px)/1.1 Oswald,sans-serif;letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(90deg,#fff,#ffb36b 50%,#ff4a1a);-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{margin:0 0 8px;font:600 15px Oswald,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--org);text-shadow:0 0 12px rgba(255,120,30,.5)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:14px 0}
+.card{position:relative;background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:16px;padding:18px;overflow:hidden;
+ box-shadow:0 8px 30px rgba(0,0,0,.45);transition:transform .3s,border-color .3s,box-shadow .3s;animation:rise .6s both}
+.card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--mx) var(--my),rgba(255,120,40,.22),transparent 70%)}
+.card::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--org),var(--red),transparent);opacity:.7}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,120,50,.55);box-shadow:0 16px 46px rgba(0,0,0,.6),0 0 34px rgba(255,70,20,.28)}
+.card:hover::before{opacity:1}
+.grid .card:nth-child(1){animation-delay:.04s}.grid .card:nth-child(2){animation-delay:.12s}.grid .card:nth-child(3){animation-delay:.2s}.grid .card:nth-child(4){animation-delay:.28s}.grid .card:nth-child(5){animation-delay:.36s}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.card ul{margin:6px 0 0;padding-left:18px}.card li{margin:4px 0}.card li::marker{color:var(--org)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:14px 0}
+.kpi div{position:relative;background:linear-gradient(160deg,rgba(60,18,10,.7),rgba(24,8,6,.6));border:1px solid var(--line);border-radius:14px;padding:14px;overflow:hidden;animation:rise .6s both}
+.kpi div::after{content:"";position:absolute;right:-30px;bottom:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,90,20,.35),transparent);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.35);opacity:.6}}
+.kpi b{display:block;font:700 26px Oswald,sans-serif;letter-spacing:.03em;color:#fff;text-shadow:0 0 16px rgba(255,120,30,.55)}
+.kpi small{color:var(--mut);text-transform:uppercase;letter-spacing:.08em;font-size:11px}
+.tag{display:inline-block;font:500 11px Inter;padding:1px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:6px;letter-spacing:.04em;text-transform:none;text-shadow:none}
+.tag.fact{color:var(--ok);border-color:rgba(91,226,138,.5);background:rgba(91,226,138,.08)}.tag.est{color:var(--warn);border-color:rgba(255,194,51,.5);background:rgba(255,194,51,.08)}
+.note{background:linear-gradient(90deg,rgba(255,45,26,.18),rgba(255,45,26,.04));border:1px solid rgba(255,70,40,.35);border-left:4px solid var(--red);padding:13px 15px;border-radius:12px;margin:14px 0;color:#ffe2d6;box-shadow:0 0 28px rgba(255,45,26,.12)}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 6px;border-bottom:1px solid rgba(255,110,60,.12);cursor:pointer;border-radius:8px;transition:.2s}
+label.chk:hover{background:rgba(255,100,40,.08)}
+label.chk input{margin-top:5px;accent-color:var(--red);width:16px;height:16px}
+label.chk.done span{color:var(--mut);text-decoration:line-through;text-decoration-color:var(--red)}
+.bar{height:12px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin:10px 0;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s cubic-bezier(.2,.8,.2,1);background:linear-gradient(90deg,#8a0000,#ff2d1a,#ff8a1f,#ffd166,#ff8a1f,#ff2d1a);background-size:300% 100%;animation:shim 3s linear infinite;box-shadow:0 0 18px rgba(255,90,20,.8)}
+@keyframes shim{to{background-position:-300% 0}}
+table{width:100%;border-collapse:collapse;margin-top:6px}
+td,th{padding:7px 8px;border-bottom:1px solid rgba(255,110,60,.12);text-align:left;font-size:14px}
+th{color:var(--mut);font-weight:500}
+input[type=number],textarea,input[type=text]{background:rgba(10,3,3,.6);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;width:100%;transition:.25s;outline:none}
+input:focus,textarea:focus{border-color:var(--org);box-shadow:0 0 0 3px rgba(255,120,30,.2),0 0 22px rgba(255,90,20,.3)}
+td input[type=number]{width:130px;text-align:right}
+textarea{min-height:96px;resize:vertical}
+.res{font:700 22px Oswald,sans-serif;color:var(--gold);text-shadow:0 0 14px rgba(255,200,60,.4)}
+.pos{color:var(--ok)!important}.neg{color:#ff5a47!important}
+a{color:var(--org)}
+.small{font-size:13px;color:var(--mut)}
+@media(max-width:600px){nav{top:4px}.horns{font-size:34px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}#fx{display:none}}
+
+.tw{overflow-x:auto}.tw table td,.tw table th{vertical-align:top}
+a{color:var(--org)}a:hover{color:var(--gold)}
+
+/* ---------- UPDATE MODAL ---------- */
+.ov{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 60%,rgba(120,10,0,.55),rgba(0,0,0,.88));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:ovin .5s ease both}
+.ov.out{animation:ovout .7s ease forwards}
+@keyframes ovin{from{opacity:0}to{opacity:1}}
+@keyframes ovout{0%{opacity:1;filter:brightness(1)}30%{opacity:1;filter:brightness(3) saturate(2)}100%{opacity:0;filter:brightness(1)}}
+.mb{position:relative;max-width:480px;width:100%;text-align:center;padding:34px 28px 28px;border-radius:22px;background:linear-gradient(170deg,rgba(60,14,8,.92),rgba(16,4,4,.95));border:1px solid rgba(255,110,50,.55);box-shadow:0 0 0 1px rgba(255,60,20,.25),0 0 70px rgba(255,70,20,.45),0 30px 80px rgba(0,0,0,.7);animation:mbin .7s cubic-bezier(.2,1.3,.3,1) both;overflow:hidden}
+.mb::before{content:"";position:absolute;left:-20%;right:-20%;bottom:-40%;height:70%;background:radial-gradient(closest-side,rgba(255,150,30,.55),transparent);animation:flame 3s ease-in-out infinite alternate;pointer-events:none}
+@keyframes mbin{from{opacity:0;transform:translateY(40px) scale(.85) rotate(-1.5deg)}to{opacity:1;transform:none}}
+.mb .em{font-size:54px;filter:drop-shadow(0 0 18px #ff3a10);animation:flick 2.2s infinite}
+.mb h4{position:relative;margin:6px 0 10px;font:700 clamp(26px,6vw,34px)/1.15 Oswald,Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(180deg,#fff3c4,#ffb03a 45%,#ff3a10);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(255,80,20,.6))}
+.mb ul{position:relative;list-style:none;margin:14px 0 22px;padding:0;text-align:left;color:var(--tx)}
+.mb li{padding:5px 0 5px 24px;position:relative;font-size:14px}
+.mb li::before{content:"🔥";position:absolute;left:0;top:4px;font-size:13px}
+.mb button{position:relative;border:0;cursor:pointer;color:#fff;font:700 17px Oswald,Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:14px 34px;border-radius:14px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 60%,#ffd166);text-shadow:0 1px 3px rgba(0,0,0,.5);box-shadow:0 0 30px rgba(255,80,20,.8),inset 0 1px 0 rgba(255,255,255,.45);transition:transform .2s,box-shadow .2s;animation:btnp 1.8s ease-in-out infinite}
+.mb button:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 0 50px rgba(255,120,20,1),inset 0 1px 0 rgba(255,255,255,.5)}
+.mb button:active{transform:scale(.96)}
+@keyframes btnp{50%{box-shadow:0 0 46px rgba(255,110,20,1),inset 0 1px 0 rgba(255,255,255,.45)}}
+.mv{position:relative;margin-top:14px;font-size:11px;color:var(--mut);letter-spacing:.1em}
+
+/* ---------- plán, dotazník, dokumenty ---------- */
+.chap{margin-bottom:14px;animation:none}
+.chap p{margin:6px 0}.chap h5{margin:16px 0 6px;font:600 14px Oswald,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.chap ul,.chap ol{margin:6px 0 10px;padding-left:20px}.chap li{margin:3px 0}
+.q{padding:8px 0;border-bottom:1px solid rgba(255,110,60,.12)}.q:last-child{border-bottom:0}.q ul{margin:4px 0 0}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 16px}
+.toc button{background:rgba(255,100,40,.1);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font:500 12px Inter,sans-serif;cursor:pointer;transition:.2s}
+.toc button:hover{background:rgba(255,100,40,.25);border-color:var(--org)}
+.dlbar{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:10px 0}
+.dlbtn{border:0;cursor:pointer;color:#fff;font:700 15px Oswald,Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:12px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 70%,#ffd166);box-shadow:0 0 26px rgba(255,80,20,.6),inset 0 1px 0 rgba(255,255,255,.4);transition:.2s;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.dlbtn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(255,110,20,.9),inset 0 1px 0 rgba(255,255,255,.5)}
+.dlbtn:disabled{opacity:.7;cursor:wait}
+
+/* ---------- vylepšení: přístupnost, mobil, tisk, grafy ---------- */
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+footer#foot{max-width:1120px;margin:0 auto;padding:6px 20px 40px;text-align:center;color:var(--mut);font-size:12px;letter-spacing:.06em}
+.chart{width:100%;height:auto;display:block;margin-top:6px}
+.chart text{fill:var(--mut);font:11px Inter,sans-serif}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 0;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.swot{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+@media(max-width:700px){
+ nav{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ nav::-webkit-scrollbar{display:none}
+ nav button{white-space:nowrap;flex:0 0 auto;padding:8px 12px}
+ main{padding:16px 12px 60px}.grid{grid-template-columns:1fr}
+}
+@media print{
+ body{background:#fff!important;color:#000!important}
+ .hell,.smoke,.cracks,.lava,#fx,.vig,nav,.ov,.dlbar,.toc,footer#foot,svg[width="0"]{display:none!important}
+ .card,.kpi div,.note{background:#fff!important;color:#000!important;border:1px solid #bbb!important;box-shadow:none!important;backdrop-filter:none!important;break-inside:avoid-page}
+ .card::before,.card::after,.kpi div::after{display:none!important}
+ h1,h2,h3,h4,h5,.kpi b,.res{color:#a01808!important;-webkit-text-fill-color:#a01808!important;background:none!important;filter:none!important;text-shadow:none!important}
+ header h1{font-size:34px!important}a{color:#000!important}
+ td,th,.small,.kpi small,li,p{color:#000!important}
+ section{display:block!important;animation:none!important}
+}
+
+/* ---------- veřejný dotazník ---------- */
+main.fm{max-width:720px;margin:0 auto;padding:10px 16px 60px}
+.fm .lead{color:var(--tx);font-size:16px;text-align:center;margin:10px 0 16px}
+.center{text-align:center}
+.fcard{padding:22px;animation:none}
+.fcard h2{margin:2px 0 12px}
+.prog{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.prog i{display:block;height:100%;border-radius:99px;transition:width .5s;background:linear-gradient(90deg,#ff2d1a,#ff8a1f,#ffd166);box-shadow:0 0 14px rgba(255,90,20,.8)}
+.stp{margin:8px 0 2px;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+fieldset.q{border:0;border-top:1px solid rgba(255,110,60,.15);margin:0;padding:16px 0 6px;min-width:0}
+fieldset.q:first-of-type{border-top:0}
+fieldset.q legend{font-weight:600;font-size:16px;padding:0;margin-bottom:6px;line-height:1.4}
+.rq{color:var(--red);font-style:normal}
+.hint,.ends{font-size:12px;color:var(--mut);margin:2px 0 8px}
+.ends{display:flex;justify-content:space-between}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;background:rgba(10,3,3,.5);border:1px solid var(--line);border-radius:12px;padding:11px 14px;cursor:pointer;transition:.2s}
+.opt:hover{border-color:var(--org);background:rgba(255,100,40,.1)}
+.opt input{margin-top:3px;accent-color:var(--red);width:17px;height:17px;flex:0 0 auto}
+.opt:has(input:checked){border-color:var(--org);background:rgba(255,100,40,.2);box-shadow:0 0 18px rgba(255,90,20,.25)}
+.consent{margin-top:8px;font-size:13px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sc{position:relative;cursor:pointer}
+.sc input{position:absolute;opacity:0;inset:0}
+.sc span{display:block;text-align:center;padding:12px 0;border-radius:12px;border:1px solid var(--line);background:rgba(10,3,3,.5);font:700 18px Oswald,sans-serif;transition:.2s}
+.sc:hover span{border-color:var(--org)}
+.sc input:checked+span{background:linear-gradient(135deg,#ff2d1a,#ff8a1f);border-color:transparent;box-shadow:0 0 20px rgba(255,80,20,.6)}
+.sc input:focus-visible+span{outline:2px solid var(--gold)}
+.kc{display:flex;gap:8px;align-items:center}.kc input{max-width:180px}
+.fm textarea,.fm input[type=email],.fm input[type=number]{background:rgba(10,3,3,.6);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font:inherit;width:100%;outline:none}
+.fm input:focus,.fm textarea:focus{border-color:var(--org);box-shadow:0 0 0 3px rgba(255,120,30,.2)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px}
+.btn{border:0;cursor:pointer;color:#fff;font:700 16px Oswald,Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:13px 26px;border-radius:12px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 70%,#ffd166);box-shadow:0 0 24px rgba(255,80,20,.55),inset 0 1px 0 rgba(255,255,255,.4);text-shadow:0 1px 2px rgba(0,0,0,.5);transition:.2s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.7;cursor:wait}
+.btn.ghost{background:transparent;box-shadow:none;border:1px solid var(--line);color:var(--tx)}
+.err{color:#ff8a7a;font-size:13px;min-height:0;margin-top:2px}
+.thx{text-align:center;padding:20px 0}.thx .em{font-size:64px;filter:drop-shadow(0 0 20px #ff3a10);animation:flick 2.2s infinite}
+@media(max-width:600px){.fcard{padding:16px}.opt{padding:10px 12px}}
+
+/* ---------- výsledky dotazníku ---------- */
+.rb{display:grid;grid-template-columns:minmax(120px,1.4fr) 2fr auto;gap:10px;align-items:center;margin:5px 0;font-size:13px}
+.rbar{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.rbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#ff2d1a,#ff8a1f,#ffd166)}
+.rb b{font-weight:600;color:var(--gold);white-space:nowrap}
+pre.code{max-height:260px;overflow:auto;background:rgba(10,3,3,.7);border:1px solid var(--line);border-radius:10px;padding:12px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:#ffd9c7;white-space:pre;margin-top:12px}
+img.qr{background:#fff;padding:4px;border-radius:6px;display:block}
+.toc-b{margin-left:8px;background:rgba(255,100,40,.12);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:3px 10px;font:500 12px Inter;cursor:pointer;letter-spacing:0;text-transform:none}
+@media(max-width:600px){.rb{grid-template-columns:1fr;gap:3px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><filter id="heat"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="4" result="n"><animate attributeName="baseFrequency" dur="9s" values="0.012 0.03;0.018 0.045;0.012 0.03" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="38"/></filter></svg>
+<div class="hell"></div><div class="smoke"></div><div class="cracks"></div>
+<div class="lava"><i></i><i></i><i></i><i></i><i></i></div>
+<canvas id="fx"></canvas><div class="vig"></div>
+<header><div class="logo"><span class="horns">😈</span><h1>Devils<span>Pot</span></h1></div><p class="sub">Hotpot ve Zlíně · krátký dotazník</p></header>
+<main class="fm"><div class="note" id="test" style="display:none"><b>Testovací režim:</b> odpovědi se zatím neukládají.</div><p class="lead" id="intro"></p><div class="card fcard" id="card"></div><p class="small center">Dotazník je anonymní. E-mail je nepovinný a použijeme ho jen k oznámení o otevření.</p></main>
+<script>
+/* Dotazník: otázky (sdílí dashboard i veřejná stránka dotaznik.html) */
+const SITE_URL="https://hound-protocol.github.io/DevilsPot_Dashboard/";
+/* Adresa Google Apps Script (webová aplikace), kam se ukládají odpovědi. Prázdné = testovací režim, odpovědi se neukládají. */
+const QFORM_URL="";
+const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
+const QEND="Děkujeme! Sledujte nás, brzy se ozveme se zkušebními večery.";
+const QUEST=[
+ ["A. Znalost a zájem",[
+  [1,"Znáte hotpot?","jedna odpověď",["Ano, už jsem ho jedl/a","Znám ho, ale ještě jsem ho nejedl/a","Ne, nevím, co to je"]],
+  [2,"Kde jste hotpot jedl/a?","více odpovědí, jen pokud jste v otázce 1 zvolil/a „už jsem ho jedl/a“",["V Praze","V Brně","V jiném městě v ČR","V zahraničí","Doma"]],
+  [3,"Chtěl/a byste mít hotpot restauraci ve Zlíně?","škála 1–5 (1 = rozhodně ne, 5 = rozhodně ano)",[]],
+  [4,"Jak často byste restauraci navštěvoval/a?","jedna odpověď",["Jednou týdně nebo častěji","2–3× měsíčně","Jednou měsíčně","Několikrát za rok","Spíš bych nechodil/a"]]
+ ]],
+ ["B. Návyky",[
+  [5,"S kým byste nejčastěji šel/šla?","více odpovědí",["S přáteli (parta 4+ lidí)","S partnerem/partnerkou","S rodinou","S kolegy (firemní akce)","Sám/sama"]],
+  [6,"Kdy byste přišel/přišla?","více odpovědí",["Všední den večer","Pátek nebo sobota večer","Víkend odpoledne","Oběd ve všední den","Při oslavě nebo speciální příležitosti"]],
+  [7,"Jaký typ nabídky byste preferoval/a?","jedna odpověď",["All-you-can-eat (pevná cena, neomezeně)","Sety pro 2–4 osoby","À la carte (platím za to, co si vyberu)","Nevím, záleží na ceně"]]
+ ]],
+ ["C. Cena",[
+  [8,"Kolik jste ochotni utratit na jednu osobu za jídlo (bez alkoholu)?","jedna odpověď",["Do 300 Kč","300–400 Kč","400–500 Kč","500–600 Kč","600–700 Kč","700–800 Kč","Více než 800 Kč"]]
+ ]],
+ ["D. Co je pro vás důležité",[
+  [9,"Vyberte tři nejdůležitější věci při výběru restaurace.","nejvýše 3 odpovědi",["Cena","Kvalita masa a surovin","Výběr vývarů","Atmosféra a vzhled","Rychlost obsluhy","Poloha a parkování","Vegetariánské a bezmasé možnosti","Zážitek a fotky na sociální sítě"]],
+  [10,"Jaké vývary byste chtěl/a?","více odpovědí",["Jemný kuřecí","Pálivý sečuánský","Houbový","Rajčatový","Thajský (tom yum)","Bezmasý/vegan"]],
+  [11,"Jak pálivé jídlo máte rád/a?","škála 1–5 (1 = vůbec ne, 5 = co nejpálivější)",[]],
+  [12,"Kde ve Zlíně byste restauraci chtěl/a?","jedna odpověď",["V centru","Blízko univerzity","V nákupním centru","Nezáleží, hlavně dobré jídlo"]]
+ ]],
+ ["E. Komunikace",[
+  [13,"Kde se o nové restauraci nejspíš dozvíte?","více odpovědí",["Instagram","TikTok","Facebook","Google Maps","Od kamarádů","Plakát nebo leták (například na univerzitě)"]]
+ ]],
+ ["F. O vás",[
+  [14,"Jste:","jedna odpověď",["Student/ka UTB","Student/ka jiné školy","Pracující","Jiné"]],
+  [15,"Věk:","jedna odpověď",["do 18","19–24","25–34","35–44","45 a více"]],
+  [16,"Bydlíte:","jedna odpověď",["Ve Zlíně","V okolí Zlína","Jinde"]]
+ ]],
+ ["G. Otevřené otázky (nepovinné)",[
+  [17,"Co by vás přesvědčilo, abyste přišel/přišla?","volná odpověď",[]],
+  [18,"Co by vás naopak odradilo?","volná odpověď",[]],
+  [19,"Chcete se dozvědět o otevření a o zkušebních večerech? Zadejte e-mail.","nepovinné; zadáním souhlasíte, že vám napíšeme pouze o DevilsPotu a kdykoliv se můžete odhlásit",[]]
+ ]]
+];
+const QVW=["Při jaké ceně na osobu byste hotpot považoval/a za tak levný, že pochybujete o kvalitě?","Při jaké ceně by to byla výhodná nabídka?","Při jaké ceně by to začalo být drahé, ale ještě byste šel/šla?","Při jaké ceně by to bylo příliš drahé a nešel/nešla byste?"];
+
+/* Veřejná stránka dotazníku DevilsPot */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const TYPE={1:"radio",2:"check",3:"scale",4:"radio",5:"check",6:"check",7:"radio",8:"radio",9:"check3",10:"check",11:"scale",12:"radio",13:"check",14:"radio",15:"radio",16:"radio",17:"text",18:"text",19:"email"};
+const REQ=[1,3,4,8,14];
+const QM={};QUEST.forEach(([sec,qs])=>qs.forEach(q=>QM[q[0]]={n:q[0],t:q[1],ty:q[2],o:q[3]}));
+// kroky: oddíly A–C, volitelné cenové pásmo, oddíly D–G
+const STEPS=[];QUEST.forEach(([sec,qs],i)=>{STEPS.push({title:sec,qs:qs.map(q=>q[0])});if(i===2)STEPS.push({title:"Cena: vaše představa (nepovinné)",vw:true,qs:[]})});
+const ans={};let step=0;const t0=Date.now();
+const src=(new URLSearchParams(location.search)).get("z")||"";
+const SEEN="Ano, už jsem ho jedl/a";
+const hint=q=>{const m=/\((.*?)\)/.exec(q.ty);return m?m[1]:q.ty};
+
+function qHTML(n){
+ const q=QM[n],ty=TYPE[n],req=REQ.includes(n);
+ let body="";
+ const name="q"+n;
+ if(ty==="radio")body=`<div class="opts">${q.o.map((o,i)=>`<label class="opt"><input type="radio" name="${name}" value="${esc(o)}" ${ans[n]===o?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>`;
+ else if(ty==="check"||ty==="check3")body=`<div class="opts">${q.o.map(o=>`<label class="opt"><input type="checkbox" name="${name}" value="${esc(o)}" ${(ans[n]||[]).includes(o)?"checked":""}><span>${esc(o)}</span></label>`).join("")}</div>${ty==="check3"?'<div class="hint">Vyberte nejvýše 3 možnosti.</div>':""}`;
+ else if(ty==="scale"){const h=/1 = ([^,]+), 5 = ([^)]+)/.exec(q.ty)||[];body=`<div class="scale">${[1,2,3,4,5].map(i=>`<label class="sc"><input type="radio" name="${name}" value="${i}" ${String(ans[n])===String(i)?"checked":""}><span>${i}</span></label>`).join("")}</div><div class="ends"><span>${esc(h[1]||"")}</span><span>${esc(h[2]||"")}</span></div>`}
+ else if(ty==="text")body=`<textarea name="${name}" rows="3" maxlength="800" placeholder="Napište, co vás napadne…">${esc(ans[n]||"")}</textarea>`;
+ else if(ty==="email")body=`<input type="email" name="${name}" maxlength="120" placeholder="vas@email.cz" value="${esc(ans[n]||"")}" autocomplete="email"><label class="opt consent"><input type="checkbox" name="consent" ${ans.consent?"checked":""}><span>Souhlasím, že mi DevilsPot pošle e-mail o otevření a zkušebních večerech. Kdykoliv se mohu odhlásit.</span></label>`;
+ const hidden=n===2&&ans[1]!==SEEN?' style="display:none"':"";
+ return `<fieldset class="q" data-n="${n}"${hidden}><legend>${n}. ${esc(q.t)}${req?' <em class="rq">*</em>':""}</legend>${ty==="radio"||ty==="check"?`<div class="hint">${esc(hint(q))}</div>`:""}${body}<div class="err" id="e${n}"></div></fieldset>`;
+}
+function vwHTML(){return `<p class="lead">Čtyři krátké otázky o ceně. Napište částku v korunách na osobu (jen jídlo, bez alkoholu). Pokud si nejste jistí, přeskočte.</p>${QVW.map((t,i)=>`<fieldset class="q"><legend>${esc(t)}</legend><div class="kc"><input type="number" inputmode="numeric" min="0" max="5000" step="10" name="vw${i+1}" value="${esc(ans["vw"+(i+1)]||"")}" placeholder="např. 450"><span>Kč</span></div></fieldset>`).join("")}`}
+
+function render(){
+ const s=STEPS[step],last=step===STEPS.length-1;
+ const pct=Math.round(100*step/STEPS.length);
+ $("#card").innerHTML=`<div class="prog"><i style="width:${pct}%"></i></div><div class="stp">Krok ${step+1} z ${STEPS.length}</div><h2>${esc(s.title)}</h2><form id="f" novalidate>${s.vw?vwHTML():s.qs.map(qHTML).join("")}<input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true"></form><div class="nav">${step>0?'<button type="button" class="btn ghost" id="back">← Zpět</button>':"<span></span>"}<button type="button" class="btn" id="next">${last?"Odeslat 🔥":"Pokračovat →"}</button></div><div class="err" id="ge"></div>`;
+ $("#back")&&($("#back").onclick=()=>{collect();step--;render();toTop()});
+ $("#next").onclick=()=>{collect();if(!validate())return;if(last)submit();else{step++;render();toTop()}};
+ // podmíněná otázka 2
+ document.querySelectorAll('input[name="q1"]').forEach(r=>r.addEventListener("change",()=>{collect();const f=document.querySelector('fieldset[data-n="2"]');if(f){f.style.display=ans[1]===SEEN?"":"none";if(ans[1]!==SEEN)delete ans[2]}}));
+ // max 3 u otázky 9
+ document.querySelectorAll('input[name="q9"]').forEach(c=>c.addEventListener("change",()=>{const on=[...document.querySelectorAll('input[name="q9"]:checked')];if(on.length>3){c.checked=false;$("#e9").textContent="Nejvýše 3 možnosti."}else $("#e9").textContent=""}));
+}
+const toTop=()=>window.scrollTo({top:0,behavior:"smooth"});
+function collect(){
+ const f=$("#f");if(!f)return;
+ const s=STEPS[step];
+ if(s.vw){for(let i=1;i<=4;i++){const el=f.elements["vw"+i];ans["vw"+i]=el?el.value.trim():""}return}
+ s.qs.forEach(n=>{const ty=TYPE[n],nm="q"+n;
+  if(ty==="radio"||ty==="scale"){const c=f.querySelector(`input[name="${nm}"]:checked`);if(c)ans[n]=c.value;else delete ans[n]}
+  else if(ty==="check"||ty==="check3"){const a=[...f.querySelectorAll(`input[name="${nm}"]:checked`)].map(x=>x.value);if(a.length)ans[n]=a;else delete ans[n]}
+  else if(ty==="text"){const v=f.elements[nm].value.trim();if(v)ans[n]=v;else delete ans[n]}
+  else if(ty==="email"){const v=f.elements[nm].value.trim();if(v)ans[n]=v;else delete ans[n];ans.consent=f.elements.consent.checked}
+ });
+ ans.hp=f.elements.hp.value;
+}
+function validate(){
+ const s=STEPS[step];let ok=true;
+ document.querySelectorAll(".err").forEach(e=>e.textContent="");
+ s.qs.forEach(n=>{
+  if(REQ.includes(n)&&ans[n]==null){const e=$("#e"+n);if(e)e.textContent="Tuto otázku prosím vyplňte.";ok=false}
+  if(TYPE[n]==="email"&&ans[n]){if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ans[n])){$("#e"+n).textContent="Zadejte platný e-mail.";ok=false}else if(!ans.consent){$("#e"+n).textContent="Pro odeslání e-mailu je potřeba souhlas.";ok=false}}
+ });
+ if(!ok){$("#ge").textContent="Zkontrolujte prosím označené otázky.";const f=document.querySelector(".err:not(:empty)");f&&f.scrollIntoView({behavior:"smooth",block:"center"})}
+ return ok;
+}
+async function submit(){
+ const b=$("#next");b.disabled=true;b.textContent="Odesílám…";
+ const p={t:Math.round((Date.now()-t0)/1000),src,hp:ans.hp||"",consent:!!ans.consent&&!!ans[19]};
+ for(let i=1;i<=19;i++)p["q"+i]=ans[i]==null?"":ans[i];
+ for(let i=1;i<=4;i++)p["vw"+i]=ans["vw"+i]||"";
+ try{
+  if(QFORM_URL){await fetch(QFORM_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)})}
+  else console.info("Testovací režim, odpovědi se neukládají:",p);
+  thanks();
+ }catch(e){b.disabled=false;b.textContent="Odeslat 🔥";$("#ge").textContent="Odeslání se nepovedlo. Zkontrolujte připojení a zkuste to znovu."}
+}
+function thanks(){$("#intro").style.display="none";
+ $("#card").innerHTML=`<div class="thx"><div class="em">😈</div><h2>${esc(QEND.replace(/\s*🔥\s*$/,""))}</h2><p class="lead">Každá odpověď nám pomáhá. ${QFORM_URL?"":'<br><b>Testovací režim:</b> odpovědi se zatím neukládají.'}</p></div>`;
+ toTop();
+}
+// start
+$("#intro").textContent=QINTRO;
+if(!QFORM_URL)$("#test").style.display="block";
+render();
+// uhlíky
+(function(){const cv=$("#fx"),x=cv.getContext("2d");let W,H,D=Math.min(devicePixelRatio||1,2),ps=[];
+ function rs(){W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;cv.style.width=W+"px";cv.style.height=H+"px";x.setTransform(D,0,0,D,0,0)}
+ addEventListener("resize",rs);rs();
+ const N=Math.round(Math.min(90,W/10));
+ function mk(i){return{x:Math.random()*W,y:i?Math.random()*H:H+10,s:Math.random()*2.2+.6,v:Math.random()*.8+.3,sw:Math.random()*6.28,sa:Math.random()*.8+.2,h:Math.random()*35+8}}
+ for(let i=0;i<N;i++)ps.push(mk(true));
+ function f(){if(document.hidden){requestAnimationFrame(f);return}x.clearRect(0,0,W,H);for(const p of ps){p.y-=p.v*(1+(H-p.y)/H*.6);p.sw+=.02;p.x+=Math.sin(p.sw)*p.sa;const a=Math.max(0,Math.min(1,p.y/H*1.25));const g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,p.s*5);g.addColorStop(0,`hsla(${p.h+20},100%,70%,${a})`);g.addColorStop(.4,`hsla(${p.h},100%,55%,${a*.55})`);g.addColorStop(1,`hsla(${p.h-8},100%,40%,0)`);x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.s*5,0,6.283);x.fill();if(p.y<-10)Object.assign(p,mk(false))}requestAnimationFrame(f)}
+ if(!matchMedia("(prefers-reduced-motion: reduce)").matches)f()})();
+
+</script>
+</body>
+</html>

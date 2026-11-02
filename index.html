@@ -160,6 +160,56 @@ footer#foot{max-width:1120px;margin:0 auto;padding:6px 20px 40px;text-align:cent
  td,th,.small,.kpi small,li,p{color:#000!important}
  section{display:block!important;animation:none!important}
 }
+
+/* ---------- veřejný dotazník ---------- */
+main.fm{max-width:720px;margin:0 auto;padding:10px 16px 60px}
+.fm .lead{color:var(--tx);font-size:16px;text-align:center;margin:10px 0 16px}
+.center{text-align:center}
+.fcard{padding:22px;animation:none}
+.fcard h2{margin:2px 0 12px}
+.prog{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.prog i{display:block;height:100%;border-radius:99px;transition:width .5s;background:linear-gradient(90deg,#ff2d1a,#ff8a1f,#ffd166);box-shadow:0 0 14px rgba(255,90,20,.8)}
+.stp{margin:8px 0 2px;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+fieldset.q{border:0;border-top:1px solid rgba(255,110,60,.15);margin:0;padding:16px 0 6px;min-width:0}
+fieldset.q:first-of-type{border-top:0}
+fieldset.q legend{font-weight:600;font-size:16px;padding:0;margin-bottom:6px;line-height:1.4}
+.rq{color:var(--red);font-style:normal}
+.hint,.ends{font-size:12px;color:var(--mut);margin:2px 0 8px}
+.ends{display:flex;justify-content:space-between}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;background:rgba(10,3,3,.5);border:1px solid var(--line);border-radius:12px;padding:11px 14px;cursor:pointer;transition:.2s}
+.opt:hover{border-color:var(--org);background:rgba(255,100,40,.1)}
+.opt input{margin-top:3px;accent-color:var(--red);width:17px;height:17px;flex:0 0 auto}
+.opt:has(input:checked){border-color:var(--org);background:rgba(255,100,40,.2);box-shadow:0 0 18px rgba(255,90,20,.25)}
+.consent{margin-top:8px;font-size:13px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sc{position:relative;cursor:pointer}
+.sc input{position:absolute;opacity:0;inset:0}
+.sc span{display:block;text-align:center;padding:12px 0;border-radius:12px;border:1px solid var(--line);background:rgba(10,3,3,.5);font:700 18px Oswald,sans-serif;transition:.2s}
+.sc:hover span{border-color:var(--org)}
+.sc input:checked+span{background:linear-gradient(135deg,#ff2d1a,#ff8a1f);border-color:transparent;box-shadow:0 0 20px rgba(255,80,20,.6)}
+.sc input:focus-visible+span{outline:2px solid var(--gold)}
+.kc{display:flex;gap:8px;align-items:center}.kc input{max-width:180px}
+.fm textarea,.fm input[type=email],.fm input[type=number]{background:rgba(10,3,3,.6);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font:inherit;width:100%;outline:none}
+.fm input:focus,.fm textarea:focus{border-color:var(--org);box-shadow:0 0 0 3px rgba(255,120,30,.2)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px}
+.btn{border:0;cursor:pointer;color:#fff;font:700 16px Oswald,Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:13px 26px;border-radius:12px;background:linear-gradient(135deg,#ff2d1a,#ff8a1f 70%,#ffd166);box-shadow:0 0 24px rgba(255,80,20,.55),inset 0 1px 0 rgba(255,255,255,.4);text-shadow:0 1px 2px rgba(0,0,0,.5);transition:.2s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.7;cursor:wait}
+.btn.ghost{background:transparent;box-shadow:none;border:1px solid var(--line);color:var(--tx)}
+.err{color:#ff8a7a;font-size:13px;min-height:0;margin-top:2px}
+.thx{text-align:center;padding:20px 0}.thx .em{font-size:64px;filter:drop-shadow(0 0 20px #ff3a10);animation:flick 2.2s infinite}
+@media(max-width:600px){.fcard{padding:16px}.opt{padding:10px 12px}}
+
+/* ---------- výsledky dotazníku ---------- */
+.rb{display:grid;grid-template-columns:minmax(120px,1.4fr) 2fr auto;gap:10px;align-items:center;margin:5px 0;font-size:13px}
+.rbar{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.rbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#ff2d1a,#ff8a1f,#ffd166)}
+.rb b{font-weight:600;color:var(--gold);white-space:nowrap}
+pre.code{max-height:260px;overflow:auto;background:rgba(10,3,3,.7);border:1px solid var(--line);border-radius:10px;padding:12px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:#ffd9c7;white-space:pre;margin-top:12px}
+img.qr{background:#fff;padding:4px;border-radius:6px;display:block}
+.toc-b{margin-left:8px;background:rgba(255,100,40,.12);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:3px 10px;font:500 12px Inter;cursor:pointer;letter-spacing:0;text-transform:none}
+@media(max-width:600px){.rb{grid-template-columns:1fr;gap:3px}}
 </style>
 </head>
 <body>
@@ -253,7 +303,7 @@ const FIN=[
 const BANK=["Podnikatelský plán a prognóza na 3 roky","Rozpočet investice s nabídkami dodavatelů","Návrh nebo předsmlouva nájmu prostoru","Doklad o poptávce (předprodeje, zkušební večery, seznam zájemců)","Příjmy a závazky ručitelů","Doklad o odborné způsobilosti pro hostinskou činnost (výuční list a praxe Filipa)","Pojištění a zajištění úvěru"];
 
 const ROAD=[
- ["Fáze 1: Ověření (měsíc 1–3)",[["Vytvořit dashboard a první návrh plánu","done"],["První kolo průzkumu trhu, cen, práva a financování","done"],["Filip: ověřit na živnostenském úřadě, že vyučení a praxe stačí pro hostinskou činnost","todo"],["Dohodnout podíly a role mezi Erikem a Filipem","todo"],["Ověřit ve Zlíně terénně, že hotpot opravdu chybí","todo"],["Navštívit hotpot restaurace jinde (Praha, Brno), nafotit, změřit ceny","todo"],["Navrhnout menu a spočítat cenu surovin na porci","todo"],["Sepsat zásady zaměstnávání, zaměstnanecký řád a vzory dohod","todo"],["Dotazník mezi studenty UTB a známými (hotový, k rozeslání)","todo"],["Nábor studentů UTB na brigády: kontakt na Job centrum UTB a Studentskou unii","todo"],["Založit sociální sítě a seznam zájemců","todo"]]],
+ ["Fáze 1: Ověření (měsíc 1–3)",[["Vytvořit dashboard a první návrh plánu","done"],["První kolo průzkumu trhu, cen, práva a financování","done"],["Filip: ověřit na živnostenském úřadě, že vyučení a praxe stačí pro hostinskou činnost","todo"],["Dohodnout podíly a role mezi Erikem a Filipem","todo"],["Ověřit ve Zlíně terénně, že hotpot opravdu chybí","todo"],["Navštívit hotpot restaurace jinde (Praha, Brno), nafotit, změřit ceny","todo"],["Navrhnout menu a spočítat cenu surovin na porci","todo"],["Sepsat zásady zaměstnávání, zaměstnanecký řád a vzory dohod","todo"],["Dotazník pro studenty UTB a známé: digitální verze hotová","done"],["Zprovoznit ukládání odpovědí (Google tabulka a Apps Script) a poslat adresu Claudovi","todo"],["Vytisknout plakáty s QR kódem a rozeslat dotazník (studenti UTB, sociální sítě)","todo"],["Nábor studentů UTB na brigády: kontakt na Job centrum UTB a Studentskou unii","todo"],["Založit sociální sítě a seznam zájemců","todo"]]],
  ["Fáze 2: Zkušební provoz (měsíc 3–6)",[["Najít kuchyň nebo prostor na jednorázové večery","todo"],["Uspořádat 2–4 hotpot večery","todo"],["Vyhodnotit tržby, náklady a spokojenost","todo"],["Rozhodnout: pokračovat / upravit / skončit","todo"]]],
  ["Fáze 3: Plán a financování (měsíc 5–9)",[["Dokončit podnikatelský plán a finance","todo"],["Konzultace s účetní: forma, DPH","todo"],["Bezplatná konzultace v CzechInvest Zlín","todo"],["Schůzky s 2–3 bankami (Garant InvestEU)","todo"],["Nabídky leasingu vybavení","todo"],["Podepsat smlouvu společníků","todo"]]],
  ["Fáze 4: Prostor a povolení (měsíc 8–12)",[["Vybrat lokalitu (frekvence, studenti, parkování, elektřina)","todo"],["Dohodnout nájem s volnými měsíci na rekonstrukci","todo"],["Změna užívání, hygiena, požární ochrana","todo"],["Živnostenské oprávnění / registrace firmy","todo"]]],
@@ -273,10 +323,13 @@ const SRC=[
 ];
 
 /* Verze (zvýšit při každém vydání) a novinky pro okno „Nová pekelná verze je online!“ */
-const VERSION="2026-11-02-f";
-const WHATS_NEW=["Graf citlivosti zisku na cenu a obsazenost","Rozjezd prvního roku a jednotková ekonomika hosta","SWOT analýza a Slovníček pojmů","Nejbližší kroky na přehledu, stažení dotazníku do Wordu","Lepší mobil, tisk do PDF a plynulejší efekty"];
+const VERSION="2026-11-02-g";
+const WHATS_NEW=["Digitální dotazník: vlastní stránka pro respondenty (mobil i počítač)","Odpovědi do vaší Google tabulky a živé výsledky v dashboardu","QR kódy a odkazy pro každý kanál, měření, odkud odpovědi přišly","Návod na zprovoznění v záložce Dotazník"];
 
-/* Dotazník, terénní ověření, rozhodnutí */
+/* Dotazník: otázky (sdílí dashboard i veřejná stránka dotaznik.html) */
+const SITE_URL="https://hound-protocol.github.io/DevilsPot_Dashboard/";
+/* Adresa Google Apps Script (webová aplikace), kam se ukládají odpovědi. Prázdné = testovací režim, odpovědi se neukládají. */
+const QFORM_URL="";
 const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
 const QEND="Děkujeme! Sledujte nás, brzy se ozveme se zkušebními večery.";
 const QUEST=[
@@ -315,7 +368,9 @@ const QUEST=[
  ]]
 ];
 const QVW=["Při jaké ceně na osobu byste hotpot považoval/a za tak levný, že pochybujete o kvalitě?","Při jaké ceně by to byla výhodná nabídka?","Při jaké ceně by to začalo být drahé, ale ještě byste šel/šla?","Při jaké ceně by to bylo příliš drahé a nešel/nešla byste?"];
-const QDIST=["QR kód na plakátu nebo letáku (kolej, menza, fakulty). Pro vyvěšení na UTB se zeptat studentských organizací.","Skupiny na Facebooku a Instagramu: zlínské komunity, studentské skupiny, spolky.","Osobně: deset minut ve Zlíně s tabletem nebo telefonem dává často víc kvalitních odpovědí než sdílení online.","Motivace: malá odměna (slosování o večeři pro dva na zkušebním večeru) zvýší počet odpovědí."];
+
+/* Dotazník, terénní ověření, rozhodnutí */
+const QDIST=["Každý kanál má vlastní odkaz a QR kód (parametr ?z=), aby bylo vidět, odkud odpovědi přišly. Odkazy a QR kódy jsou v záložce Dotazník.","QR kód na plakátu nebo letáku (kolej, menza, fakulty). Pro vyvěšení na UTB se zeptat studentských organizací.","Skupiny na Facebooku a Instagramu: zlínské komunity, studentské skupiny, spolky.","Osobně: deset minut ve Zlíně s tabletem nebo telefonem dává často víc kvalitních odpovědí než sdílení online.","Motivace: malá odměna (slosování o večeři pro dva na zkušebním večeru) zvýší počet odpovědí."];
 const QEVAL=["Zájem: podíl odpovědí 4 a 5 v otázce 3. Pokud je to přes polovinu a zájemci chtějí chodit alespoň jednou měsíčně, je to dobrý signál.","Cena: medián odpovědí na otázku 8 (nebo průsečík křivek ve Van Westendorpu). Porovnat s modelem (průměrná útrata 500 Kč).","Menu: nejčastěji vybrané vývary a pálivost určí základní nabídku.","Kanály: pořadí v otázce 13 ukáže, kam dát marketingový rozpočet.","Segmenty: výsledky srovnat zvlášť pro studenty a pracující, mívají jinou ochotu platit."];
 
 const FIELD=[
@@ -327,6 +382,7 @@ const FIELD=[
 ];
 
 const DECISIONS=[
+ ["2. 11. 2026","Digitální dotazník: veřejná stránka dotaznik.html, odpovědi se ukládají do Google tabulky zakladatelů přes Google Apps Script. Odkazy s parametrem ?z= měří, který kanál odpovědi přivedl. Výsledky se zobrazují v dashboardu."],
  ["2. 11. 2026","Jídlo pro zaměstnance (návrh Filipa, k potvrzení): oběd a večeře na účet podniku nebo se silnou slevou (např. 50 Kč). Zbytků bude málo, suroviny se využijí do vývaru nebo hotpotu. Model počítá s 4 000 Kč měsíčně (odhad)."],
  ["2. 11. 2026","Zásady zaměstnávání: jasné, legálně podložené, vstřícné, klidné a férové podmínky pro všechny, šance růst a bezpečné, čisté a profesionální prostředí."],
  ["2. 11. 2026","Chceme verbovat studenty UTB na brigády (DPP/DPČ). Kanály, právní rámec a postup náboru jsou v dashboardu v záložce Nábor brigádníků."],
@@ -638,6 +694,7 @@ const PLAN_DOC=[
  ]},
  {id:"vyzkum",title:"Výzkum zákazníků a terénní ověření",b:[
   pp("Poptávka a cena se ověří dvěma způsoby: zákaznickým dotazníkem (cíl alespoň 100, lépe 200 odpovědí, viz příloha A) a osobním terénním ověřením ve Zlíně."),
+  pp("**Digitální dotazník** je na adrese "+SITE_URL+"dotaznik.html a lze jej vyplnit na mobilu i počítači. Odpovědi se ukládají do Google tabulky zakladatelů. Každý kanál (plakát, Instagram, Facebook, koleje, osobně) má vlastní odkaz, takže je vidět, odkud odpovědi přišly. Stav připojení: "+(QFORM_URL?"připojeno.":"čeká na připojení ukládání odpovědí.")),
   hh("Terénní ověření"),
   tb(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]])),
   hh("Výsledky"),
@@ -670,6 +727,7 @@ const PLAN_APPX=[
  {id:"pC",title:"Příloha C: Slovníček pojmů",b:[tb(["Pojem","Vysvětlení"],GLOSS)]}
 ];
 
+const APPS_SCRIPT="/**\n * DevilsPot – ukládání odpovědí z dotazníku do Google tabulky.\n * Postup: nová Google tabulka > Rozšíření > Apps Script > vložit tento kód > Nasadit > Nová nasazení >\n * typ \"Webová aplikace\", Spustit jako: Já, Přístup: Kdokoli > zkopírovat adresu webové aplikace.\n * E-maily a volné odpovědi zůstávají jen v tabulce, veřejný výstup (doGet) obsahuje pouze souhrnné počty.\n */\nvar SHEET = 'Odpovědi';\nvar HEAD = ['Čas'];\nfor (var i = 1; i <= 19; i++) HEAD.push('q' + i);\nfor (var j = 1; j <= 4; j++) HEAD.push('vw' + j);\nHEAD.push('souhlas s e-mailem', 'zdroj', 'sekund vyplňování');\n\nfunction sheet_() {\n  var ss = SpreadsheetApp.getActiveSpreadsheet();\n  var sh = ss.getSheetByName(SHEET);\n  if (!sh) { sh = ss.insertSheet(SHEET); sh.appendRow(HEAD); sh.setFrozenRows(1); }\n  return sh;\n}\n\nfunction clean_(v) {\n  if (Array.isArray(v)) v = v.join('; ');\n  v = String(v == null ? '' : v).slice(0, 1000);\n  return /^[=+\\-@]/.test(v) ? \"'\" + v : v;   // ochrana před vložením vzorců\n}\n\nfunction out_(o) {\n  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);\n}\n\nfunction doPost(e) {\n  try {\n    var d = JSON.parse(e.postData.contents);\n    if (d.hp) return out_({ ok: true });                 // past na roboty\n    var lock = LockService.getScriptLock();\n    lock.waitLock(10000);\n    var row = [new Date()];\n    for (var i = 1; i <= 19; i++) row.push(clean_(d['q' + i]));\n    for (var j = 1; j <= 4; j++) row.push(clean_(d['vw' + j]));\n    row.push(d.consent ? 'ano' : 'ne', clean_(d.src), Number(d.t) || '');\n    sheet_().appendRow(row);\n    lock.releaseLock();\n    return out_({ ok: true });\n  } catch (err) {\n    return out_({ ok: false });\n  }\n}\n\nfunction median_(a) {\n  a = a.filter(function (x) { return !isNaN(x); }).sort(function (x, y) { return x - y; });\n  if (!a.length) return null;\n  var m = Math.floor(a.length / 2);\n  return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;\n}\n\n/* Veřejný souhrn: bez e-mailů a volných odpovědí */\nfunction doGet() {\n  var vals = sheet_().getDataRange().getValues();\n  var n = Math.max(0, vals.length - 1);\n  var res = { n: n, q: {}, vw: {}, src: {} };\n  [1, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16].forEach(function (c) {\n    var cnt = {};\n    for (var r = 1; r < vals.length; r++) {\n      String(vals[r][c] || '').split('; ').forEach(function (o) { if (o) cnt[o] = (cnt[o] || 0) + 1; });\n    }\n    res.q[c] = cnt;\n  });\n  [3, 11].forEach(function (c) {\n    var dist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, s = 0, k = 0;\n    for (var r = 1; r < vals.length; r++) {\n      var v = Number(vals[r][c]);\n      if (v >= 1 && v <= 5) { dist[v]++; s += v; k++; }\n    }\n    res.q[c] = { avg: k ? s / k : null, dist: dist, n: k };\n  });\n  for (var w = 1; w <= 4; w++) {\n    var col = 19 + w, arr = [];\n    for (var r2 = 1; r2 < vals.length; r2++) { var x = Number(vals[r2][col]); if (vals[r2][col] !== '' && x > 0) arr.push(x); }\n    res.vw['vw' + w] = median_(arr);\n  }\n  var sc = 25;\n  for (var r3 = 1; r3 < vals.length; r3++) { var s2 = String(vals[r3][sc] || 'neuvedeno'); res.src[s2] = (res.src[s2] || 0) + 1; }\n  return out_(res);\n}\n";
 const NEXT=ROAD.flatMap(([t,it])=>it.filter(x=>x[1]!=="done").map(x=>x[0])).slice(0,6);
 
 const $=s=>document.querySelector(s);
@@ -788,6 +846,41 @@ function chartSVG(){
  V.slov=`<h2>Slovníček pojmů</h2><p class="small">Vysvětlení odborných výrazů použitých v dashboardu a plánu. Je také přílohou C podnikového plánu.</p><div class="card chap">${tabl(["Pojem","Vysvětlení"],GLOSS)}</div>`;
 })();
 
+
+/* ---------- Digitální dotazník ---------- */
+const QCH=[["Hlavní odkaz",""],["Plakát a leták","plakat"],["Instagram","ig"],["Facebook","fb"],["Koleje a menza","kolej"],["Osobně (tablet)","osobne"]];
+const QCHF={"":"hlavni",plakat:"plakat",ig:"instagram",fb:"facebook",kolej:"kolej",osobne:"osobne"};
+const qUrl=z=>SITE_URL+"dotaznik.html"+(z?"?z="+z:"");
+const QM2={};QUEST.forEach(([sec,qs])=>qs.forEach(q=>QM2[q[0]]={t:q[1],o:q[3]}));
+const SETUP=["Vytvořte novou Google tabulku (sheets.new) na účtu, kde chcete odpovědi mít.","V tabulce otevřete Rozšíření a Apps Script, smažte vše v souboru Code.gs a vložte kód níže.","Klikněte na Nasadit a Nové nasazení, typ „Webová aplikace“. Nastavte Spustit jako: Já a Přístup: Kdokoli.","Povolte oprávnění (Google upozorní na neověřenou aplikaci, zvolte Rozšířené a Pokračovat).","Zkopírujte adresu webové aplikace (končí na /exec) a pošlete ji Claudovi. Ten ji vloží do dashboardu a dotazník se přepne z testovacího režimu do ostrého."];
+V.dotaznik=V.dotaznik.replace('<div class="note">',`<div class="card chap" id="digi"><h3>Digitální dotazník <span class="tag ${QFORM_URL?"fact":"est"}">${QFORM_URL?"připojeno":"čeká na připojení"}</span></h3>
+<p>Respondenti vyplňují samostatnou stránku (3 minuty, mobil i počítač) <a href="${qUrl("")}" target="_blank" rel="noopener">${qUrl("")}</a>. Odpovědi se ukládají do Google tabulky zakladatelů a souhrn se zobrazuje v sekci Výsledky níže. ${QFORM_URL?"":"Dokud není ukládání připojeno, stránka běží v testovacím režimu a odpovědi se neukládají."}</p>
+<div class="tw"><table><tr><th>Kanál</th><th>Odkaz</th><th>QR kód</th></tr>${QCH.map(([n,z])=>`<tr><td><b>${n}</b></td><td><a href="${qUrl(z)}" target="_blank" rel="noopener">${qUrl(z).replace(SITE_URL,"…/")}</a></td><td><a href="assets/qr/qr-${QCHF[z]}.png" download="qr-${QCHF[z]}.png"><img class="qr" src="assets/qr/qr-${QCHF[z]}.png" alt="QR kód: ${n}" width="84" height="84"></a><div class="small">kliknutím stáhnout</div></td></tr>`).join("")}</table></div></div>
+<div class="card chap"><h3>Jak zprovoznit ukládání odpovědí <span class="tag est">jednorázově, asi 5 minut</span></h3><ol>${SETUP.map(x=>`<li>${esc(x)}</li>`).join("")}</ol><button type="button" class="dlbtn" id="cpgs">Zkopírovat kód skriptu</button> <span class="small" id="cpmsg"></span><pre class="code" id="gscode">${esc(APPS_SCRIPT)}</pre><p class="small">Soukromí: e-maily a volné odpovědi zůstávají jen v tabulce. Veřejný souhrn obsahuje pouze počty. E-mail respondent zadává dobrovolně a se souhlasem.</p></div>
+<div class="card chap" id="qres"><h3>Výsledky <button type="button" class="toc-b" id="qrefresh">↻ Obnovit</button></h3><p class="small" id="qresmsg"></p><div id="qresbody"></div></div>
+<div class="note">`);
+function bars(counts,total){const e=Object.entries(counts).sort((a,b)=>b[1]-a[1]);if(!e.length)return"<p class='small'>Zatím bez odpovědí.</p>";return e.map(([k,v])=>`<div class="rb"><span>${esc(k)}</span><div class="rbar"><i style="width:${total?Math.round(100*v/total):0}%"></i></div><b>${v} (${total?Math.round(100*v/total):0} %)</b></div>`).join("")}
+function renderResults(r){
+ const n=r.n||0;const q3=r.q&&r.q[3];const top=q3?(q3.dist[4]+q3.dist[5]):0;
+ let h=`<div class="kpi"><div><small>Odpovědí</small><b>${n}</b></div><div><small>Zájem o hotpot (1–5)</small><b>${q3&&q3.avg!=null?q3.avg.toFixed(1).replace(".",","):"–"}</b></div><div><small>Podíl odpovědí 4–5</small><b>${q3&&q3.n?Math.round(100*top/q3.n)+" %":"–"}</b></div><div><small>Cíl odpovědí</small><b>100–200</b></div></div>`;
+ const choice=[1,2,4,5,6,7,8,9,10,12,13,14,15,16];
+ h+=`<div class="grid">`+choice.map(c=>`<div class="card"><h3>${c}. ${esc(QM2[c].t)}</h3>${bars(r.q[c]||{},n)}</div>`).join("")+`</div>`;
+ h+=`<div class="grid">`+[3,11].map(c=>{const x=r.q[c]||{};const d=x.dist||{};const o={};for(let i=1;i<=5;i++)o[i]=d[i]||0;return `<div class="card"><h3>${c}. ${esc(QM2[c].t)}</h3>${bars(o,x.n||0)}<p class="small">Průměr: ${x.avg!=null?x.avg.toFixed(2).replace(".",","):"–"}</p></div>`}).join("")+`<div class="card"><h3>Cenové pásmo (medián, Kč)</h3><table>${["Příliš levné (pochybnosti o kvalitě)","Výhodná cena","Začíná být drahé","Příliš drahé"].map((t,i)=>`<tr><td>${t}</td><td style="text-align:right">${r.vw&&r.vw["vw"+(i+1)]!=null?r.vw["vw"+(i+1)]+" Kč":"–"}</td></tr>`).join("")}</table></div><div class="card"><h3>Odkud odpovědi přišly</h3>${bars(r.src||{},n)}</div></div>`;
+ return h;
+}
+async function loadResults(){
+ const msg=$("#qresmsg"),body=$("#qresbody");if(!msg)return;
+ if(!QFORM_URL){msg.textContent="Výsledky se zobrazí po připojení ukládání odpovědí.";body.innerHTML="";return}
+ msg.textContent="Načítám výsledky…";
+ try{const r=await (await fetch(QFORM_URL,{cache:"no-store"})).json();msg.textContent="Stav k "+new Date().toLocaleString("cs-CZ")+".";body.innerHTML=renderResults(r)}
+ catch(e){msg.textContent="Výsledky se nepodařilo načíst. Zkontrolujte, zda je webová aplikace nasazená s přístupem Kdokoli.";body.innerHTML=""}
+}
+function wireDotaznik(){
+ const cp=$("#cpgs");if(cp)cp.onclick=async()=>{const m=$("#cpmsg");try{await navigator.clipboard.writeText(APPS_SCRIPT);m.textContent="Zkopírováno."}catch(e){const r=document.createRange();r.selectNodeContents($("#gscode"));const sl=getSelection();sl.removeAllRanges();sl.addRange(r);m.textContent="Kód je označený, zkopírujte jej (Ctrl+C)."}};
+ const rf=$("#qrefresh");if(rf)rf.onclick=loadResults;
+ loadResults();
+}
+
 /* ---------- Word (.docx) ---------- */
 function loadDocx(){return new Promise((res,rej)=>{if(window.docx)return res(window.docx);const s=document.createElement("script");s.src="vendor/docx.umd.js";s.onload=()=>window.docx?res(window.docx):rej(new Error("docx"));s.onerror=()=>rej(new Error("load"));document.head.appendChild(s)})}
 async function buildDocx(mode){const Q=mode==="quest";
@@ -857,7 +950,7 @@ async function downloadWord(mode,btnSel,msgSel){
 const nav=$("#nav"),main=$("#main");$("#upd").textContent=UPDATED;$("#foot").textContent="DevilsPot · verze "+VERSION+" · aktualizováno "+UPDATED;
 function show(id){main.innerHTML=`<section class="on">${V[id]}</section>`;nav.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.id===id));
  const rp=$("#rp");if(rp)rp.textContent=dn+" / "+tot;
- const dl=$("#dl");if(dl)dl.onclick=()=>downloadWord("plan","#dl","#dlmsg");const dq=$("#dlq");if(dq)dq.onclick=()=>downloadWord("quest","#dlq","#dlqmsg");
+ const dl=$("#dl");if(dl)dl.onclick=()=>downloadWord("plan","#dl","#dlmsg");if(id==="dotaznik")wireDotaznik();const dq=$("#dlq");if(dq)dq.onclick=()=>downloadWord("quest","#dlq","#dlqmsg");
  main.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.go);el&&el.scrollIntoView({behavior:"smooth",block:"start"})});
  requestAnimationFrame(()=>document.querySelectorAll(".bar i").forEach(i=>i.style.width=getComputedStyle(i).getPropertyValue("--w")));
  try{location.hash=id}catch(e){}window.scrollTo({top:0,behavior:"smooth"})}
