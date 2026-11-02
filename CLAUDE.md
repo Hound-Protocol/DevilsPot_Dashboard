@@ -16,7 +16,7 @@ Statická stránka (GitHub Pages) s přehledem projektu hotpot restaurace Devils
 - `src/data.js`: model financí (INV, FIXED, M), přehled, konkurence, marketing, provoz, právo, financování, harmonogram, zdroje, VERSION, WHATS_NEW.
 - `src/data2.js`: dotazník (QUEST), terénní ověření (FIELD), rozhodnutí (DECISIONS), nábor brigádníků (BRIG), zásady zaměstnávání (ZAS), SWOT, slovníček (GLOSS), rozjezd prvního roku a jednotková ekonomika (ramp, unit).
 - `src/quest.js`: otázky dotazníku, SITE_URL a QFORM_URL (adresa Apps Script webové aplikace; prázdná = testovací režim).
-- `src/form.js`, `src/dotaznik.tpl.html`: veřejná stránka dotazníku (`dotaznik.html`). `src/apps-script/Code.gs`: skript pro ukládání odpovědí do Google tabulky. `src/make_qr.py`: QR kódy do `assets/qr/`.
+- `src/form.js`, `src/dotaznik.tpl.html`: veřejná stránka dotazníku (`dotaznik.html`). `src/apps-script/Code.gs`: skript pro ukládání odpovědí do Google tabulky a (volitelně) do SOUKROMÉHO GitHub repozitáře. Osobní data patří jen do soukromého repozitáře, nikdy sem. `src/make_qr.py`: QR kódy do `assets/qr/`.
 - `src/plan.js`: podnikový plán jako dokument (PLAN_DOC, PLAN_APPX).
 - `src/app.js`: vykreslení, navigace, export do Wordu, efekty.
 - `src/hell.css`, `src/index.tpl.html`: vzhled a šablona.

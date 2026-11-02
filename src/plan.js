@@ -202,7 +202,7 @@ const PLAN_DOC=[
  ]},
  {id:"vyzkum",title:"Výzkum zákazníků a terénní ověření",b:[
   pp("Poptávka a cena se ověří dvěma způsoby: zákaznickým dotazníkem (cíl alespoň 100, lépe 200 odpovědí, viz příloha A) a osobním terénním ověřením ve Zlíně."),
-  pp("**Digitální dotazník** je na adrese "+SITE_URL+"dotaznik.html a lze jej vyplnit na mobilu i počítači. Odpovědi se ukládají do Google tabulky zakladatelů. Každý kanál (plakát, Instagram, Facebook, koleje, osobně) má vlastní odkaz, takže je vidět, odkud odpovědi přišly. Stav připojení: "+(QFORM_URL?"připojeno.":"čeká na připojení ukládání odpovědí.")),
+  pp("**Digitální dotazník** je na adrese "+SITE_URL+"dotaznik.html a lze jej vyplnit na mobilu i počítači. Odpovědi se ukládají do Google tabulky zakladatelů a kopie každé odpovědi do samostatného soukromého repozitáře na GitHubu. Každý kanál (plakát, Instagram, Facebook, koleje, osobně) má vlastní odkaz, takže je vidět, odkud odpovědi přišly. Stav připojení: "+(QFORM_URL?"připojeno.":"čeká na připojení ukládání odpovědí.")),
   hh("Terénní ověření"),
   tb(["Oblast","Co zjistit"],FIELD.map(f=>[f[0],f[1]])),
   hh("Výsledky"),

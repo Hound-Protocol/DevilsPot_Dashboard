@@ -3,6 +3,10 @@
  * Postup: nová Google tabulka > Rozšíření > Apps Script > vložit tento kód > Nasadit > Nová nasazení >
  * typ "Webová aplikace", Spustit jako: Já, Přístup: Kdokoli > zkopírovat adresu webové aplikace.
  * E-maily a volné odpovědi zůstávají jen v tabulce, veřejný výstup (doGet) obsahuje pouze souhrnné počty.
+ *
+ * VOLITELNĚ: kopie každé odpovědi do SOUKROMÉHO GitHub repozitáře. V Apps Script otevřete Nastavení projektu >
+ * Vlastnosti skriptu a přidejte: GH_REPO (např. Hound-Protocol/DevilsPot_Data) a GH_TOKEN (fine-grained token jen pro
+ * tento repozitář s oprávněním Contents: Read and write). Token je uložen jen ve skriptu, nikdy na webu.
  */
 var SHEET = 'Odpovědi';
 var HEAD = ['Čas'];
@@ -27,6 +31,28 @@ function out_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
 
+/* Kopie odpovědi do soukromého repozitáře (volitelné, chyba nikdy nezastaví uložení do tabulky) */
+function ghSave_(rec) {
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var token = props.getProperty('GH_TOKEN'), repo = props.getProperty('GH_REPO');
+    if (!token || !repo) return;
+    var now = new Date();
+    var id = Utilities.formatDate(now, 'UTC', "yyyyMMdd-HHmmss") + '-' + Utilities.getUuid().slice(0, 8);
+    var path = 'odpovedi/' + Utilities.formatDate(now, 'UTC', 'yyyy-MM') + '/' + id + '.json';
+    var body = {
+      message: 'Nová odpověď ' + id,
+      content: Utilities.base64Encode(JSON.stringify(rec, null, 2), Utilities.Charset.UTF_8)
+    };
+    var r = UrlFetchApp.fetch('https://api.github.com/repos/' + repo + '/contents/' + path, {
+      method: 'put', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'DevilsPot-form' },
+      payload: JSON.stringify(body)
+    });
+    if (r.getResponseCode() >= 300) Logger.log('GitHub: ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 300));
+  } catch (err) { Logger.log('GitHub chyba: ' + err); }
+}
+
 function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
@@ -38,6 +64,10 @@ function doPost(e) {
     for (var j = 1; j <= 4; j++) row.push(clean_(d['vw' + j]));
     row.push(d.consent ? 'ano' : 'ne', clean_(d.src), Number(d.t) || '');
     sheet_().appendRow(row);
+    var rec = { cas: row[0].toISOString(), zdroj: clean_(d.src), sekund: Number(d.t) || null, souhlas_email: !!d.consent };
+    for (var a = 1; a <= 19; a++) rec['q' + a] = d['q' + a] == null ? '' : d['q' + a];
+    for (var b = 1; b <= 4; b++) rec['vw' + b] = d['vw' + b] == null ? '' : d['vw' + b];
+    ghSave_(rec);
     lock.releaseLock();
     return out_({ ok: true });
   } catch (err) {
