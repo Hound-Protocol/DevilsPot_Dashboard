@@ -65,7 +65,7 @@ async function submit(){
  for(let i=1;i<=19;i++)p["q"+i]=ans[i]==null?"":ans[i];
  for(let i=1;i<=4;i++)p["vw"+i]=ans["vw"+i]||"";
  try{
-  if(QFORM_URL){await fetch(QFORM_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)})}
+  if(QFORM_URL){const res=await fetch(QFORM_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)});const j=await res.json().catch(()=>({}));if(!res.ok||!j.ok)throw new Error("ulozeni")}
   else console.info("Testovací režim, odpovědi se neukládají:",p);
   thanks();
  }catch(e){b.disabled=false;b.textContent="Odeslat 🔥";$("#ge").textContent="Odeslání se nepovedlo. Zkontrolujte připojení a zkuste to znovu."}

@@ -222,7 +222,7 @@ img.qr{background:#fff;padding:4px;border-radius:6px;display:block}
 <script>
 /* Dotazník: otázky (sdílí dashboard i veřejná stránka dotaznik.html) */
 const SITE_URL="https://hound-protocol.github.io/DevilsPot_Dashboard/";
-/* Adresa Google Apps Script (webová aplikace), kam se ukládají odpovědi. Prázdné = testovací režim, odpovědi se neukládají. */
+/* Adresa Cloudflare Workeru, který ukládá odpovědi do soukromého repozitáře DevilsPot_Data. Prázdné = testovací režim, odpovědi se neukládají. */
 const QFORM_URL="";
 const QINTRO="Ve Zlíně chystáme novou restauraci s hotpotem (společné vaření v hrnci s vývarem přímo u stolu). Pomozte nám pár minutami: dotazník je anonymní a zabere asi 3 minuty. Vaše odpovědi nám pomohou vybrat menu, ceny i místo. Děkujeme!";
 const QEND="Děkujeme! Sledujte nás, brzy se ozveme se zkušebními večery.";
@@ -330,7 +330,7 @@ async function submit(){
  for(let i=1;i<=19;i++)p["q"+i]=ans[i]==null?"":ans[i];
  for(let i=1;i<=4;i++)p["vw"+i]=ans["vw"+i]||"";
  try{
-  if(QFORM_URL){await fetch(QFORM_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)})}
+  if(QFORM_URL){const res=await fetch(QFORM_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)});const j=await res.json().catch(()=>({}));if(!res.ok||!j.ok)throw new Error("ulozeni")}
   else console.info("Testovací režim, odpovědi se neukládají:",p);
   thanks();
  }catch(e){b.disabled=false;b.textContent="Odeslat 🔥";$("#ge").textContent="Odeslání se nepovedlo. Zkontrolujte připojení a zkuste to znovu."}
